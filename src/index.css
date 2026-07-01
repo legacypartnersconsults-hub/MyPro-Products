@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Nunito:wght@400;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-nunito: "Nunito", sans-serif;
+  --color-market-blue: #468CDC;
+  --color-market-blue-hover: #397bc7;
+  --color-market-green: #98c44E;
+  --color-market-green-hover: #85b03f;
+  --color-ready-blue: #6AD5F9;
+  --color-ready-blue-hover: #4dc4e8;
+  --color-ready-green: #98C44E;
+  --color-ready-green-hover: #85b03f;
+}
+
+/* Custom CSS Scrollbar style to match B2B SaaS layout */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

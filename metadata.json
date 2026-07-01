@@ -1,0 +1,6 @@
+{
+  "name": "MyPro Products",
+  "description": "B2B SaaS umbrella website for MyPro Products, serving insurance carriers, property managers, consumers, and contractors.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
