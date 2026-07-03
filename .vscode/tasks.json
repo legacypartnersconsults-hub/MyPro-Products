@@ -1,0 +1,82 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Run Vite Dev Server",
+			"type": "shell",
+			"command": "C:\\Progra~1\\nodejs\\npm.cmd",
+			"args": [
+				"run",
+				"dev"
+			],
+			"isBackground": true
+		},
+		{
+			"label": "Run Vite Dev Server via Node",
+			"type": "shell",
+			"command": "C:\\Progra~1\\nodejs\\node.exe",
+			"args": [
+				"C:\\Progra~1\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+				"run",
+				"dev"
+			],
+			"isBackground": true
+		},
+		{
+			"label": "Run Vite Dev Server with PATH",
+			"type": "shell",
+			"command": "$env:Path='C:\\Progra~1\\nodejs;'+$env:Path; C:\\Progra~1\\nodejs\\node.exe C:\\Progra~1\\nodejs\\node_modules\\npm\\bin\\npm-cli.js run dev",
+			"isBackground": true
+		},
+		{
+			"label": "Git Status Check",
+			"type": "shell",
+			"command": "git status --short --branch"
+		},
+		{
+			"label": "Git Status Check Full Path",
+			"type": "shell",
+			"command": "& 'C:\\Program Files\\Git\\cmd\\git.exe' status --short --branch"
+		},
+		{
+			"label": "Git Add Deploy Files",
+			"type": "shell",
+			"command": "& 'C:\\Program Files\\Git\\cmd\\git.exe' add .github/workflows/deploy.yml index.html package.json package-lock.json"
+		},
+		{
+			"label": "Git Commit Deploy Fix",
+			"type": "shell",
+			"command": "& 'C:\\Program Files\\Git\\cmd\\git.exe' commit -m \"Fix GitHub Pages deployment for Vite build output\""
+		},
+		{
+			"label": "Git Commit Deploy Fix Safe",
+			"type": "shell",
+			"command": "& 'C:\\Program Files\\Git\\cmd\\git.exe' commit -m 'Fix GitHub Pages deployment for Vite build output'"
+		},
+		{
+			"label": "Git Config Name Local",
+			"type": "shell",
+			"command": "& 'C:\\Program Files\\Git\\cmd\\git.exe' config user.name 'infomyproproducts'"
+		},
+		{
+			"label": "Git Config Email Local",
+			"type": "shell",
+			"command": "& 'C:\\Program Files\\Git\\cmd\\git.exe' config user.email 'jruland@myproproducts.com'"
+		},
+		{
+			"label": "Git Commit Deploy Fix Final",
+			"type": "shell",
+			"command": "& 'C:\\Program Files\\Git\\cmd\\git.exe' commit -m 'Fix GitHub Pages deployment for Vite build output'"
+		},
+		{
+			"label": "Git Push Main",
+			"type": "shell",
+			"command": "& 'C:\\Program Files\\Git\\cmd\\git.exe' push origin main"
+		},
+		{
+			"label": "Git Status After Push",
+			"type": "shell",
+			"command": "& 'C:\\Program Files\\Git\\cmd\\git.exe' status --short --branch"
+		}
+	]
+}
