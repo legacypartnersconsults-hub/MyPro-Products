@@ -404,18 +404,29 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 font-sans antialiased selection:bg-cyan-500/20 selection:text-cyan-400">
       
-      {/* 1. Header Navigation */}
+      {/* 1. standalone Banner notifying that it is part of MyPro Products umbrella */}
+      <div className="bg-slate-900 text-slate-300 text-xs px-4 py-2.5 flex flex-col sm:flex-row justify-between items-center space-y-1.5 sm:space-y-0 shadow-sm border-b border-slate-800 relative z-50">
+        <div className="flex items-center space-x-3">
+          <span className="font-medium text-slate-200">
+            MyPro Ready Hub ensures communities stay safe, prepared, and connected.
+          </span>
+          <span className="hidden sm:inline text-slate-700">|</span>
+          <a href="#alerts" className="font-semibold text-cyan-400 hover:text-cyan-300 underline flex items-center space-x-1">
+            <span>View Active Disaster Alerts &rarr;</span>
+          </a>
+        </div>
+        <button 
+          onClick={onBackToCorporate}
+          className="flex items-center space-x-1 font-bold bg-[#98C44E] hover:bg-[#85b03f] text-white px-3 py-1 rounded transition-colors text-[11px] cursor-pointer"
+        >
+          <ArrowLeft className="h-3 w-3" />
+          <span>Back to MyPro Products Suite</span>
+        </button>
+      </div>
+
+      {/* 2. Header Navigation */}
       <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 py-4 px-6">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          {/* Back button */}
-          <button 
-            onClick={onBackToCorporate}
-            className="flex items-center space-x-2 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer text-sm font-medium"
-          >
-            <ArrowLeft className="h-4.5 w-4.5" />
-            <span>Back to Suite</span>
-          </button>
-
           {/* Logo */}
           <div className="flex items-center space-x-2 flex-shrink-0">
             <MyProReadyHubLogo size="md" />

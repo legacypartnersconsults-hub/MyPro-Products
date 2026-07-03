@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface MyProMarketLogoProps {
+interface MyProProductsLogoProps {
   showText?: boolean;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
 }
 
-export default function MyProMarketLogo({ showText = true, size = 'md', className = '' }: MyProMarketLogoProps) {
+export default function MyProProductsLogo({ showText = true, size = 'md', className = '' }: MyProProductsLogoProps) {
   // Dimensions based on size
   const iconDimensions = {
     sm: { h: 'h-7', w: 'w-7', viewBox: '0 0 140 120' },
@@ -45,10 +45,10 @@ export default function MyProMarketLogo({ showText = true, size = 'md', classNam
         <rect x="51" y="56" width="10" height="10" fill="#468CDC" rx="1.5" />
         <rect x="63" y="56" width="10" height="10" fill="#468CDC" rx="1.5" />
         
-        {/* Green Checkmark Framing the Bottom - Color Hex #98CC44 */}
+        {/* Accent Checkmark Framing the Bottom - Color Hex #BCB6A5 */}
         <path 
           d="M 21 78 L 51 104 L 111 58" 
-          stroke="#98CC44" 
+          stroke="#BCB6A5" 
           strokeWidth="11" 
           strokeLinecap="round" 
           strokeLinejoin="round" 
@@ -60,11 +60,11 @@ export default function MyProMarketLogo({ showText = true, size = 'md', classNam
         <div className="flex flex-col select-none text-left">
           <div className={`${textSizes.main} font-extrabold tracking-tight leading-none`}>
             <span className="text-[#468CDC]">My</span>
-            <span className="text-[#98CC44]">Pro</span>
-            <span className="text-[#468CDC] ml-1">Market</span>
+            <span className="text-[#BCB6A5]">Pro</span>
+            <span className="text-[#468CDC] ml-1">Products</span>
           </div>
           <span className={`${textSizes.sub} font-bold text-slate-400 tracking-wider block uppercase mt-0.5 leading-none`}>
-            by MyPro Products
+            Claims & Dispatch Ecosystem
           </span>
         </div>
       )}

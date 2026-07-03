@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowUpRight, Shield, Layers, Zap, Database, Mail } from 'lucide-react';
+import MyProProductsLogo from './MyProProductsLogo';
 
 interface FooterProps {
   onNavigateToSection: (sectionId: string) => void;
@@ -27,15 +28,7 @@ export default function Footer({ onNavigateToSection, onRequestDemo, onLaunchPor
           
           {/* Column 1: Company Profile */}
           <div className="md:col-span-4 space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="h-9 w-9 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-lg">
-                M
-              </div>
-              <div>
-                <span className="text-white font-bold text-lg tracking-tight">MyPro</span>
-                <span className="text-xs font-semibold text-blue-400 ml-1.5 uppercase tracking-wider">Products</span>
-              </div>
-            </div>
+            <MyProProductsLogo size="md" />
             <p className="text-xs leading-relaxed text-slate-400 max-w-sm">
               MyPro Products is the leading enterprise B2B software suite connecting carriers, managers, homeowners, and vetted field labor into automated, compliance-checked workflows.
             </p>
@@ -111,7 +104,7 @@ export default function Footer({ onNavigateToSection, onRequestDemo, onLaunchPor
               Subscribe to "Ecosystem Audit" – our monthly B2B property tech and compliance tracking bulletin.
             </p>
             {subscribed ? (
-              <div className="bg-slate-800/80 border border-blue-500/30 text-blue-400 p-3.5 rounded-lg text-xs leading-relaxed animate-fade-in">
+              <div className="bg-slate-800/80 border border-[#468CDC]/30 text-[#468CDC] p-3.5 rounded-lg text-xs leading-relaxed animate-fade-in">
                 <span className="font-semibold block text-white mb-0.5">Subscription confirmed!</span>
                 Thank you for subscribing to our monthly B2B property tech and compliance bulletin.
               </div>
@@ -127,12 +120,12 @@ export default function Footer({ onNavigateToSection, onRequestDemo, onLaunchPor
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@company.com"
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-8 pr-3 py-2 text-xs text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                    className="w-full bg-slate-800 border border-slate-700 rounded-lg pl-8 pr-3 py-2 text-xs text-white focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
                   />
                 </div>
                 <button
                   type="submit"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded-lg text-xs transition-colors cursor-pointer"
+                  className="bg-[#468CDC] hover:bg-[#3b7cbd] text-white font-bold px-4 py-2 rounded-lg text-xs transition-colors cursor-pointer"
                 >
                   Join
                 </button>

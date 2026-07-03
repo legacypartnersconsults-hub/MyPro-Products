@@ -3,6 +3,7 @@ import { Menu, X, ChevronDown, ArrowUpRight, Shield, Layers, ShieldAlert, Databa
 import { products } from '../data';
 import MyProMarketLogo from './MyProMarketLogo';
 import MyProReadyHubLogo from './MyProReadyHubLogo';
+import MyProProductsLogo from './MyProProductsLogo';
 
 interface NavbarProps {
   onRequestDemo: (productId?: string, audienceId?: string) => void;
@@ -59,13 +60,7 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
         <div className="flex justify-between items-center">
           {/* Logo */}
           <div className="flex items-center space-x-2 cursor-pointer" onClick={() => handleNavClick('hero')}>
-            <div className="h-10 w-10 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-200">
-              <span className="font-bold text-xl tracking-tight">M</span>
-            </div>
-            <div>
-              <span className="text-xl font-bold text-slate-900 tracking-tight">MyPro</span>
-              <span className="text-sm font-semibold text-blue-600 ml-1.5 px-2 py-0.5 bg-blue-50 rounded-full border border-blue-100 uppercase tracking-wider text-[10px]">Products</span>
-            </div>
+            <MyProProductsLogo size="md" />
           </div>
 
           {/* Desktop Navigation */}
@@ -129,7 +124,7 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
                         }`}>
                           {product.id === 'market' && <MyProMarketLogo showText={false} size="sm" />}
                           {product.id === 'readyhub' && <MyProReadyHubLogo showText={false} size="sm" />}
-                          {product.id === 'pulse' && <Database className="h-5 w-5" />}
+                          {product.id === 'claimassist' && <ShieldAlert className="h-5 w-5 text-purple-600" />}
                         </div>
                         <div className="flex-grow">
                           <div className="flex items-center space-x-2">
@@ -243,14 +238,14 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
               Upcoming Solutions
             </div>
             <button
-              onClick={() => { onRequestDemo('pulse'); setIsOpen(false); }}
+              onClick={() => { onRequestDemo('claimassist'); setIsOpen(false); }}
               className="w-full flex items-center justify-between p-3 rounded-lg bg-slate-50/80 hover:bg-slate-50 text-left"
             >
               <div className="flex items-center space-x-3">
-                <Database className="h-5 w-5 text-purple-600" />
+                <ShieldAlert className="h-5 w-5 text-purple-600" />
                 <div>
-                  <div className="text-sm font-bold">MyPro Pulse</div>
-                  <div className="text-xs text-slate-500">AI Risk Assessment</div>
+                  <div className="text-sm font-bold">MyPro Claim Assist</div>
+                  <div className="text-xs text-slate-500">Homeowner Claim Helper</div>
                 </div>
               </div>
               <span className="text-[10px] font-semibold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-100">Coming Soon</span>

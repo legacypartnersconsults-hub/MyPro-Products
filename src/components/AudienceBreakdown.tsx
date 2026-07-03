@@ -43,7 +43,7 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-xs font-bold uppercase tracking-widest text-blue-600 bg-blue-50 px-3 py-1.5 rounded-full border border-blue-100">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#468CDC] bg-[#468CDC]/5 px-3 py-1.5 rounded-full border border-[#468CDC]/15">
             Tailored Solutions
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-4">
@@ -65,12 +65,12 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
                 onClick={() => setActiveAudienceId(aud.id)}
                 className={`flex flex-col items-center text-center p-5 rounded-xl border transition-all focus:outline-none ${
                   isSelected
-                    ? 'bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-150'
+                    ? 'bg-[#468CDC] border-[#468CDC] text-white shadow-lg shadow-[#468CDC]/15'
                     : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50/50 hover:border-slate-300'
                 }`}
               >
                 <div className={`p-2.5 rounded-lg mb-3 ${
-                  isSelected ? 'bg-white/10 text-white' : 'bg-blue-50 text-blue-600'
+                  isSelected ? 'bg-white/10 text-white' : 'bg-[#468CDC]/10 text-[#468CDC]'
                 }`}>
                   {getIcon(aud.icon)}
                 </div>
@@ -122,7 +122,7 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {activeAudience.keyBenefits.map((benefit, idx) => (
                     <div key={idx} className="flex items-center space-x-2.5">
-                      <div className="h-2 w-2 rounded-full bg-blue-600 flex-shrink-0" />
+                      <div className="h-2 w-2 rounded-full bg-[#468CDC] flex-shrink-0" />
                       <span className="text-xs font-semibold text-slate-700">{benefit}</span>
                     </div>
                   ))}
@@ -133,10 +133,10 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
             {/* Right side: High Impact Stats Card */}
             <div className="lg:col-span-4 bg-slate-50 rounded-xl p-6 border border-slate-150 flex flex-col justify-between h-full min-h-[220px]">
               <div>
-                <span className="text-[10px] font-bold bg-blue-100 text-blue-800 px-2 py-0.5 rounded uppercase tracking-wider">
+                <span className="text-[10px] font-bold bg-[#468CDC]/10 text-[#468CDC] px-2 py-0.5 rounded uppercase tracking-wider">
                   Target Impact
                 </span>
-                <div className="text-5xl font-extrabold text-blue-600 tracking-tight mt-4">
+                <div className="text-5xl font-extrabold text-[#468CDC] tracking-tight mt-4">
                   {activeAudience.stats.value}
                 </div>
                 <div className="text-sm font-bold text-slate-800 mt-1">
@@ -150,7 +150,7 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
               <div className="mt-8">
                 <button
                   onClick={() => onRequestDemo(undefined, activeAudience.id)}
-                  className="w-full text-center py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all shadow-md text-sm"
+                  className="w-full text-center py-3 bg-[#468CDC] hover:bg-[#3b7cbd] text-white font-bold rounded-xl transition-all shadow-md text-sm"
                 >
                   Configure For My Team
                 </button>
@@ -170,7 +170,7 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
             {/* Left side: Interactive Controls */}
             <div className="lg:col-span-6 space-y-6">
               <div className="flex items-center space-x-2">
-                <Calculator className="h-5 w-5 text-blue-600" />
+                <Calculator className="h-5 w-5 text-[#468CDC]" />
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">IMPACT ESTIMATOR</span>
               </div>
               <h3 className="text-3xl font-bold text-slate-900 tracking-tight">
@@ -187,7 +187,7 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
                 <div>
                   <div className="flex justify-between items-center text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                     <span>Claims / Dispatches per Month</span>
-                    <span className="text-blue-600 font-mono text-sm font-extrabold">{claimsCount} jobs</span>
+                    <span className="text-[#468CDC] font-mono text-sm font-extrabold">{claimsCount} jobs</span>
                   </div>
                   <input
                     type="range"
@@ -196,7 +196,7 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
                     step="5"
                     value={claimsCount}
                     onChange={(e) => setClaimsCount(parseInt(e.target.value))}
-                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-blue-600 focus:outline-none"
+                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-[#468CDC] focus:outline-none"
                   />
                   <div className="flex justify-between text-[10px] text-slate-400 font-semibold mt-1">
                     <span>5</span>
@@ -209,7 +209,7 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
                 <div>
                   <div className="flex justify-between items-center text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                     <span>Current Admin Hours per Claim</span>
-                    <span className="text-blue-600 font-mono text-sm font-extrabold">{adminHoursPerClaim} hours</span>
+                    <span className="text-[#468CDC] font-mono text-sm font-extrabold">{adminHoursPerClaim} hours</span>
                   </div>
                   <input
                     type="range"
@@ -218,7 +218,7 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
                     step="1"
                     value={adminHoursPerClaim}
                     onChange={(e) => setAdminHoursPerClaim(parseInt(e.target.value))}
-                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-blue-600 focus:outline-none"
+                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-[#468CDC] focus:outline-none"
                   />
                   <div className="flex justify-between text-[10px] text-slate-400 font-semibold mt-1">
                     <span>1 hr (Optimized)</span>
@@ -231,7 +231,7 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
                 <div>
                   <div className="flex justify-between items-center text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                     <span>Staff Blended Hourly Rate</span>
-                    <span className="text-blue-600 font-mono text-sm font-extrabold">${averageHourlyCost}/hr</span>
+                    <span className="text-[#468CDC] font-mono text-sm font-extrabold">${averageHourlyCost}/hr</span>
                   </div>
                   <input
                     type="range"
@@ -240,7 +240,7 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
                     step="5"
                     value={averageHourlyCost}
                     onChange={(e) => setAverageHourlyCost(parseInt(e.target.value))}
-                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-blue-600 focus:outline-none"
+                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-[#468CDC] focus:outline-none"
                   />
                   <div className="flex justify-between text-[10px] text-slate-400 font-semibold mt-1">
                     <span>$25</span>
@@ -258,14 +258,14 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
               {/* Mesh background */}
               <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(59,130,246,0.15),transparent_60%)] pointer-events-none" />
 
-              <h4 className="text-xs font-bold uppercase tracking-widest text-blue-400">Projected Resource Recovery</h4>
+              <h4 className="text-xs font-bold uppercase tracking-widest text-[#468CDC]">Projected Resource Recovery</h4>
               
               <div className="mt-8 grid grid-cols-2 gap-6">
                 
                 {/* Metric 1 */}
-                <div className="border-l-2 border-blue-500 pl-4">
+                <div className="border-l-2 border-[#468CDC] pl-4">
                   <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-white flex items-center">
-                    <Clock className="h-6 w-6 text-blue-400 mr-2 flex-shrink-0" />
+                    <Clock className="h-6 w-6 text-[#468CDC] mr-2 flex-shrink-0" />
                     <span>{hoursSavedByMyPro}</span>
                   </div>
                   <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1.5">Hours Saved / mo</div>
@@ -307,7 +307,7 @@ export default function AudienceBreakdown({ onRequestDemo }: AudienceBreakdownPr
               <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
                 <button
                   onClick={() => onRequestDemo(undefined, activeAudienceId)}
-                  className="w-full py-3 px-6 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-center text-sm transition-colors shadow-lg shadow-blue-900/30"
+                  className="w-full py-3 px-6 bg-[#468CDC] hover:bg-[#3b7cbd] text-white font-bold rounded-xl text-center text-sm transition-colors shadow-lg shadow-[#468CDC]/30"
                 >
                   Download Complete PDF Proposal
                 </button>

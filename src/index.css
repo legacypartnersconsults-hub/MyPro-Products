@@ -13,6 +13,10 @@
   --color-ready-blue-hover: #4dc4e8;
   --color-ready-green: #98C44E;
   --color-ready-green-hover: #85b03f;
+  --color-mypro-blue: #468CDC;
+  --color-mypro-blue-hover: #3b7cbd;
+  --color-mypro-accent: #BCB6A5;
+  --color-mypro-accent-hover: #ada693;
 }
 
 /* Custom CSS Scrollbar style to match B2B SaaS layout */

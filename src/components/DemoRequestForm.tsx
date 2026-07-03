@@ -151,10 +151,8 @@ export default function DemoRequestForm({
             <h3 className="text-lg font-bold text-slate-900">
               {isMarketOnly ? 'Request MyPro Market Demo' : 'Request an Enterprise Demo'}
             </h3>
-            <p className="text-xs text-slate-500 mt-1 font-nunito">
-              {isMarketOnly 
-                ? 'Your inquiry will be sent directly to jruland@myproproducts.com.' 
-                : 'Configure your unified MyPro Products ecosystem demonstration.'}
+            <p className="text-xs text-blue-600 mt-1 font-nunito font-semibold">
+              Your inquiry will be sent directly to jruland@myproproducts.com.
             </p>
           </div>
           <button
@@ -453,15 +451,9 @@ export default function DemoRequestForm({
                 
                 <div>
                   <h4 className="text-2xl font-extrabold text-slate-900 tracking-tight">Demo Inquiry Confirmed!</h4>
-                  {isMarketOnly ? (
-                    <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto leading-relaxed">
-                      Thank you, <span className="font-bold text-slate-800">{formData.fullName}</span>. Your request has been successfully processed and sent to <span className="font-bold text-[#468CDC]">jruland@myproproducts.com</span>.
-                    </p>
-                  ) : (
-                    <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto">
-                      Thank you, <span className="font-bold text-slate-800">{formData.fullName}</span>. An enterprise systems consultant is reviewing your application parameters.
-                    </p>
-                  )}
+                  <p className="text-sm text-slate-600 mt-2 max-w-md mx-auto leading-relaxed">
+                    Thank you, <span className="font-bold text-slate-800">{formData.fullName}</span>. Your request has been successfully processed and sent to <span className="font-bold text-blue-600">jruland@myproproducts.com</span>.
+                  </p>
                 </div>
 
                 {/* Summary Box */}
@@ -490,9 +482,7 @@ export default function DemoRequestForm({
                 <div className="text-xs text-slate-400 flex items-center justify-center space-x-1.5">
                   <Shield className="h-4 w-4 text-blue-500" />
                   <span>
-                    {isMarketOnly 
-                      ? 'A confirmation copy has been sent to your email and jruland@myproproducts.com.' 
-                      : 'A personalized invite and PDF brief have been sent to your inbox.'}
+                    A confirmation copy has been sent to your email and jruland@myproproducts.com.
                   </span>
                 </div>
 

@@ -41,22 +41,22 @@ export const products: Product[] = [
     ]
   },
   {
-    id: 'pulse',
-    name: 'MyPro Pulse',
-    tagline: 'AI-Powered Property Risk Assessment & Monitoring',
-    description: 'Future-proof your assets. MyPro Pulse leverages property history, geographic telemetry, and AI models to predict maintenance risks, suggest preventative work, and detect claim anomalies before they escalate.',
+    id: 'claimassist',
+    name: 'MyPro Claim Assist',
+    tagline: 'Insurance Claims Management & Documentation for Homeowners',
+    description: 'Empowering homeowners through complex recovery. MyPro Claim Assist is a dedicated, secure application designed specifically to help homeowners organize, document, and manage their property damage claims, communications, and repair receipts.',
     status: 'upcoming',
     badge: 'Coming Soon',
     features: [
-      'Predictive property vulnerability modeling',
-      'Automated preventative maintenance scheduling',
-      'Anomalous cost and claim behavior flagger',
-      'Integrated weather hazard pre-emptive dispatcher'
+      'Step-by-step claims roadmaps customized to your insurance carrier',
+      'Receipt & estimate organizer to keep track of every repair expense',
+      'Secure claims communications log with adjusters and contractors',
+      'Interactive checklist to identify overlooked claim line items'
     ],
     benefits: [
-      'Reduces major water and fire loss incidents by 30%',
-      'Optimizes preventative capital expenditure budgeting',
-      'Empowers carriers with proactive risk profiling data'
+      'Helps homeowners secure higher, fairer claim payouts from carriers',
+      'Dramatically reduces anxiety and administrative confusion during repairs',
+      'Maintains an audit-ready digital folder of all claim and construction records'
     ]
   }
 ];
