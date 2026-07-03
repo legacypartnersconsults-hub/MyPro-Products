@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import MyProMarketLogo from './MyProMarketLogo';
+import { PrivacyPolicyModal, TermsOfServiceModal } from './LegalModals';
 import { 
   ShieldCheck, 
   Layers, 
@@ -74,8 +75,13 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
   const [smsEmail, setSmsEmail] = useState('');
   const [smsRole, setSmsRole] = useState<'homeowner' | 'carrier' | 'contractor' | 'manager'>('homeowner');
   const [smsConsent, setSmsConsent] = useState(false);
+  const [termsConsent, setTermsConsent] = useState(false); // Separate Terms/Privacy consent
   const [smsSubmitted, setSmsSubmitted] = useState(false);
   const [smsError, setSmsError] = useState('');
+
+  // Legal Modal States
+  const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [termsOpen, setTermsOpen] = useState(false);
 
   const handleSmsSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,7 +101,11 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
       return;
     }
     if (!smsConsent) {
-      setSmsError('You must explicitly consent to receive SMS alerts to opt in.');
+      setSmsError('You must explicitly agree to receive SMS text messages from MyPro Market by checking the SMS consent box.');
+      return;
+    }
+    if (!termsConsent) {
+      setSmsError('You must acknowledge and agree to our Terms of Service and Privacy Policy separately.');
       return;
     }
 
@@ -689,31 +699,27 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                 Opt In to Text / SMS Messaging
               </h2>
               <p className="text-sm text-slate-600 leading-relaxed text-left">
-                Connect and communicate effortlessly during repair events. By opting in to MyPro Market mobile text alerts, you will receive real-time automated updates regarding:
+                Connect and communicate effortlessly during repair events. By opting in to MyPro Market mobile text alerts, you explicitly agree to receive automated notifications and informational SMS/text messages from our business regarding your active property claims and vendor dispatches. You will receive real-time updates regarding:
               </p>
               
               <ul className="space-y-3.5 text-xs text-slate-700 font-medium text-left">
                 <li className="flex items-start space-x-2.5">
                   <span className="h-5 w-5 rounded-full bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0 text-[10px] font-bold">✓</span>
-                  <span><strong>Immediate Contractor Dispatches:</strong> Instant notice when a professional has been assigned to your property claim.</span>
+                  <span><strong>Immediate Contractor Dispatches:</strong> Instant text notice when a certified professional has been assigned to your property claim.</span>
                 </li>
                 <li className="flex items-start space-x-2.5">
                   <span className="h-5 w-5 rounded-full bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0 text-[10px] font-bold">✓</span>
-                  <span><strong>Live ETA & Tracking Status:</strong> Know exactly when help will arrive with live arrival ETA notifications.</span>
-                </li>
-                <li className="flex items-start space-x-2.5">
-                  <span className="h-5 w-5 rounded-full bg-green-50 text-green-600 flex items-center justify-center flex-shrink-0 text-[10px] font-bold">✓</span>
-                  <span><strong>Secure Repair Coordination:</strong> Receive critical checklists, job status changes, and repair completion notifications.</span>
+                  <span><strong>Secure Repair Coordination:</strong> Receive critical job status changes, claim milestones, and repair completion notifications.</span>
                 </li>
               </ul>
 
               <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-[11px] text-slate-500 space-y-2 leading-relaxed text-left">
                 <h4 className="font-bold text-slate-700 uppercase tracking-wide text-[10px]">Important SMS Program Disclosures:</h4>
                 <p>
-                  By checking the consent box and submitting the form, you agree to receive automated notifications and informational SMS alerts from MyPro Market. Msg & data rates may apply. Msg frequency varies by active job event.
+                  By checking the SMS Consent box and submitting the form, you agree to receive automated notifications and informational SMS alerts from MyPro Market at the mobile number provided. Consent is optional and is not a condition of purchase. Msg & data rates may apply. Msg frequency varies by active job event.
                 </p>
                 <p>
-                  You can unsubscribe at any time by replying <strong>STOP</strong> to any of our text messages. For help or questions, reply <strong>HELP</strong> or contact our support team. We value your privacy; your mobile number will never be sold or shared with unapproved third parties.
+                  You can unsubscribe at any time by replying <strong>STOP</strong> to any of our text messages. For help or questions, reply <strong>HELP</strong> or contact our support team at support@myproproducts.com. We value your privacy; your mobile number and SMS consent will never be sold, shared, or rented with third parties or affiliates for marketing or promotional purposes.
                 </p>
               </div>
             </div>
@@ -787,6 +793,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                     </div>
                   </div>
 
+                  {/* Separate Checkbox 1: Explicit SMS Consent */}
                   <div className="bg-white border border-slate-200 rounded-xl p-4 mt-2 text-left">
                     <label className="flex items-start space-x-3 cursor-pointer">
                       <input
@@ -796,7 +803,44 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                         className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#468CDC] focus:ring-[#468CDC] cursor-pointer"
                       />
                       <span className="text-xs text-slate-600 leading-relaxed select-none">
-                        I explicitly consent to receive automated text messages and mobile alerts from MyPro Market regarding active jobs, dispatches, and property claim status updates. Message & data rates may apply. Replying <strong>STOP</strong> at any time stops further messages.
+                        I explicitly consent and agree to receive automated notifications, dispatches, and informational text messages (SMS) from MyPro Market regarding active jobs, dispatches, and property claim status updates at the mobile number provided. Message & data rates may apply. Msg frequency varies by active job. I can reply <strong>STOP</strong> at any time to opt-out.
+                      </span>
+                    </label>
+                  </div>
+
+                  {/* Separate Checkbox 2: Terms & Privacy Agreement */}
+                  <div className="bg-white border border-slate-200 rounded-xl p-4 mt-2 text-left">
+                    <label className="flex items-start space-x-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={termsConsent}
+                        onChange={(e) => setTermsConsent(e.target.checked)}
+                        className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#468CDC] focus:ring-[#468CDC] cursor-pointer"
+                      />
+                      <span className="text-xs text-slate-600 leading-relaxed select-none">
+                        I acknowledge that I have read and agree to the MyPro Market{' '}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setTermsOpen(true);
+                          }}
+                          className="text-[#468CDC] hover:underline font-semibold focus:outline-none"
+                        >
+                          Terms of Service
+                        </button>{' '}
+                        and{' '}
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setPrivacyOpen(true);
+                          }}
+                          className="text-[#468CDC] hover:underline font-semibold focus:outline-none"
+                        >
+                          Privacy Policy
+                        </button>
+                        . I understand my phone number and SMS consent will not be sold, shared, or rented with third parties or affiliates for marketing purposes.
                       </span>
                     </label>
                   </div>
@@ -831,6 +875,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                       setSmsPhone('');
                       setSmsEmail('');
                       setSmsConsent(false);
+                      setTermsConsent(false);
                     }}
                     className="mt-4 px-5 py-2 text-xs font-bold text-[#468CDC] hover:text-[#3b7cbd] focus:outline-none"
                   >
@@ -907,11 +952,15 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
       <footer className="bg-slate-950 text-slate-500 py-10 border-t border-slate-900 text-xs text-center">
         <p>&copy; {new Date().getFullYear()} MyPro Market. A MyPro Products Ecosystem Suite Platform.</p>
         <div className="flex justify-center space-x-6 mt-3">
-          <span className="hover:text-slate-300 cursor-pointer">Terms & Agreements</span>
-          <span className="hover:text-slate-300 cursor-pointer">Privacy Policy</span>
+          <span className="hover:text-slate-300 cursor-pointer" onClick={() => setTermsOpen(true)}>Terms & Agreements</span>
+          <span className="hover:text-slate-300 cursor-pointer" onClick={() => setPrivacyOpen(true)}>Privacy Policy</span>
           <span className="hover:text-slate-300 cursor-pointer" onClick={onBackToCorporate}>Return to MyPro Products Homepage</span>
         </div>
       </footer>
+
+      {/* Legal Modals for Carrier and User Compliance */}
+      <PrivacyPolicyModal isOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
+      <TermsOfServiceModal isOpen={termsOpen} onClose={() => setTermsOpen(false)} />
 
     </div>
   );
