@@ -14,11 +14,14 @@ import MyProMarketWebsite from './components/MyProMarketWebsite';
 import MyProMarketSignIn from './components/MyProMarketSignIn';
 import MyProMarketPortal from './components/MyProMarketPortal';
 import MyProReadyHubWebsite from './components/MyProReadyHubWebsite';
+import { PrivacyPolicyModal, TermsOfServiceModal } from './components/LegalModals';
 
 export default function App() {
   const [demoFormOpen, setDemoFormOpen] = useState(false);
   const [preselectedProduct, setPreselectedProduct] = useState<string>('');
   const [preselectedAudience, setPreselectedAudience] = useState<string>('');
+  const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [termsOpen, setTermsOpen] = useState(false);
   const [activeView, setActiveView] = useState<'corporate' | 'market' | 'readyhub' | 'signin' | 'portal'>(() => {
     // Basic path-based detection on load
     if (typeof window !== 'undefined') {
@@ -175,6 +178,8 @@ export default function App() {
         onNavigateToSection={handleNavigateToSection}
         onRequestDemo={() => handleOpenDemoForm()}
         onLaunchPortal={handleLaunchPortal}
+        onOpenPrivacy={() => setPrivacyOpen(true)}
+        onOpenTerms={() => setTermsOpen(true)}
       />
 
       {/* 6. Multi-step Demo Inquiry Modal Wizard */}
@@ -184,6 +189,10 @@ export default function App() {
         preselectedProductId={preselectedProduct}
         preselectedAudienceId={preselectedAudience}
       />
+
+      {/* Legal Modals for Carrier and User Compliance */}
+      <PrivacyPolicyModal isOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
+      <TermsOfServiceModal isOpen={termsOpen} onClose={() => setTermsOpen(false)} />
 
     </div>
   );

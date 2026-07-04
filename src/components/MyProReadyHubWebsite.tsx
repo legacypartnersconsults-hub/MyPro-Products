@@ -7,6 +7,7 @@ import {
   MapPin, AlertCircle, Heart, Key, Clock, Copy, FileCode
 } from 'lucide-react';
 import MyProReadyHubLogo from './MyProReadyHubLogo';
+import { PrivacyPolicyModal, TermsOfServiceModal } from './LegalModals';
 
 interface MyProReadyHubWebsiteProps {
   onBackToCorporate: () => void;
@@ -31,6 +32,8 @@ interface UploadedDocument {
 }
 
 export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo }: MyProReadyHubWebsiteProps) {
+  const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [termsOpen, setTermsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'checklist' | 'scanner' | 'cabinet' | 'alerts'>('checklist');
   const [selectedDisaster, setSelectedDisaster] = useState<'hurricane' | 'wildfire' | 'flood' | 'freeze'>('hurricane');
   
@@ -1360,15 +1363,24 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
       {/* 5. Footer and Certifications */}
       <footer className="bg-slate-900 border-t border-slate-800 py-12 px-6">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 rounded bg-gradient-to-tr from-cyan-500 to-lime-500 flex items-center justify-center text-slate-950">
-              <span className="font-bold text-sm">M</span>
+          <div className="flex flex-col items-center md:items-start space-y-2">
+            <div className="flex items-center space-x-2">
+              <div className="h-8 w-8 rounded bg-gradient-to-tr from-cyan-500 to-lime-500 flex items-center justify-center text-slate-950">
+                <span className="font-bold text-sm">M</span>
+              </div>
+              <span className="text-sm font-semibold text-slate-300">&copy; 2026 MyPro Ready Hub. All rights reserved.</span>
             </div>
-            <span className="text-sm font-semibold text-slate-300">&copy; 2026 MyPro Ready Hub. All rights reserved.</span>
+            <p className="text-[11px] text-slate-500">
+              Need assistance or have program questions? Contact us toll-free at <span className="text-slate-400 font-semibold">(833) 369-7762</span> or email <a href="mailto:jruland@myproproducts.com" className="text-cyan-500 hover:underline">jruland@myproproducts.com</a>.
+            </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400 font-medium">
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-slate-400 font-medium">
             <span className="hover:text-cyan-400 cursor-pointer" onClick={onBackToCorporate}>Products Home</span>
+            <span>&bull;</span>
+            <button onClick={() => setTermsOpen(true)} className="hover:text-cyan-400 cursor-pointer focus:outline-none">Terms & Conditions</button>
+            <span>&bull;</span>
+            <button onClick={() => setPrivacyOpen(true)} className="hover:text-cyan-400 cursor-pointer focus:outline-none">Privacy Policy</button>
             <span>&bull;</span>
             <span>HIPAA Compliant</span>
             <span>&bull;</span>
@@ -1376,6 +1388,10 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
           </div>
         </div>
       </footer>
+
+      {/* Legal Modals for Carrier and User Compliance */}
+      <PrivacyPolicyModal isOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
+      <TermsOfServiceModal isOpen={termsOpen} onClose={() => setTermsOpen(false)} />
 
     </div>
   );

@@ -719,7 +719,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                   By checking the SMS Consent box and submitting the form, you agree to receive automated notifications and informational SMS alerts from MyPro Market at the mobile number provided. Consent is optional and is not a condition of purchase. Msg & data rates may apply. Msg frequency varies by active job event.
                 </p>
                 <p>
-                  You can unsubscribe at any time by replying <strong>STOP</strong> to any of our text messages. For help or questions, reply <strong>HELP</strong> or contact our support team at support@myproproducts.com. We value your privacy; your mobile number and SMS consent will never be sold, shared, or rented with third parties or affiliates for marketing or promotional purposes.
+                  You can unsubscribe at any time by replying <strong>STOP</strong> to any of our text messages. For help or questions, reply <strong>HELP</strong> or contact our support team at jruland@myproproducts.com. We value your privacy; your mobile number and SMS consent will never be sold, shared, or rented with third parties or affiliates for marketing or promotional purposes.
                 </p>
               </div>
             </div>
@@ -949,12 +949,21 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
       </section>
 
       {/* 8. Simple Mini-Footer for Standalone page */}
-      <footer className="bg-slate-950 text-slate-500 py-10 border-t border-slate-900 text-xs text-center">
-        <p>&copy; {new Date().getFullYear()} MyPro Market. A MyPro Products Ecosystem Suite Platform.</p>
-        <div className="flex justify-center space-x-6 mt-3">
-          <span className="hover:text-slate-300 cursor-pointer" onClick={() => setTermsOpen(true)}>Terms & Agreements</span>
-          <span className="hover:text-slate-300 cursor-pointer" onClick={() => setPrivacyOpen(true)}>Privacy Policy</span>
-          <span className="hover:text-slate-300 cursor-pointer" onClick={onBackToCorporate}>Return to MyPro Products Homepage</span>
+      <footer className="bg-slate-950 text-slate-500 py-12 border-t border-slate-900 text-xs text-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+          <p className="text-slate-400">
+            &copy; {new Date().getFullYear()} MyPro Market. A MyPro Products Ecosystem Suite Platform.
+          </p>
+          <div className="text-slate-500 max-w-md mx-auto leading-relaxed">
+            Need assistance or have program questions? Contact us toll-free at <span className="text-slate-300 font-semibold">(833) 369-7762</span> or email <a href="mailto:jruland@myproproducts.com" className="text-[#468CDC] hover:underline font-medium">jruland@myproproducts.com</a>.
+          </div>
+          <div className="flex justify-center flex-wrap gap-x-6 gap-y-2 pt-2 text-slate-400">
+            <button onClick={() => setTermsOpen(true)} className="hover:text-slate-200 cursor-pointer focus:outline-none">Terms of Service & SMS Program Terms</button>
+            <span className="text-slate-700 hidden sm:inline">|</span>
+            <button onClick={() => setPrivacyOpen(true)} className="hover:text-slate-200 cursor-pointer focus:outline-none">Privacy Policy</button>
+            <span className="text-slate-700 hidden sm:inline">|</span>
+            <button onClick={onBackToCorporate} className="hover:text-slate-200 cursor-pointer focus:outline-none">Return to MyPro Products Homepage</button>
+          </div>
         </div>
       </footer>
 

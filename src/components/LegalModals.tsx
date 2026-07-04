@@ -114,14 +114,17 @@ export function PrivacyPolicyModal({ isOpen, onClose }: LegalModalProps) {
             </div>
 
             <div>
-              <h4 className="text-sm font-bold text-slate-900 mb-2">6. Contact Us</h4>
-              <p>
-                If you have questions regarding this Privacy Policy or our mobile privacy practices, please contact us at:
+              <h4 className="text-sm font-bold text-slate-900 mb-2">6. Contact and Support</h4>
+              <p className="mb-2">
+                If you have any questions, concerns, or requests regarding this Privacy Policy, your personal data, or our mobile program practices, please do not hesitate to contact our dedicated support team:
               </p>
-              <p className="mt-1 font-semibold text-slate-800">
-                MyPro Products Compliance Office<br />
-                Email: jruland@myproproducts.com
-              </p>
+              <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 space-y-2 text-slate-700">
+                <p><strong>General Support Email:</strong> <a href="mailto:jruland@myproproducts.com" className="text-[#468CDC] hover:underline font-semibold">jruland@myproproducts.com</a></p>
+                <p><strong>Compliance & Privacy Officer:</strong> <a href="mailto:jruland@myproproducts.com" className="text-[#468CDC] hover:underline font-semibold">jruland@myproproducts.com</a></p>
+                <p><strong>Toll-Free Support Hotline:</strong> <span className="font-semibold text-slate-900">(833) 369-7762</span></p>
+                <p><strong>Support Availability:</strong> Monday – Friday, 9:00 AM to 5:00 PM Eastern Standard Time (EST)</p>
+                <p><strong>Mailing Address:</strong> MyPro Products Compliance Office, 102 Flagler Plaza Dr., Palm Coast, FL 32137</p>
+              </div>
             </div>
           </div>
 
@@ -129,7 +132,7 @@ export function PrivacyPolicyModal({ isOpen, onClose }: LegalModalProps) {
           <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
             <button
               onClick={onClose}
-              className="px-5 py-2 bg-[#468CDC] hover:bg-[#3b7cbd] text-white font-bold rounded-xl text-xs transition-colors cursor-pointer"
+              className="px-5 py-2 bg-[#468CDC] hover:bg-[#3b7cbd] text-white !text-white font-bold rounded-xl text-xs transition-colors cursor-pointer"
             >
               Close
             </button>
@@ -223,7 +226,7 @@ export function TermsOfServiceModal({ isOpen, onClose }: LegalModalProps) {
                   <strong>Opt-Out Instruction:</strong> You can unsubscribe from text alerts at any time. Simply reply <strong>STOP</strong> to any message received. A final confirmation SMS will be sent to confirm your unsubscription, and no further text messages will be sent to your device.
                 </li>
                 <li>
-                  <strong>Assistance:</strong> For assistance or program questions, reply <strong>HELP</strong> to any message, or email us at support@myproproducts.com.
+                  <strong>Assistance:</strong> For assistance or program questions, reply <strong>HELP</strong> to any message, or email us at jruland@myproproducts.com.
                 </li>
               </ul>
             </div>
@@ -248,13 +251,27 @@ export function TermsOfServiceModal({ isOpen, onClose }: LegalModalProps) {
                 These Terms of Service and any dispute arising in connection with our services will be governed by and construed in accordance with the laws of the State of Texas, without regard to its conflict of law principles.
               </p>
             </div>
+
+            <div>
+              <h4 className="text-sm font-bold text-slate-900 mb-2">6. Contact and Support</h4>
+              <p className="mb-2">
+                For questions about our terms, mobile subscription alerts, or general platform inquiries, please contact our support team:
+              </p>
+              <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 space-y-2 text-slate-700">
+                <p><strong>General Support Email:</strong> <a href="mailto:jruland@myproproducts.com" className="text-[#468CDC] hover:underline font-semibold">jruland@myproproducts.com</a></p>
+                <p><strong>Compliance & Privacy Officer:</strong> <a href="mailto:jruland@myproproducts.com" className="text-[#468CDC] hover:underline font-semibold">jruland@myproproducts.com</a></p>
+                <p><strong>Toll-Free Support Hotline:</strong> <span className="font-semibold text-slate-900">(833) 369-7762</span></p>
+                <p><strong>Support Availability:</strong> Monday – Friday, 9:00 AM to 5:00 PM Eastern Standard Time (EST)</p>
+                <p><strong>Mailing Address:</strong> MyPro Products Compliance Office, 102 Flagler Plaza Dr., Palm Coast, FL 32137</p>
+              </div>
+            </div>
           </div>
 
           {/* Footer */}
           <div className="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
             <button
               onClick={onClose}
-              className="px-5 py-2 bg-[#468CDC] hover:bg-[#3b7cbd] text-white font-bold rounded-xl text-xs transition-colors cursor-pointer"
+              className="px-5 py-2 bg-[#468CDC] hover:bg-[#3b7cbd] text-white !text-white font-bold rounded-xl text-xs transition-colors cursor-pointer"
             >
               Close
             </button>

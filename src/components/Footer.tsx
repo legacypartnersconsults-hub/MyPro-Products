@@ -6,9 +6,17 @@ interface FooterProps {
   onNavigateToSection: (sectionId: string) => void;
   onRequestDemo: () => void;
   onLaunchPortal: () => void;
+  onOpenPrivacy?: () => void;
+  onOpenTerms?: () => void;
 }
 
-export default function Footer({ onNavigateToSection, onRequestDemo, onLaunchPortal }: FooterProps) {
+export default function Footer({
+  onNavigateToSection,
+  onRequestDemo,
+  onLaunchPortal,
+  onOpenPrivacy,
+  onOpenTerms
+}: FooterProps) {
   const currentYear = new Date().getFullYear();
   const [subscribed, setSubscribed] = useState(false);
   const [email, setEmail] = useState('');
@@ -136,14 +144,19 @@ export default function Footer({ onNavigateToSection, onRequestDemo, onLaunchPor
         </div>
 
         {/* Bottom copyright & certification bar */}
-        <div className="pt-8 flex flex-col sm:flex-row justify-between items-center text-xs space-y-4 sm:space-y-0">
-          <div>
-            &copy; {currentYear} MyPro Products. All rights reserved. Deployed at{' '}
-            <span className="text-white font-medium hover:underline cursor-pointer">myproproducts.com</span>
+        <div className="pt-8 flex flex-col md:flex-row justify-between items-center text-xs gap-4">
+          <div className="space-y-1 text-center md:text-left">
+            <div>
+              &copy; {currentYear} MyPro Products. All rights reserved. Deployed at{' '}
+              <span className="text-white font-medium hover:underline cursor-pointer">myproproducts.com</span>
+            </div>
+            <p className="text-slate-500">
+              Support Desk: <span className="text-slate-400 font-semibold">(833) 369-7762</span> (Toll-Free) &bull; <a href="mailto:jruland@myproproducts.com" className="text-[#468CDC] hover:underline font-medium">jruland@myproproducts.com</a>
+            </p>
           </div>
-          <div className="flex space-x-6">
-            <span className="hover:text-white cursor-pointer">Privacy Policy</span>
-            <span className="hover:text-white cursor-pointer">Terms of Service</span>
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            <span className="hover:text-white cursor-pointer" onClick={onOpenPrivacy}>Privacy Policy</span>
+            <span className="hover:text-white cursor-pointer" onClick={onOpenTerms}>Terms of Service</span>
             <span className="hover:text-white cursor-pointer">API Reference</span>
             <span className="flex items-center space-x-1 text-green-400">
               <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse"></span>
