@@ -148,7 +148,12 @@ export default function Footer({
           <div className="space-y-1 text-center md:text-left">
             <div>
               &copy; {currentYear} MyPro Products. All rights reserved. Deployed at{' '}
-              <span className="text-white font-medium hover:underline cursor-pointer">myproproducts.com</span>
+              <a
+                href="https://myproproducts.com"
+                className="text-white font-medium hover:underline"
+              >
+                myproproducts.com
+              </a>
             </div>
             <p className="text-slate-500">
               Support Desk: <span className="text-slate-400 font-semibold">(833) 369-7762</span> (Toll-Free) &bull; <a href="mailto:jruland@myproproducts.com" className="text-[#468CDC] hover:underline font-medium">jruland@myproproducts.com</a>
