@@ -65,11 +65,11 @@ export default function Hero({ onRequestDemo, onExploreSuite, onLaunchPortal }: 
             </div>
             <div className="flex items-center space-x-1.5">
               <ShieldCheck className="h-4.5 w-4.5 text-[#BCB6A5]" />
-              <span>Real-Time SLA Tracking</span>
+              <span>Disaster Prep & Content Inventory</span>
             </div>
             <div className="flex items-center space-x-1.5">
               <ShieldCheck className="h-4.5 w-4.5 text-[#BCB6A5]" />
-              <span>Homeowner & Consumer Guided</span>
+              <span>Claim Management & Documentation for Homeowners</span>
             </div>
           </motion.div>
 
@@ -81,18 +81,11 @@ export default function Hero({ onRequestDemo, onExploreSuite, onLaunchPortal }: 
             className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-2"
           >
             <button
-              onClick={() => onRequestDemo()}
+              onClick={onExploreSuite}
               className="w-full sm:w-auto px-8 py-4 bg-[#468CDC] hover:bg-[#3b7cbd] text-white font-bold rounded-xl transition-all shadow-lg shadow-slate-200 hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center space-x-2 cursor-pointer"
             >
-              <span>Request a Demo</span>
-              <ArrowRight className="h-5 w-5" />
-            </button>
-            <button
-              onClick={onExploreSuite}
-              className="w-full sm:w-auto px-8 py-4 bg-white text-slate-800 font-bold rounded-xl border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center space-x-2 cursor-pointer"
-            >
               <span>Explore Suite</span>
-              <Layers className="h-5 w-5 text-slate-500" />
+              <Layers className="h-5 w-5" />
             </button>
           </motion.div>
         </div>

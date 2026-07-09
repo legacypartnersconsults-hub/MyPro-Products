@@ -27,12 +27,19 @@ import {
   MessageSquare,
   Sparkles,
   Award,
-  ArrowUpRight
+  ArrowUpRight,
+  AlertTriangle,
+  Calculator,
+  Users,
+  Home,
+  CheckCircle
 } from 'lucide-react';
+import { audiences } from '../data';
+import { Audience } from '../types';
 
 interface MyProMarketWebsiteProps {
   onBackToCorporate: () => void;
-  onRequestDemo: (productId?: string) => void;
+  onRequestDemo: (productId?: string, audienceId?: string) => void;
   onLaunchApp?: () => void;
 }
 
@@ -43,29 +50,24 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
 
   const marketLifecycleSteps = [
     {
-      title: 'Damage Intake',
-      desc: 'Owner or property manager files damage report online. Automated checklist pre-categorizes standard claim items.',
-      metrics: 'Minutes vs Hours'
+      title: 'Create Your Job',
+      desc: 'Detail your project requirements, upload photos, and outline your timeline—whether it is a custom home remodel, an emergency restoration, or a critical underwriting compliance repair.',
+      metrics: 'Fast & Simple'
     },
     {
-      title: 'Vetting Compliance',
-      desc: 'MyPro automated system checks background records, state licensing, active general liability, and worker comp insurance.',
-      metrics: '100% Guaranteed Compliance'
+      title: 'Submit Your Request',
+      desc: 'Once you create your job and choose your contractor, MyPro Market notifies your contractor directly. You Bypass middleman markup fees and third party brokers completely.',
+      metrics: 'No Broker Fees'
     },
     {
-      title: 'Instant Dispatch',
-      desc: 'The best-fitting local vetted contractor receives dispatch details, accepts instantly, and coordinates arrival with the occupant.',
-      metrics: '<15 min Avg Acceptance'
+      title: 'Match with Your Pro',
+      desc: 'Connect immediately with elite, state-licensed local contractors who match your specific trade needs. Review verified real-time compliance profiles, certifications, and customer reviews.',
+      metrics: '100% Vetted Pros'
     },
     {
-      title: 'Real-time Tracking',
-      desc: 'Field crew uploads milestone photos, material sheets, and digital dry-log reports live to the carrier portal.',
-      metrics: 'Continuous Progress Feed'
-    },
-    {
-      title: 'Standard Audit & Pay',
-      desc: 'Platform automatically generates structured, carrier-compliant billing reports, facilitating immediate, secure payouts.',
-      metrics: 'Payout in Days, Not Months'
+      title: 'Get Your Job Done',
+      desc: 'Monitor your project\'s trajectory in real time with automated milestone updates, fully transparent compliance reports, high-resolution progress photographs, and direct chat communication through our integrated messaging platform.',
+      metrics: 'Complete Peace of Mind'
     }
   ];
 
@@ -82,6 +84,16 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
   // Legal Modal States
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
+
+  // Moved Sections: ROI states
+  const [claimsCount, setClaimsCount] = useState<number>(25);
+  const [averageHourlyCost, setAverageHourlyCost] = useState<number>(45);
+  const [adminHoursPerClaim, setAdminHoursPerClaim] = useState<number>(6);
+
+  const totalAdminHoursCurrently = claimsCount * adminHoursPerClaim;
+  const hoursSavedByMyPro = Math.round(totalAdminHoursCurrently * 0.65); // 65% efficiency gain
+  const financialSavings = hoursSavedByMyPro * averageHourlyCost;
+  const turnaroundDaysReduction = 14;
 
   const handleSmsSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -269,7 +281,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 font-nunito">Ease of Use</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  With our modern, intuitive dispatch dashboard, automated compliance routing, and simplified digital workflows, MyPro Market removes all the complexity from managing emergency dispatches. Property managers and insurance agents can easily coordinate claims and dispatch contractors in a fraction of the time.
+                  Designed with intuitive simplicity at its core, MyPro Market enables users to navigate the platform seamlessly. By transforming complex administration into straightforward, hassle-free actions, stakeholders can effortlessly coordinate jobs, dispatch qualified contractors, and monitor project progress through its entire lifecycle.
                 </p>
               </div>
             </div>
@@ -282,7 +294,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 font-nunito">Clear Communication</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  The platform operates as a unified communication hub, instantly connecting insurance agents, property managers, and vetted field contractors. Automatic status updates, real-time job-site notifications, and synchronized chat rooms eliminate friction and keep every key stakeholder perfectly aligned.
+                  MyPro Market operates as a unified communication hub, instantly connecting insurance agents, insurance adjusters, property managers, homeowners, business owners and contractors. Status updates, jobsite notifications, document and invoice storage keep every stakeholder perfectly aligned.
                 </p>
               </div>
             </div>
@@ -295,7 +307,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 font-nunito">Performance & Accountability</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  Every job in the MyPro Market ecosystem is fully documented and auditable. Real-time contractor GPS tracking, instant digital dry logs, transparent moisture readings, and step-by-step progress photos are uploaded live to guarantee professional-grade performance and structural accountability.
+                  Every project within the MyPro Market ecosystem is fully documented and auditable. Integrated cycle-time tracking, secure document storage, and structured post-job reviews deliver a completely transparent, high-performance process that ensures accountability at every milestone.
                 </p>
               </div>
             </div>
@@ -308,7 +320,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 font-nunito">Quality and Trust</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
-                  All contractors undergo continuous background checks, trade license verification, and direct-from-underwriter audits to ensure a minimum of $2,000,000 in general liability and worker's compensation cover. This programmatic screening process ensures that only premier, fully vetted service teams protect your property.
+                  Every service provider undergoes a rigorous screening process. Active trade licensing, general liability insurance, comprehensive background checks, and industry certifications are completely transparent and accessible for all users to verify, ensuring only fully vetted and credentialed professionals service your property.
                 </p>
               </div>
             </div>
@@ -373,7 +385,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                       </div>
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Live GPS ETAs and status tracking directly on your dashboard.</span>
+                        <span>Real-time job tracking, a unified communication portal, and secure document and invoice storage directly within your dashboard.</span>
                       </div>
                     </div>
                   </div>
@@ -393,22 +405,22 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                   className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center"
                 >
                   <div className="md:col-span-8 space-y-4">
-                    <h3 className="text-xl font-bold text-slate-900">Mitigate Claim Bloat and Expedite Turnaround</h3>
+                    <h3 className="text-xl font-bold text-slate-900">Accelerate Claim Cycles, Alleviate Insured Stress, and Minimize Adjuster Follow-ups</h3>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      Carriers struggle with contractor invoice inflation, delayed damage reporting, and lack of clean visual documentation from the field. MyPro Market standardizes the claims lifecycle instantly.
+                      Simplify claim repairs with streamlined workflows, time-cycle tracking, performance reporting, and seamless communication between adjusters, contractors and insureds.
                     </p>
                     <div className="space-y-2.5 text-xs text-slate-700">
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Standardized line-item pricing verified against local market metrics.</span>
+                        <span>MyPro Market ensures efficiency and ease of use for all stakeholders.</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Real-time photo logs and structural moisture dry-log metrics.</span>
+                        <span>Invite insureds to view live project details directly, fostering complete transparency while significantly reducing inbound status inquiries to adjusters.</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Comprehensive, audit-ready data packets delivered automatically.</span>
+                        <span>Real-time cycle-time tracking and comprehensive post-job performance reporting to facilitate seamless communication between all stakeholders.</span>
                       </div>
                     </div>
                   </div>
@@ -428,29 +440,29 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                   className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center"
                 >
                   <div className="md:col-span-8 space-y-4">
-                    <h3 className="text-xl font-bold text-slate-900">Focus on the Work, Not Chasing Payouts</h3>
+                    <h3 className="text-xl font-bold text-slate-900">Streamlined, Direct-to-Contractor Job Assignments</h3>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      Restoration pros spend too much time bidding, traveling for scopes, and waiting up to 60 days for carriers to approve and release checks. MyPro Market routes direct dispatches with pre-approved pricing parameters.
+                      Receive job assignments directly from the source. MyPro Market eliminates third-party intermediaries and biased dispatch algorithms, giving the original job creator complete control over contractor selection. This direct connection ensures you build genuine, long-term client relationships based purely on performance, expertise, and trust.
                     </p>
                     <div className="space-y-2.5 text-xs text-slate-700">
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Pre-approved scopes that align with carrier guidelines.</span>
+                        <span>Direct-to-source opportunities, enabling you to build lasting professional relationships with key decision makers.</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Direct digital verification that triggers instant electronic ACH payouts.</span>
+                        <span>Bypass middleman intermediaries with a platform that values your reputation and guarantees transaction transparency.</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Zero customer-acquisition cost (CAC) for dispatched regional work.</span>
+                        <span>Full autonomy for job creators to select your services based on performance, quality, and capability.</span>
                       </div>
                     </div>
                   </div>
                   <div className="md:col-span-4 bg-white p-5 rounded-xl border border-slate-150 text-center shadow-sm">
-                    <div className="text-4xl font-extrabold text-market-green">&lt; 5 Days</div>
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Avg billing-to-payment cycle</div>
-                    <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">Direct deposit released upon carrier validation of uploaded field photos.</p>
+                    <div className="text-4xl font-extrabold text-market-green">100% Direct</div>
+                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Zero Intermediaries</div>
+                    <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">Build authentic client relationships without third-party brokers, biased algorithms, or middleman fees.</p>
                   </div>
                 </motion.div>
               )}
@@ -463,29 +475,29 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                   className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center"
                 >
                   <div className="md:col-span-8 space-y-4">
-                    <h3 className="text-xl font-bold text-slate-900">Build Local Authority and Protect Policyholder Loyalty</h3>
+                    <h3 className="text-xl font-bold text-slate-900">MyPro Market: A Powerful Value-Add for Your Agency, Your Clients, and Your Staff</h3>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      Agents are the first line of contact after disaster strikes but often lack visibility into mitigation scheduling. MyPro Market empowers local agents with real-time tracking of active local dispatches.
+                      Seamlessly connect your policyholders with licensed, pre-vetted contractors through an optimized, transparent framework that accelerates restoration timelines and ensures real-time communication at every milestone.
                     </p>
                     <div className="space-y-2.5 text-xs text-slate-700">
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Direct dashboard transparency to track assigned contractor ETA for active clients.</span>
+                        <span>24/7 rapid emergency dispatch to instantly connect clients with elite, pre-vetted contractors when disaster strikes.</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Automated SMS/text status alerts sent to client's phone immediately.</span>
+                        <span>Unified dashboard tracking that grants your agency real-time visibility into claim progress and contractor milestones.</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Seamless claim submission flow that initiates programmatic dispatching.</span>
+                        <span>A highly optimized, stress-free experience that dramatically reduces staff inquiries and elevates client satisfaction.</span>
                       </div>
                     </div>
                   </div>
                   <div className="md:col-span-4 bg-white p-5 rounded-xl border border-slate-150 text-center shadow-sm">
-                    <div className="text-4xl font-extrabold text-market-blue">98%</div>
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Policyholder Retention Rate</div>
-                    <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">Maintained by delivering immediate, fully audited emergency response when help is needed most.</p>
+                    <div className="text-4xl font-extrabold text-market-blue">24/7 Relief</div>
+                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">For Staff & Clients</div>
+                    <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">Support your agency staff and protect client loyalty with automated, transparent restoration routing active around the clock.</p>
                   </div>
                 </motion.div>
               )}
@@ -498,29 +510,29 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                   className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center"
                 >
                   <div className="md:col-span-8 space-y-4">
-                    <h3 className="text-xl font-bold text-slate-900">Elite Vetted Service Teams Dispatched to Your Door</h3>
+                    <h3 className="text-xl font-bold text-slate-900">Elite Vetted Contractors for Restoration, Remodels, and Compliance</h3>
                     <p className="text-xs text-slate-600 leading-relaxed">
-                      Homeowners suffer high anxiety waiting hours to find certified help or struggling with complex insurance claims documentation. MyPro Market manages everything seamlessly for you.
+                      Whether you are addressing an emergency loss, planning a custom home remodel, or resolving time-sensitive underwriting inspection findings to secure your coverage, finding trustworthy professionals can be stressful. MyPro Market simplifies the process by matching you directly with elite, fully certified local contractors.
                     </p>
                     <div className="space-y-2.5 text-xs text-slate-700">
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Programmatically vetted contractors with full licensing and background checks.</span>
+                        <span>Programmatically vetted contractors with verified background checks, active licensing, and robust insurance coverage for all home care needs.</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Clear real-time repair progress tracking with visual photo updates.</span>
+                        <span>Transparent real-time project milestones and high-resolution photo updates, keeping you fully informed at every stage of work.</span>
                       </div>
                       <div className="flex items-center space-x-2">
                         <Check className="h-4.5 w-4.5 text-market-green" />
-                        <span>Secure claims processing directly coordinated with your insurance carrier.</span>
+                        <span>Comprehensive project coordination—handling everything from complex insurance claims and renovations to critical property inspection repairs.</span>
                       </div>
                     </div>
                   </div>
                   <div className="md:col-span-4 bg-white p-5 rounded-xl border border-slate-150 text-center shadow-sm">
                     <div className="text-4xl font-extrabold text-market-green">4.9 / 5</div>
                     <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1">Homeowner Satisfaction Score</div>
-                    <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">From thousands of emergency repair and restoration completions managed on-platform.</p>
+                    <p className="text-[11px] text-slate-500 mt-2 leading-relaxed">Achieved across thousands of home projects, from emergency repairs and custom remodels to compliance inspections.</p>
                   </div>
                 </motion.div>
               )}
@@ -530,25 +542,25 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
         </div>
       </section>
 
-      {/* Property Repair Claims Lifecycle Section */}
-      <section className="py-24 bg-slate-50 border-t border-slate-100">
+      {/* How MyPro Market Works Section */}
+      <section id="provides" className="py-24 bg-slate-50 border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-xs font-bold uppercase tracking-widest text-market-blue bg-market-blue/5 px-3 py-1.5 rounded-full border border-market-blue/15">
-              Claims Lifecycle
+              Market Workflow
             </span>
             <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight mt-4">
-              Property Repair Claims Lifecycle
+              How MyPro Market Works
             </h2>
             <p className="text-sm text-slate-600 mt-3 leading-relaxed">
-              See how the vetting ecosystem and real-time tracking operate seamlessly under our flagship application.
+              Connect with elite, pre-vetted contractors through a streamlined, transparent process designed for fast results and real-time tracking.
             </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             
-            {/* Claims Lifecycle interactive stepper */}
+            {/* Market Workflow interactive stepper */}
             <div className="lg:col-span-7 space-y-6">
               <div className="flex items-center space-x-2">
                 <Activity className="h-5 w-5 text-market-blue" />
@@ -613,59 +625,107 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
               </div>
 
               <div className="space-y-5">
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs">
-                  <div className="flex justify-between items-center font-semibold text-slate-800 border-b border-slate-100 pb-2 mb-2">
-                    <span>Pro Contractor ID:</span>
-                    <span className="font-mono text-slate-500">PRO-8942-TX</span>
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 text-xs text-left">
+                  <div className="flex justify-between items-center font-semibold text-slate-800 border-b border-slate-150 pb-2 mb-2">
+                    <span className="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Contractor Profile</span>
+                    <span className="font-bold text-market-blue">Legacy Construction</span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-slate-600 text-left">
-                    <div className="flex items-center space-x-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-market-green" />
-                      <span>Licensing: <strong className="text-slate-800">Verified Active</strong></span>
+                  
+                  <div className="space-y-3.5 mt-2.5 text-[11px] text-slate-600">
+                    <div>
+                      <strong className="text-slate-800 block mb-0.5">About the Company</strong>
+                      <p className="leading-relaxed">A premier full-service residential and commercial contractor specializing in high-quality home remodels, emergency damage restoration, and swift underwriting compliance resolution.</p>
                     </div>
-                    <div className="flex items-center space-x-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-market-green" />
-                      <span>GL Insurance: <strong className="text-slate-800">$2M Active</strong></span>
+
+                    <div>
+                      <strong className="text-slate-800 block mb-1.5">Types of Services Offered</strong>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1.5 mt-1">
+                        <div className="flex items-center space-x-1.5">
+                          <Check className="h-3 w-3 text-market-green flex-shrink-0" />
+                          <span>General Construction/Remodel</span>
+                        </div>
+                        <div className="flex items-center space-x-1.5">
+                          <Check className="h-3 w-3 text-market-green flex-shrink-0" />
+                          <span>Electrical</span>
+                        </div>
+                        <div className="flex items-center space-x-1.5">
+                          <Check className="h-3 w-3 text-market-green flex-shrink-0" />
+                          <span>HVAC</span>
+                        </div>
+                        <div className="flex items-center space-x-1.5">
+                          <Check className="h-3 w-3 text-market-green flex-shrink-0" />
+                          <span>Plumbing & Mechanical</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-market-green" />
-                      <span>Auto Policy: <strong className="text-slate-800">Active</strong></span>
+
+                    <div>
+                      <strong className="text-slate-800 block mb-0.5">Credentials & Certifications</strong>
+                      <p className="leading-relaxed">State Licensed General Contractor (#GC-8942-TX), IICRC Certified, OSHA-30 Compliant, $2M General Liability, fully bonded.</p>
                     </div>
-                    <div className="flex items-center space-x-1.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-market-green" />
-                      <span>Background: <strong className="text-slate-800">Passed</strong></span>
+
+                    <div className="flex items-center space-x-2 pt-1 border-t border-slate-200/55 mt-2">
+                      <span className="h-2 w-2 rounded-full bg-market-green" />
+                      <span className="font-bold text-slate-800">Background: <span className="text-market-green">Passed</span></span>
                     </div>
                   </div>
                 </div>
 
-                {/* Real-Time Live Map Claim Trace */}
+                {/* Real-Time Job Tracking Milestones */}
                 <div>
-                  <div className="flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
-                    <span>Real-time claim tracking</span>
-                    <span className="text-market-blue flex items-center space-x-1">
-                      <span className="h-2 w-2 rounded-full bg-market-blue animate-ping"></span>
-                      <span className="font-semibold text-[10px]">Active dispatch trace</span>
-                    </span>
+                  <div className="flex justify-between items-center text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">
+                    <span>Real-Time Job Tracking Milestones</span>
                   </div>
                   
-                  <div className="h-36 rounded-xl bg-slate-100 border border-slate-200 relative overflow-hidden flex flex-col justify-between p-4 shadow-inner">
-                    {/* Grid lines mock map */}
-                    <div className="absolute inset-0 bg-[linear-gradient(to_right,#e2e8f0_1px,transparent_1px),linear-gradient(to_bottom,#e2e8f0_1px,transparent_1px)] bg-[size:1.5rem_1.5rem]" />
-                    <div className="relative z-10 flex justify-between items-start text-[10px] text-slate-400 font-mono">
-                      <span>Lat/Lng: 29.7604° N, 95.3698° W</span>
-                      <span>Job: #9042-W</span>
-                    </div>
-                    <div className="relative z-10 flex items-center justify-between">
-                      <div className="flex items-center space-x-2 bg-white/95 backdrop-blur-sm p-2 rounded-lg border border-slate-100 shadow-sm max-w-[190px] text-left">
-                        <Clock className="h-4 w-4 text-market-blue flex-shrink-0" />
-                        <div className="text-[10px]">
-                          <div className="font-bold text-slate-800 leading-none">ETA to Property</div>
-                          <div className="text-slate-500 mt-1">8 minutes (Distance: 3.4 mi)</div>
-                        </div>
-                      </div>
-                      <div className="h-9 w-9 rounded-full bg-market-blue flex items-center justify-center text-white border-2 border-white shadow-lg shadow-market-blue/40 animate-bounce">
-                        <Activity className="h-4.5 w-4.5" />
-                      </div>
+                  <div className="rounded-xl bg-white border border-slate-200 p-4 shadow-inner text-left">
+                    <h4 className="text-xs font-extrabold text-[#468CDC] mb-4">Milestones (7)</h4>
+                    
+                    {/* Horizontal Milestones Line */}
+                    <div className="flex items-start justify-between relative overflow-x-auto pb-2 scrollbar-none">
+                      {[
+                        { step: 1, label: 'Assignment Accepted/Rejected', status: 'checked' },
+                        { step: 2, label: 'Customer Contacted', status: 'checked' },
+                        { step: 3, label: 'Job Started', status: 'checked' },
+                        { step: 4, label: 'Job Completed', status: 'active' },
+                        { step: 5, label: 'COS Uploaded', status: 'pending' },
+                        { step: 6, label: 'Invoice Uploaded', status: 'pending' },
+                        { step: 7, label: 'Job Closed', status: 'pending' },
+                      ].map((item, index, arr) => {
+                        return (
+                          <div key={item.step} className="flex-1 flex flex-col items-center min-w-[70px] relative">
+                            {/* Connector line behind circles */}
+                            {index < arr.length - 1 && (
+                              <div className={`absolute top-4 left-[50%] right-[-50%] h-[2px] z-0 ${
+                                item.status === 'checked' && arr[index + 1].status !== 'pending'
+                                  ? 'bg-[#98C44E]' 
+                                  : item.status === 'checked' && arr[index + 1].status === 'active'
+                                  ? 'bg-[#98C44E]'
+                                  : 'bg-slate-200'
+                              }`} />
+                            )}
+                            
+                            {/* Circle Indicator */}
+                            <div className={`h-8 w-8 rounded-full flex items-center justify-center text-[11px] font-bold relative z-10 shadow-sm transition-all ${
+                              item.status === 'checked'
+                                ? 'bg-[#98C44E] text-white'
+                                : item.status === 'active'
+                                ? 'bg-[#468CDC] text-white ring-4 ring-blue-100'
+                                : 'bg-slate-200 text-slate-500'
+                            }`}>
+                              {item.status === 'checked' ? (
+                                <Check className="h-4 w-4 stroke-[3]" />
+                              ) : (
+                                item.step
+                              )}
+                            </div>
+                            
+                            {/* Text label */}
+                            <span className="text-[9px] font-bold text-center mt-2 leading-tight text-slate-600 max-w-[65px] h-10 flex items-start justify-center">
+                              {item.label}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -680,6 +740,157 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
               </div>
             </div>
 
+          </div>
+        </div>
+      </section>
+
+
+
+      {/* Calculate Your Administrative Savings Section (Moved) */}
+      <section id="roi-calculator" className="py-20 border-t border-slate-150 bg-slate-100/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left side: Interactive Controls */}
+            <div className="lg:col-span-6 space-y-6 text-left">
+              <div className="flex items-center space-x-2">
+                <Calculator className="h-5 w-5 text-market-blue" />
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest font-nunito">IMPACT ESTIMATOR</span>
+              </div>
+              <h3 className="text-3xl font-bold text-slate-900 tracking-tight font-nunito">
+                Calculate Your Administrative Savings
+              </h3>
+              <p className="text-sm text-slate-600 leading-relaxed font-nunito">
+                Manually managing claims, vetting credentials, checking insurance policies, and handling payout authorizations eats up vital staff hours. See how much MyPro Products recovers for your bottom line.
+              </p>
+
+              {/* Sliders Container */}
+              <div className="space-y-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                {/* Slider 1 */}
+                <div>
+                  <div className="flex justify-between items-center text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-nunito">
+                    <span>Claims / Dispatches per Month</span>
+                    <span className="text-market-blue font-mono text-sm font-extrabold">{claimsCount} jobs</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="5"
+                    max="200"
+                    step="5"
+                    value={claimsCount}
+                    onChange={(e) => setClaimsCount(parseInt(e.target.value))}
+                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-market-blue focus:outline-none"
+                  />
+                  <div className="flex justify-between text-[10px] text-slate-400 font-semibold mt-1 font-mono">
+                    <span>5</span>
+                    <span>100</span>
+                    <span>200+</span>
+                  </div>
+                </div>
+
+                {/* Slider 2 */}
+                <div>
+                  <div className="flex justify-between items-center text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-nunito">
+                    <span>Current Admin Hours per Claim</span>
+                    <span className="text-market-blue font-mono text-sm font-extrabold">{adminHoursPerClaim} hours</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="1"
+                    max="15"
+                    step="1"
+                    value={adminHoursPerClaim}
+                    onChange={(e) => setAdminHoursPerClaim(parseInt(e.target.value))}
+                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-market-blue focus:outline-none"
+                  />
+                  <div className="flex justify-between text-[10px] text-slate-400 font-semibold mt-1 font-mono">
+                    <span>1 hr (Optimized)</span>
+                    <span>8 hr</span>
+                    <span>15 hr (Heavy)</span>
+                  </div>
+                </div>
+
+                {/* Slider 3 */}
+                <div>
+                  <div className="flex justify-between items-center text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 font-nunito">
+                    <span>Staff Blended Hourly Rate</span>
+                    <span className="text-market-blue font-mono text-sm font-extrabold">${averageHourlyCost}/hr</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="25"
+                    max="120"
+                    step="5"
+                    value={averageHourlyCost}
+                    onChange={(e) => setAverageHourlyCost(parseInt(e.target.value))}
+                    className="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-market-blue focus:outline-none"
+                  />
+                  <div className="flex justify-between text-[10px] text-slate-400 font-semibold mt-1 font-mono">
+                    <span>$25</span>
+                    <span>$70</span>
+                    <span>$120</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right side: Dynamic Visual ROI Summary */}
+            <div className="lg:col-span-6 bg-slate-900 rounded-2xl p-6 md:p-8 text-white relative overflow-hidden shadow-xl text-left">
+              {/* Mesh background */}
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(70,140,220,0.15),transparent_60%)] pointer-events-none" />
+
+              <h4 className="text-xs font-bold uppercase tracking-widest text-market-blue font-nunito">Projected Resource Recovery</h4>
+              
+              <div className="mt-8 grid grid-cols-2 gap-6">
+                {/* Metric 1 */}
+                <div className="border-l-2 border-market-blue pl-4">
+                  <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-white flex items-center font-nunito">
+                    <Clock className="h-6 w-6 text-market-blue mr-2 flex-shrink-0" />
+                    <span>{hoursSavedByMyPro}</span>
+                  </div>
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1.5 font-nunito">Hours Saved / mo</div>
+                </div>
+
+                {/* Metric 2 */}
+                <div className="border-l-2 border-green-500 pl-4">
+                  <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-white flex items-center font-nunito">
+                    <DollarSign className="h-6 w-6 text-green-400 mr-1 flex-shrink-0" />
+                    <span>{financialSavings.toLocaleString()}</span>
+                  </div>
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1.5 font-nunito">Labor Cost Recovered</div>
+                </div>
+
+                {/* Metric 3 */}
+                <div className="border-l-2 border-amber-500 pl-4">
+                  <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-white flex items-center font-nunito">
+                    <TrendingUp className="h-6 w-6 text-amber-400 mr-2 flex-shrink-0" />
+                    <span>-{turnaroundDaysReduction}d</span>
+                  </div>
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1.5 font-nunito">Claim Duration</div>
+                </div>
+
+                {/* Metric 4 */}
+                <div className="border-l-2 border-indigo-400 pl-4">
+                  <div className="text-3xl md:text-4xl font-extrabold tracking-tight text-white font-nunito">
+                    <span>65%</span>
+                  </div>
+                  <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1.5 font-nunito">Efficiency Gain</div>
+                </div>
+              </div>
+
+              {/* Bottom Callout */}
+              <div className="mt-8 p-4 bg-slate-800/80 rounded-xl border border-slate-700 text-xs leading-relaxed text-slate-300 font-nunito">
+                <span className="font-bold text-white">B2B Insights:</span> By programmatically centralizing credential auditing, workflow triggers, and milestone evidence logging, the MyPro Products suite eliminates redundant manual checking.
+              </div>
+
+              <div className="mt-6 flex flex-col sm:flex-row items-center gap-3">
+                <button
+                  onClick={() => onRequestDemo('market')}
+                  className="w-full py-3 px-6 bg-market-blue hover:bg-market-blue-hover text-white font-bold rounded-xl text-center text-sm transition-colors shadow-lg shadow-market-blue/30 cursor-pointer font-nunito"
+                >
+                  Request a Demo
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </section>

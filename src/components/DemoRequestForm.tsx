@@ -250,7 +250,7 @@ export default function DemoRequestForm({
                   <div className="p-4 bg-slate-50 border border-slate-150 rounded-xl flex items-center justify-between">
                     <div>
                       <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Product of Interest</span>
-                      <span className="text-sm font-bold text-[#468CDC]">MyPro Market Claims & Dispatch</span>
+                      <span className="text-sm font-bold text-[#468CDC]">MyPro Market</span>
                     </div>
                     <span className="text-[10px] font-bold uppercase bg-[#98C44E] text-white px-2.5 py-1 rounded">
                       Selected

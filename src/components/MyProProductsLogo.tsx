@@ -4,9 +4,10 @@ interface MyProProductsLogoProps {
   showText?: boolean;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
+  subText?: string;
 }
 
-export default function MyProProductsLogo({ showText = true, size = 'md', className = '' }: MyProProductsLogoProps) {
+export default function MyProProductsLogo({ showText = true, size = 'md', className = '', subText = 'Claims & Dispatch Ecosystem' }: MyProProductsLogoProps) {
   // Dimensions based on size
   const iconDimensions = {
     sm: { h: 'h-7', w: 'w-7', viewBox: '0 0 140 120' },
@@ -64,7 +65,7 @@ export default function MyProProductsLogo({ showText = true, size = 'md', classN
             <span className="text-[#468CDC] ml-1">Products</span>
           </div>
           <span className={`${textSizes.sub} font-bold text-slate-400 tracking-wider block uppercase mt-0.5 leading-none`}>
-            Claims & Dispatch Ecosystem
+            {subText}
           </span>
         </div>
       )}

@@ -7,7 +7,6 @@ import { useState, useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ProductSuite from './components/ProductSuite';
-import AudienceBreakdown from './components/AudienceBreakdown';
 import DemoRequestForm from './components/DemoRequestForm';
 import Footer from './components/Footer';
 import MyProMarketWebsite from './components/MyProMarketWebsite';
@@ -83,7 +82,7 @@ export default function App() {
       <>
         <MyProMarketWebsite 
           onBackToCorporate={handleBackToCorporate} 
-          onRequestDemo={(p) => handleOpenDemoForm(p)} 
+          onRequestDemo={(p, a) => handleOpenDemoForm(p, a)} 
           onLaunchApp={() => {
             window.scrollTo({ top: 0, behavior: 'instant' });
             setActiveView('signin');
@@ -166,11 +165,6 @@ export default function App() {
         onRequestDemo={(p) => handleOpenDemoForm(p)}
         onLaunchPortal={handleLaunchPortal}
         onLaunchReadyHub={handleLaunchReadyHub}
-      />
-
-      {/* 4. Audience Segments & Interactive ROI Estimator */}
-      <AudienceBreakdown
-        onRequestDemo={(p, a) => handleOpenDemoForm(p, a)}
       />
 
       {/* 5. Footer and Certifications */}

@@ -36,14 +36,10 @@ export default function Footer({
           
           {/* Column 1: Company Profile */}
           <div className="md:col-span-4 space-y-4">
-            <MyProProductsLogo size="md" />
-            <p className="text-xs leading-relaxed text-slate-400 max-w-sm">
-              MyPro Products is the leading enterprise B2B software suite connecting carriers, managers, homeowners, and vetted field labor into automated, compliance-checked workflows.
+            <MyProProductsLogo size="md" subText="Property Repair, Disaster Prep, and Claim Management Ecosystem" />
+            <p className="text-xs leading-relaxed text-slate-400 max-w-sm text-left">
+              MyPro Products is the premier, all-in-one ecosystem that empowers property owners, managers, and carriers with robust disaster preparedness, comprehensive claims documentation, and instant connections to fully vetted repair professionals—ensuring seamless coordination and rapid recovery when it matters most.
             </p>
-            <div className="text-xs flex items-center space-x-2 bg-slate-800/50 p-2.5 rounded-lg border border-slate-800 max-w-sm text-slate-300">
-              <Shield className="h-4 w-4 text-green-400 flex-shrink-0" />
-              <span>Full compliance & general liability tracking verified on 100% of jobs.</span>
-            </div>
           </div>
 
           {/* Column 2: Solutions Navigation */}
@@ -148,12 +144,7 @@ export default function Footer({
           <div className="space-y-1 text-center md:text-left">
             <div>
               &copy; {currentYear} MyPro Products. All rights reserved. Deployed at{' '}
-              <a
-                href="https://myproproducts.com"
-                className="text-white font-medium hover:underline"
-              >
-                myproproducts.com
-              </a>
+              <span className="text-white font-medium hover:underline cursor-pointer">myproproducts.com</span>
             </div>
             <p className="text-slate-500">
               Support Desk: <span className="text-slate-400 font-semibold">(833) 369-7762</span> (Toll-Free) &bull; <a href="mailto:jruland@myproproducts.com" className="text-[#468CDC] hover:underline font-medium">jruland@myproproducts.com</a>

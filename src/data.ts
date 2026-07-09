@@ -12,7 +12,7 @@ export const products: Product[] = [
       'Automated dispatch matching with background-vetted pros',
       'Real-time claims milestone tracking & photo documentation',
       'Integrated compliance, licensing, and insurance verification',
-      'Instant billing & standardized electronic payouts'
+      'Direct-To-Contractor Job Assignments'
     ],
     benefits: [
       'Reduces claims cycle duration by up to 40%',

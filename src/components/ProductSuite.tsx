@@ -28,7 +28,7 @@ export default function ProductSuite({ onRequestDemo, onLaunchPortal, onLaunchRe
             The MyPro Products Suite
           </h2>
           <p className="text-lg text-slate-600 mt-4 leading-relaxed">
-            From single-incident dispatches to full-portfolio automated vendor flows and predictive property risk audits.
+            The comprehensive ecosystem built for disaster preparedness, detailed property and content inventory, seamless claim documentation, and direct-to-contractor repair assignments.
           </p>
         </div>
 
@@ -109,32 +109,23 @@ export default function ProductSuite({ onRequestDemo, onLaunchPortal, onLaunchRe
                   {/* Actions */}
                   <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col space-y-3">
                     {isActive ? (
-                      <>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); if (product.id === 'readyhub') { onLaunchReadyHub(); } else { onLaunchPortal(); } }}
-                          className={`w-full text-center py-3 text-white font-bold rounded-xl transition-all flex items-center justify-center space-x-2 shadow-md cursor-pointer ${
-                            product.id === 'readyhub' 
-                              ? 'bg-cyan-500 hover:bg-cyan-600 shadow-cyan-100' 
-                              : 'bg-[#468CDC] hover:bg-[#3b7cbd] shadow-[#468CDC]/10'
-                          }`}
-                        >
-                          <span>Launch App</span>
-                          <ArrowUpRight className="h-4.5 w-4.5" />
-                        </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); onRequestDemo(product.id); }}
-                          className="w-full text-center py-3 bg-slate-50 hover:bg-slate-100 text-slate-700 font-bold rounded-xl transition-all border border-slate-200 text-xs"
-                        >
-                          Request Enterprise Demo
-                        </button>
-                      </>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); if (product.id === 'readyhub') { onLaunchReadyHub(); } else { onLaunchPortal(); } }}
+                        className={`w-full text-center py-3 text-white font-bold rounded-xl transition-all flex items-center justify-center space-x-2 shadow-md cursor-pointer ${
+                          product.id === 'readyhub' 
+                            ? 'bg-cyan-500 hover:bg-cyan-600 shadow-cyan-100' 
+                            : 'bg-[#468CDC] hover:bg-[#3b7cbd] shadow-[#468CDC]/10'
+                        }`}
+                      >
+                        <span>Launch App</span>
+                        <ArrowUpRight className="h-4.5 w-4.5" />
+                      </button>
                     ) : (
                       <button
-                        onClick={(e) => { e.stopPropagation(); onRequestDemo(product.id); }}
-                        className="w-full text-center py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl transition-all flex items-center justify-center space-x-2"
+                        disabled
+                        className="w-full text-center py-3 bg-slate-100 text-slate-400 font-bold rounded-xl transition-all flex items-center justify-center space-x-2 cursor-not-allowed text-xs"
                       >
-                        <span>Join Waitlist & Request Demo</span>
-                        <ArrowRight className="h-4.5 w-4.5" />
+                        <span>Coming Soon</span>
                       </button>
                     )}
                   </div>

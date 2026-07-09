@@ -1,0 +1,14 @@
+<svg viewBox="0 0 140 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Blue Roof & Chimney - Color Hex #468CDC -->
+  <rect x="24" y="14" width="11" height="30" fill="#468CDC" />
+  <path d="M 2 58 L 62 12 L 92 38" stroke="#468CDC" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- Window (4 panes) - Color Hex #468CDC -->
+  <rect x="51" y="44" width="10" height="10" fill="#468CDC" rx="1.5" />
+  <rect x="63" y="44" width="10" height="10" fill="#468CDC" rx="1.5" />
+  <rect x="51" y="56" width="10" height="10" fill="#468CDC" rx="1.5" />
+  <rect x="63" y="56" width="10" height="10" fill="#468CDC" rx="1.5" />
+  
+  <!-- Accent Checkmark Framing the Bottom - Color Hex #BCB6A5 -->
+  <path d="M 21 78 L 51 104 L 111 58" stroke="#BCB6A5" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
