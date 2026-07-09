@@ -78,6 +78,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
   const [smsRole, setSmsRole] = useState<'homeowner' | 'carrier' | 'contractor' | 'manager'>('homeowner');
   const [smsConsent, setSmsConsent] = useState(false);
   const [termsConsent, setTermsConsent] = useState(false); // Separate Terms/Privacy consent
+  const [privacyConsent, setPrivacyConsent] = useState(false);
   const [smsSubmitted, setSmsSubmitted] = useState(false);
   const [smsError, setSmsError] = useState('');
 
@@ -117,7 +118,11 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
       return;
     }
     if (!termsConsent) {
-      setSmsError('You must acknowledge and agree to our Terms of Service and Privacy Policy separately.');
+      setSmsError('You must acknowledge and agree to our Terms of Service.');
+      return;
+    }
+    if (!privacyConsent) {
+      setSmsError('You must acknowledge and agree to our Privacy Policy.');
       return;
     }
 
@@ -902,9 +907,12 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
             
             {/* Left Column: Context, Disclosures & Benefits */}
             <div className="lg:col-span-5 space-y-6">
-              <div className="flex items-center space-x-2">
-                <MessageSquare className="h-5 w-5 text-[#468CDC]" />
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">STAY CONNECTED</span>
+              <div className="flex flex-col space-y-4 items-start">
+                <MyProMarketLogo size="lg" />
+                <div className="flex items-center space-x-2">
+                  <MessageSquare className="h-5 w-5 text-[#468CDC]" />
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">STAY CONNECTED</span>
+                </div>
               </div>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-nunito leading-tight text-left">
                 Opt In to Text / SMS Messaging
@@ -1019,7 +1027,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                     </label>
                   </div>
 
-                  {/* Separate Checkbox 2: Terms & Privacy Agreement */}
+                  {/* Separate Checkbox 2: Terms of Service Agreement */}
                   <div className="bg-white border border-slate-200 rounded-xl p-4 mt-2 text-left">
                     <label className="flex items-start space-x-3 cursor-pointer">
                       <input
@@ -1039,8 +1047,23 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                           className="text-[#468CDC] hover:underline font-semibold focus:outline-none"
                         >
                           Terms of Service
-                        </button>{' '}
-                        and{' '}
+                        </button>
+                        .
+                      </span>
+                    </label>
+                  </div>
+
+                  {/* Separate Checkbox 3: Privacy Policy Agreement */}
+                  <div className="bg-white border border-slate-200 rounded-xl p-4 mt-2 text-left">
+                    <label className="flex items-start space-x-3 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={privacyConsent}
+                        onChange={(e) => setPrivacyConsent(e.target.checked)}
+                        className="mt-0.5 h-4 w-4 rounded border-slate-300 text-[#468CDC] focus:ring-[#468CDC] cursor-pointer"
+                      />
+                      <span className="text-xs text-slate-600 leading-relaxed select-none">
+                        I acknowledge that I have read and agree to the MyPro Market{' '}
                         <button
                           type="button"
                           onClick={(e) => {
@@ -1054,6 +1077,14 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                         . I understand my phone number and SMS consent will not be sold, shared, or rented with third parties or affiliates for marketing purposes.
                       </span>
                     </label>
+                  </div>
+
+                  {/* Message Frequency Disclosure */}
+                  <div className="bg-slate-100/70 border border-slate-200 rounded-xl p-4 mt-2 text-left text-slate-500 text-xs space-y-1">
+                    <span className="font-bold text-slate-700 block uppercase tracking-wide text-[10px]">Message Frequency Disclosure:</span>
+                    <p className="leading-relaxed">
+                      Message frequency varies based on active dispatch and job event activity. Standard notifications include initial assignment alerts, technician scheduling, real-time status updates, and claim completion confirmations. You can expect periodic updates only when there is active claim coordination on your property.
+                    </p>
                   </div>
 
                   <button
@@ -1087,6 +1118,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                       setSmsEmail('');
                       setSmsConsent(false);
                       setTermsConsent(false);
+                      setPrivacyConsent(false);
                     }}
                     className="mt-4 px-5 py-2 text-xs font-bold text-[#468CDC] hover:text-[#3b7cbd] focus:outline-none"
                   >
