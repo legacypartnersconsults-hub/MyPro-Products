@@ -3,7 +3,7 @@ export interface Product {
   name: string;
   tagline: string;
   description: string;
-  status: 'active' | 'beta' | 'upcoming';
+  status: 'active' | 'beta' | 'upcoming' | 'testing';
   badge?: string;
   features: string[];
   benefits: string[];

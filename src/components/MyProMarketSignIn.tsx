@@ -9,7 +9,7 @@ interface MyProMarketSignInProps {
 }
 
 export default function MyProMarketSignIn({ onSignInSuccess, onBackToWebsite }: MyProMarketSignInProps) {
-  const [email, setEmail] = useState('j.fletcher@enterprise-pm.com');
+  const [email, setEmail] = useState('legacy.partners.consults@gmail.com');
   const [password, setPassword] = useState('••••••••••••');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');

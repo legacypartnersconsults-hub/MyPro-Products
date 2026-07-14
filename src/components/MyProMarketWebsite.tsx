@@ -192,12 +192,14 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
             >
               Schedule Demo
             </button>
-            <button
-              onClick={onLaunchApp}
-              className="bg-[#98C44E] hover:bg-[#85b03f] text-white font-bold text-xs px-4 py-2.5 rounded-lg shadow-md shadow-[#98C44E]/10 transition-all"
+            <a
+              href="https://market.myproproducts.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-[#98C44E] hover:bg-[#85b03f] text-white font-bold text-xs px-4 py-2.5 rounded-lg shadow-md shadow-[#98C44E]/10 transition-all text-center flex items-center justify-center"
             >
               Launch App
-            </button>
+            </a>
           </div>
         </div>
       </nav>
@@ -229,13 +231,15 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
               <span>Schedule Demo</span>
               <ArrowRight className="h-5 w-5" />
             </button>
-            <button
-              onClick={onLaunchApp}
-              className="w-full sm:w-auto px-8 py-4 bg-[#98C44E] hover:bg-[#85b03f] text-white font-bold rounded-xl transition-all shadow-lg shadow-black/10 flex items-center justify-center space-x-2"
+            <a
+              href="https://market.myproproducts.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto px-8 py-4 bg-[#98C44E] hover:bg-[#85b03f] text-white font-bold rounded-xl transition-all shadow-lg shadow-black/10 flex items-center justify-center space-x-2 text-center"
             >
               <span>Launch App</span>
               <ArrowRight className="h-5 w-5" />
-            </button>
+            </a>
           </div>
 
           {/* Social Proof Stats Banner */}

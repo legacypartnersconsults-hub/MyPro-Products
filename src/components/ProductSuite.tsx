@@ -35,7 +35,7 @@ export default function ProductSuite({ onRequestDemo, onLaunchPortal, onLaunchRe
         {/* Product Cards Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch mb-16">
           {products.map((product) => {
-            const isActive = product.status === 'active';
+            const isActive = product.status === 'active' || product.status === 'testing';
             const isBeta = product.status === 'beta';
             
             return (
@@ -67,6 +67,10 @@ export default function ProductSuite({ onRequestDemo, onLaunchPortal, onLaunchRe
                   <div>
                     {product.status === 'active' ? (
                       <span className="text-xs font-bold bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full uppercase tracking-wider">
+                        {product.badge}
+                      </span>
+                    ) : product.status === 'testing' ? (
+                      <span className="text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 px-3 py-1 rounded-full uppercase tracking-wider animate-pulse">
                         {product.badge}
                       </span>
                     ) : product.status === 'beta' ? (

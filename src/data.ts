@@ -26,8 +26,8 @@ export const products: Product[] = [
     name: 'MyPro Ready Hub',
     tagline: 'Disaster Preparedness & AI Content Inventory',
     description: 'Empower your household or tenants and protect your assets. MyPro Ready Hub provides interactive disaster checklists, an AI-powered room content inventory scanner from video, a secure document & prescription cabinet, and localized real-time disaster alerts.',
-    status: 'active',
-    badge: 'New Launch',
+    status: 'testing',
+    badge: 'In Testing',
     features: [
       'Interactive disaster-specific checklists (Hurricanes, Wildfires, Floods, Freezes)',
       'AI room inventory scanner generating contents lists from video walkthroughs',

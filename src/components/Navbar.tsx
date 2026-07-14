@@ -88,7 +88,7 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
                   </div>
 
                   {products.map((product) => {
-                    const isActive = product.status === 'active';
+                    const isActive = product.status === 'active' || product.status === 'testing';
                     return (
                       <div
                         key={product.id}
@@ -116,7 +116,7 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
                         }}
                       >
                         <div className={`mt-1 flex-shrink-0 h-9 w-9 rounded-lg flex items-center justify-center ${
-                          product.status === 'active' 
+                          product.status === 'active' || product.status === 'testing'
                             ? 'bg-slate-50 border border-slate-100 group-hover:bg-slate-100 transition-colors' 
                             : product.status === 'beta' 
                             ? 'bg-amber-50 text-amber-600' 
@@ -133,6 +133,8 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
                             </span>
                             {product.status === 'active' ? (
                               <span className="text-[10px] font-medium bg-green-50 text-green-700 px-1.5 py-0.5 rounded border border-green-100">Live</span>
+                            ) : product.status === 'testing' ? (
+                              <span className="text-[10px] font-medium bg-blue-50 text-blue-700 px-1.5 py-0.5 rounded border border-blue-100">In Testing</span>
                             ) : product.status === 'beta' ? (
                               <span className="text-[10px] font-medium bg-amber-50 text-amber-700 px-1.5 py-0.5 rounded border border-amber-100">Beta</span>
                             ) : (
