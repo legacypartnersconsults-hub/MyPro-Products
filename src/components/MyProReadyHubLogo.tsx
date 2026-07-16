@@ -50,11 +50,11 @@ export default function MyProReadyHubLogo({ showText = true, size = 'md', classN
             strokeWidth="10" 
           />
           
-          {/* Glowing Window/Beacon - Divided into four equal squares - Color Hex #6AD5F9 */}
-          <rect x="51" y="44" width="10" height="10" fill="#6AD5F9" rx="1.5" />
-          <rect x="63" y="44" width="10" height="10" fill="#6AD5F9" rx="1.5" />
-          <rect x="51" y="56" width="10" height="10" fill="#6AD5F9" rx="1.5" />
-          <rect x="63" y="56" width="10" height="10" fill="#6AD5F9" rx="1.5" />
+          {/* Glowing Window/Beacon - Divided into four equal squares - Color Hex #98CC44 */}
+          <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
+          <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
+          <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
+          <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
 
           {/* Ready Green Checkmark - Color Hex #98CC44 */}
           <path 
@@ -67,13 +67,15 @@ export default function MyProReadyHubLogo({ showText = true, size = 'md', classN
 
       {/* Brand Text */}
       {showText && (
-        <div className="flex flex-col select-none">
+        <div className="flex flex-col select-none text-left justify-center">
           <div className={`${textSizes.main} font-extrabold tracking-tight leading-none`}>
             <span className="text-[#6AD5F9]">My</span>
             <span className="text-[#98CC44]">Pro</span>
-            <span className="text-[#6AD5F9] ml-1">Ready Hub</span>
           </div>
-          <span className={`${textSizes.sub} font-bold text-slate-400 tracking-wider block uppercase mt-0.5 leading-none`}>
+          <div className={`${textSizes.main} font-extrabold tracking-tight leading-none text-[#6AD5F9] mt-0.5`}>
+            Ready Hub
+          </div>
+          <span className={`${textSizes.sub} font-bold text-slate-400 tracking-wider block uppercase mt-1 leading-none`}>
             by MyPro Products &bull; Secure
           </span>
         </div>

@@ -93,11 +93,11 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
     <rect x="24" y="14" width="11" height="30" fill="#6AD5F9" />
     <!-- Inner Protected Home Roof - Color Hex #6AD5F9 -->
     <path d="M 2 58 L 62 12 L 92 38" stroke="#6AD5F9" stroke-width="10" />
-    <!-- Glowing Window/Beacon - Divided into four equal squares - Color Hex #6AD5F9 -->
-    <rect x="51" y="44" width="10" height="10" fill="#6AD5F9" rx="1.5" />
-    <rect x="63" y="44" width="10" height="10" fill="#6AD5F9" rx="1.5" />
-    <rect x="51" y="56" width="10" height="10" fill="#6AD5F9" rx="1.5" />
-    <rect x="63" y="56" width="10" height="10" fill="#6AD5F9" rx="1.5" />
+    <!-- Glowing Window/Beacon - Divided into four equal squares - Color Hex #98CC44 -->
+    <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
+    <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
+    <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
+    <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
     <!-- Ready Green Checkmark - Color Hex #98CC44 -->
     <path d="M 21 78 L 51 104 L 111 58" stroke="#98CC44" stroke-width="11" />
   </g>
@@ -119,19 +119,20 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
       <rect x="24" y="14" width="11" height="30" fill="#6AD5F9" />
       <!-- Inner Protected Home Roof - Color Hex #6AD5F9 -->
       <path d="M 2 58 L 62 12 L 92 38" stroke="#6AD5F9" stroke-width="10" />
-      <!-- Glowing Window/Beacon - Divided into four equal squares - Color Hex #6AD5F9 -->
-      <rect x="51" y="44" width="10" height="10" fill="#6AD5F9" rx="1.5" />
-      <rect x="63" y="44" width="10" height="10" fill="#6AD5F9" rx="1.5" />
-      <rect x="51" y="56" width="10" height="10" fill="#6AD5F9" rx="1.5" />
-      <rect x="63" y="56" width="10" height="10" fill="#6AD5F9" rx="1.5" />
+      <!-- Glowing Window/Beacon - Divided into four equal squares - Color Hex #98CC44 -->
+      <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
+      <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
+      <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
+      <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
       <!-- Ready Green Checkmark - Color Hex #98CC44 -->
       <path d="M 21 78 L 51 104 L 111 58" stroke="#98CC44" stroke-width="11" />
     </g>
   </g>
-  <text x="160" y="62" fill="${textFill1}" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" letter-spacing="-1">My</text>
-  <text x="210" y="62" fill="${textFill2}" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" letter-spacing="-1">Pro</text>
-  <text x="270" y="62" fill="${textFill3}" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" letter-spacing="-1">Ready Hub</text>
-  <text x="160" y="85" fill="${subTextFill}" font-family="system-ui, -apple-system, sans-serif" font-size="11" font-weight="bold" letter-spacing="1">BY MYPRO PRODUCTS • SECURE</text>
+  <text x="160" y="54" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" letter-spacing="-1">
+    <tspan fill="${textFill1}">My</tspan><tspan fill="${textFill2}">Pro</tspan>
+  </text>
+  <text x="160" y="88" fill="${textFill3}" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" letter-spacing="-1">Ready Hub</text>
+  <text x="160" y="108" fill="${subTextFill}" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" letter-spacing="1">BY MYPRO PRODUCTS • SECURE</text>
 </svg>`;
     }
   };
@@ -1365,9 +1366,7 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex flex-col items-center md:items-start space-y-2">
             <div className="flex items-center space-x-2">
-              <div className="h-8 w-8 rounded bg-gradient-to-tr from-cyan-500 to-lime-500 flex items-center justify-center text-slate-950">
-                <span className="font-bold text-sm">M</span>
-              </div>
+              <MyProReadyHubLogo showText={false} size="sm" />
               <span className="text-sm font-semibold text-slate-300">&copy; 2026 MyPro Ready Hub. All rights reserved.</span>
             </div>
             <p className="text-[11px] text-slate-500">
