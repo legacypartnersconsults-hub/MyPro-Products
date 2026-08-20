@@ -37,7 +37,10 @@ import {
   FileText,
   Trash2,
   Filter,
-  Database
+  Database,
+  Lock,
+  Unlock,
+  Key
 } from 'lucide-react';
 import { audiences } from '../data';
 import { Audience } from '../types';
@@ -80,64 +83,129 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
   const [smsName, setSmsName] = useState('');
   const [smsPhone, setSmsPhone] = useState('');
   const [smsEmail, setSmsEmail] = useState('');
-  const [smsRole, setSmsRole] = useState<'homeowner' | 'carrier' | 'contractor' | 'manager'>('homeowner');
+  const [smsRole, setSmsRole] = useState<'homeowner' | 'company' | 'contractor'>('homeowner');
   const [smsConsent, setSmsConsent] = useState(false);
   const [termsConsent, setTermsConsent] = useState(false); // Separate Terms/Privacy consent
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [smsSubmitted, setSmsSubmitted] = useState(false);
+  const [lastSubmittedRecord, setLastSubmittedRecord] = useState<any | null>(null);
   const [smsError, setSmsError] = useState('');
 
-  // Persistent & Searchable SMS Records State
+  // Persistent & Searchable SMS Records State (No mock data; loads live saved registrations)
   const [smsRecords, setSmsRecords] = useState<any[]>(() => {
     try {
       const saved = localStorage.getItem('mypro_sms_records');
-      if (saved) return JSON.parse(saved);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          // Filter out legacy mock demo profiles
+          return parsed.filter((r: any) => 
+            r.id !== 'SMS_REC_01' && 
+            r.id !== 'SMS_REC_02' && 
+            r.id !== 'SMS_REC_03' &&
+            !['Michael Scott', 'Sarah Connor'].includes(r.name)
+          );
+        }
+      }
     } catch (e) {
       console.error(e);
     }
-    return [
-      {
-        id: 'SMS_REC_01',
-        name: 'Jeff Ruland',
-        phone: '(352) 535-5737',
-        email: 'kerrie.ruland@gmail.com',
-        role: 'manager',
-        consentDate: '2026-07-08 10:15 AM',
-        ipAddress: '192.168.1.104',
-        status: 'active',
-        emailSentStatus: 'sent',
-        emailSentTimestamp: '2026-07-08 10:15 AM'
-      },
-      {
-        id: 'SMS_REC_02',
-        name: 'Michael Scott',
-        phone: '(570) 555-0123',
-        email: 'mscott@dundermifflin.com',
-        role: 'homeowner',
-        consentDate: '2026-07-10 02:22 PM',
-        ipAddress: '172.56.21.90',
-        status: 'active',
-        emailSentStatus: 'sent',
-        emailSentTimestamp: '2026-07-10 02:22 PM'
-      },
-      {
-        id: 'SMS_REC_03',
-        name: 'Sarah Connor',
-        phone: '(213) 555-1984',
-        email: 'sconnor@cyberdyne.org',
-        role: 'contractor',
-        consentDate: '2026-07-12 09:05 AM',
-        ipAddress: '68.4.112.15',
-        status: 'active',
-        emailSentStatus: 'sent',
-        emailSentTimestamp: '2026-07-12 09:05 AM'
-      }
-    ];
+    return [];
   });
 
   const [smsSearchQuery, setSmsSearchQuery] = useState('');
-  const [smsFilterRole, setSmsFilterRole] = useState<'all' | 'homeowner' | 'manager' | 'carrier' | 'contractor'>('all');
+  const [smsFilterRole, setSmsFilterRole] = useState<'all' | 'homeowner' | 'company' | 'contractor'>('all');
   const [selectedConsentRecord, setSelectedConsentRecord] = useState<any | null>(null);
+
+  // SMS Consent Registry Password Gate States
+  const [registryPassword, setRegistryPassword] = useState<string>(() => {
+    return localStorage.getItem('mypro_sms_admin_password') || '';
+  });
+  const [isRegistryUnlocked, setIsRegistryUnlocked] = useState<boolean>(() => {
+    return sessionStorage.getItem('mypro_sms_registry_unlocked') === 'true';
+  });
+  const [adminEmailInput, setAdminEmailInput] = useState('');
+  const [adminPasswordInput, setAdminPasswordInput] = useState('');
+  const [adminConfirmPasswordInput, setAdminConfirmPasswordInput] = useState('');
+  const [adminGateError, setAdminGateError] = useState('');
+
+  // Password Setup Handler
+  const handleSetupPassword = (e: React.FormEvent) => {
+    e.preventDefault();
+    setAdminGateError('');
+
+    const email = adminEmailInput.trim().toLowerCase();
+    if (email !== 'jruland@myproproducts.com') {
+      setAdminGateError('Access Denied: Only the owner/admin account (jruland@myproproducts.com) can configure the password.');
+      return;
+    }
+
+    if (adminPasswordInput.length < 6) {
+      setAdminGateError('Password must be at least 6 characters long.');
+      return;
+    }
+
+    if (adminPasswordInput !== adminConfirmPasswordInput) {
+      setAdminGateError('Passwords do not match.');
+      return;
+    }
+
+    localStorage.setItem('mypro_sms_admin_password', adminPasswordInput);
+    setRegistryPassword(adminPasswordInput);
+    
+    // Auto login
+    sessionStorage.setItem('mypro_sms_registry_unlocked', 'true');
+    setIsRegistryUnlocked(true);
+    
+    // Clear inputs
+    setAdminEmailInput('');
+    setAdminPasswordInput('');
+    setAdminConfirmPasswordInput('');
+    setAdminGateError('');
+  };
+
+  // Password Login Handler
+  const handleLoginRegistry = (e: React.FormEvent) => {
+    e.preventDefault();
+    setAdminGateError('');
+
+    const email = adminEmailInput.trim().toLowerCase();
+    if (email !== 'jruland@myproproducts.com') {
+      setAdminGateError('Invalid administrator credentials.');
+      return;
+    }
+
+    if (adminPasswordInput === registryPassword) {
+      sessionStorage.setItem('mypro_sms_registry_unlocked', 'true');
+      setIsRegistryUnlocked(true);
+      
+      // Clear inputs
+      setAdminEmailInput('');
+      setAdminPasswordInput('');
+      setAdminGateError('');
+    } else {
+      setAdminGateError('Invalid administrator credentials.');
+    }
+  };
+
+  // Lock Registry Handler
+  const handleLockRegistry = () => {
+    sessionStorage.removeItem('mypro_sms_registry_unlocked');
+    setIsRegistryUnlocked(false);
+  };
+
+  // Individual Record Deletion Handler
+  const handleDeleteRecord = (id: string, name: string) => {
+    if (confirm(`Are you sure you want to permanently delete the SMS consent profile for ${name}? This action is irreversible.`)) {
+      const updated = smsRecords.filter(rec => rec.id !== id);
+      setSmsRecords(updated);
+      try {
+        localStorage.setItem('mypro_sms_records', JSON.stringify(updated));
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
 
   // Legal Modal States
   const [privacyOpen, setPrivacyOpen] = useState(false);
@@ -190,10 +258,10 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
     const ip = `198.51.100.${Math.floor(Math.random() * 254) + 1}`; // Simulated public IP
 
     const newRecord = {
-      id: `SMS_REC_${Date.now()}`,
-      name: smsName,
+      id: `REC-${Date.now()}`,
+      name: smsName.trim(),
       phone: formattedPhone,
-      email: smsEmail,
+      email: smsEmail.trim(),
       role: smsRole,
       consentDate: formattedDate,
       ipAddress: ip,
@@ -210,8 +278,8 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
       console.error(err);
     }
 
-    // Automatically trigger the verification modal showing the sent email copy
-    setSelectedConsentRecord(newRecord);
+    // Set submitted state and store record
+    setLastSubmittedRecord(newRecord);
     setSmsSubmitted(true);
   };
 
@@ -1091,13 +1159,12 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                       <label className="block text-xs font-bold text-slate-600 uppercase tracking-wide mb-1.5">Your Account Role</label>
                       <select
                         value={smsRole}
-                        onChange={(e) => setSmsRole(e.target.value as any)}
+                        onChange={(e) => setSmsRole(e.target.value as 'homeowner' | 'company' | 'contractor')}
                         className="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
                       >
-                        <option value="homeowner">Homeowner / Consumer</option>
-                        <option value="manager">Property Manager</option>
-                        <option value="carrier">Insurance Carrier / Agent</option>
-                        <option value="contractor">Field Contractor</option>
+                        <option value="homeowner">Homeowner</option>
+                        <option value="company">Company</option>
+                        <option value="contractor">Contractor</option>
                       </select>
                     </div>
                   </div>
@@ -1188,32 +1255,75 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="text-center py-12 space-y-4"
+                  className="text-center py-8 space-y-4"
                 >
-                  <div className="h-16 w-16 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto border border-green-100">
-                    <CheckCircle2 className="h-10 w-10" />
+                  <div className="h-14 w-14 bg-green-50 text-green-500 rounded-full flex items-center justify-center mx-auto border border-green-100 shadow-sm">
+                    <CheckCircle2 className="h-8 w-8" />
                   </div>
-                  <h3 className="text-2xl font-bold text-slate-900 font-nunito">Opt-In Registration Successful!</h3>
-                  <p className="text-sm text-slate-600 max-w-md mx-auto leading-relaxed">
-                    Thank you, <strong>{smsName}</strong>. Your mobile number <strong>{smsPhone}</strong> has been enrolled under the <strong>{smsRole}</strong> role. A verification text message is on its way to your device.
-                  </p>
-                  <div className="bg-white border border-slate-200 rounded-lg p-3 max-w-sm mx-auto text-[11px] text-slate-500">
-                    Remember: reply <strong>STOP</strong> at any time to opt-out.
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-900 font-nunito">Opt-In Registration Recorded & Saved!</h3>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Your consent has been permanently logged in the compliance database and confirmation email dispatched.
+                    </p>
                   </div>
-                  <button
-                    onClick={() => {
-                      setSmsSubmitted(false);
-                      setSmsName('');
-                      setSmsPhone('');
-                      setSmsEmail('');
-                      setSmsConsent(false);
-                      setTermsConsent(false);
-                      setPrivacyConsent(false);
-                    }}
-                    className="mt-4 px-5 py-2 text-xs font-bold text-[#468CDC] hover:text-[#3b7cbd] focus:outline-none"
-                  >
-                    Enroll Another Device
-                  </button>
+
+                  {/* Saved Details Card */}
+                  <div className="bg-white border border-slate-200 rounded-xl p-4 max-w-md mx-auto text-left text-xs space-y-2 shadow-sm">
+                    <div className="flex justify-between py-1 border-b border-slate-100">
+                      <span className="text-slate-500 font-medium">Name:</span>
+                      <span className="font-semibold text-slate-900">{lastSubmittedRecord?.name || smsName}</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-slate-100">
+                      <span className="text-slate-500 font-medium">Mobile Phone:</span>
+                      <span className="font-mono font-semibold text-slate-900">{lastSubmittedRecord?.phone || smsPhone}</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-slate-100">
+                      <span className="text-slate-500 font-medium">Email:</span>
+                      <span className="font-mono text-slate-800">{lastSubmittedRecord?.email || smsEmail}</span>
+                    </div>
+                    <div className="flex justify-between py-1 border-b border-slate-100">
+                      <span className="text-slate-500 font-medium">Role:</span>
+                      <span className="capitalize font-bold text-[#468CDC]">{lastSubmittedRecord?.role || smsRole}</span>
+                    </div>
+                    <div className="flex justify-between py-1">
+                      <span className="text-slate-500 font-medium">Registry Status:</span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-green-50 text-green-700 border border-green-200">
+                        ACTIVE_CONSENT (Saved to Registry)
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                    <button
+                      onClick={() => {
+                        if (lastSubmittedRecord) {
+                          setSelectedConsentRecord(lastSubmittedRecord);
+                        } else if (smsRecords.length > 0) {
+                          setSelectedConsentRecord(smsRecords[0]);
+                        }
+                      }}
+                      className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-lg transition-colors flex items-center justify-center space-x-1.5 shadow-sm cursor-pointer"
+                    >
+                      <Mail className="h-3.5 w-3.5" />
+                      <span>View Sent Email Record</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSmsSubmitted(false);
+                        setLastSubmittedRecord(null);
+                        setSmsName('');
+                        setSmsPhone('');
+                        setSmsEmail('');
+                        setSmsRole('homeowner');
+                        setSmsConsent(false);
+                        setTermsConsent(false);
+                        setPrivacyConsent(false);
+                      }}
+                      className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold bg-[#468CDC] hover:bg-[#3b7cbd] text-white rounded-lg transition-colors cursor-pointer"
+                    >
+                      Enroll Another Profile
+                    </button>
+                  </div>
                 </motion.div>
               )}
 
@@ -1249,162 +1359,305 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
               </div>
             </div>
 
-            {/* Controls panel */}
-            <div className="bg-slate-50 border border-slate-150 rounded-xl p-4 mb-6 flex flex-col md:flex-row gap-4 items-center justify-between">
-              
-              {/* Search bar */}
-              <div className="relative w-full md:max-w-md">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                <input
-                  type="text"
-                  placeholder="Search by name, email, or phone number..."
-                  value={smsSearchQuery}
-                  onChange={(e) => setSmsSearchQuery(e.target.value)}
-                  className="w-full bg-white border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
-                />
-              </div>
+            {!isRegistryUnlocked ? (
+              /* ACCESS GATE LOCKED STATE */
+              <div className="max-w-md mx-auto mt-8 bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+                <div className="flex flex-col items-center text-center mb-6">
+                  <div className="h-12 w-12 rounded-full bg-[#468CDC]/10 flex items-center justify-center text-[#468CDC] mb-3">
+                    <Lock className="h-5 w-5" />
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900 tracking-tight font-nunito">
+                    {registryPassword ? 'Secure Registry Access Gate' : 'Configure Administrator Access'}
+                  </h4>
+                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                    {registryPassword 
+                      ? 'Protected by owner-defined master password. Access restricted to compliance managers and auditors.' 
+                      : 'No administrator password has been set up yet. Please configure the secure credentials to protect consumer consent logs.'}
+                  </p>
+                </div>
 
-              {/* Role Filter Buttons */}
-              <div className="flex items-center space-x-1 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
-                <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider mr-2 hidden lg:inline">Filter:</span>
-                {[
-                  { key: 'all', label: 'All Roles' },
-                  { key: 'manager', label: 'Managers' },
-                  { key: 'homeowner', label: 'Homeowners' },
-                  { key: 'carrier', label: 'Carriers' },
-                  { key: 'contractor', label: 'Contractors' }
-                ].map(item => (
+                {adminGateError && (
+                  <div className="bg-rose-50 border border-rose-150 rounded-xl p-3 mb-5 text-xs text-rose-700 flex items-start space-x-2">
+                    <AlertTriangle className="h-4 w-4 text-rose-500 flex-shrink-0 mt-0.5" />
+                    <span className="text-[11px] leading-tight">{adminGateError}</span>
+                  </div>
+                )}
+
+                {registryPassword ? (
+                  /* LOGIN FORM */
+                  <form onSubmit={handleLoginRegistry} className="space-y-4 text-left">
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Admin Account Username</label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="jruland@myproproducts.com"
+                        value={adminEmailInput}
+                        onChange={(e) => setAdminEmailInput(e.target.value)}
+                        className="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Administrator Password</label>
+                      <input
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        value={adminPasswordInput}
+                        onChange={(e) => setAdminPasswordInput(e.target.value)}
+                        className="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full py-2.5 px-4 bg-[#468CDC] hover:bg-[#3b7cbd] text-white rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 shadow-sm hover:shadow cursor-pointer"
+                    >
+                      <Unlock className="h-3.5 w-3.5" />
+                      <span>Unlock Consent Registry</span>
+                    </button>
+                  </form>
+                ) : (
+                  /* INITIAL SETUP FORM */
+                  <form onSubmit={handleSetupPassword} className="space-y-4 text-left">
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Owner/Admin Username</label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="jruland@myproproducts.com"
+                        value={adminEmailInput}
+                        onChange={(e) => setAdminEmailInput(e.target.value)}
+                        className="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
+                      />
+                      <span className="text-[10px] text-slate-400 mt-1 block">Your owner/admin account username must match <strong className="text-slate-600">jruland@myproproducts.com</strong> to setup access.</span>
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Desired Master Password</label>
+                      <input
+                        type="password"
+                        required
+                        placeholder="At least 6 characters"
+                        value={adminPasswordInput}
+                        onChange={(e) => setAdminPasswordInput(e.target.value)}
+                        className="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Confirm Master Password</label>
+                      <input
+                        type="password"
+                        required
+                        placeholder="••••••••"
+                        value={adminConfirmPasswordInput}
+                        onChange={(e) => setAdminConfirmPasswordInput(e.target.value)}
+                        className="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="w-full py-2.5 px-4 bg-[#468CDC] hover:bg-[#3b7cbd] text-white rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 shadow-sm hover:shadow cursor-pointer"
+                    >
+                      <Key className="h-3.5 w-3.5" />
+                      <span>Set Access Key & Enter</span>
+                    </button>
+                  </form>
+                )}
+              </div>
+            ) : (
+              /* UNLOCKED FULL REGISTRY ACCESS STATE */
+              <div className="space-y-6">
+                
+                {/* Admin Session Banner */}
+                <div className="bg-slate-900 text-slate-100 rounded-xl px-5 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+                  <div className="flex items-center space-x-2.5">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-xs font-bold text-slate-300">Authorized Admin Session Active:</span>
+                    <strong className="text-xs text-white font-mono">jruland@myproproducts.com</strong>
+                  </div>
                   <button
-                    key={item.key}
-                    onClick={() => setSmsFilterRole(item.key as any)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
-                      smsFilterRole === item.key
-                        ? 'bg-slate-900 text-white shadow-sm'
-                        : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
-                    }`}
+                    onClick={handleLockRegistry}
+                    className="px-3 py-1.5 border border-slate-700 hover:border-slate-500 rounded-lg text-[11px] font-bold text-slate-300 hover:text-white transition-colors cursor-pointer focus:outline-none flex items-center space-x-1"
                   >
-                    {item.label}
+                    <Lock className="h-3 w-3" />
+                    <span>Lock Registry Access</span>
                   </button>
-                ))}
-              </div>
-            </div>
+                </div>
 
-            {/* Registry List / Table */}
-            <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse text-xs">
-                  <thead>
-                    <tr className="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-                      <th className="p-4">Contact Profile</th>
-                      <th className="p-4">Mobile Details</th>
-                      <th className="p-4">Role / Status</th>
-                      <th className="p-4">Signature Date</th>
-                      <th className="p-4">IP Signature</th>
-                      <th className="p-4 text-right">Audit Copy</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700">
-                    {smsRecords
-                      .filter(rec => {
-                        const query = smsSearchQuery.toLowerCase().trim();
-                        const matchesQuery = !query || 
-                          rec.name.toLowerCase().includes(query) ||
-                          rec.phone.toLowerCase().includes(query) ||
-                          rec.email.toLowerCase().includes(query);
-                        const matchesRole = smsFilterRole === 'all' || rec.role === smsFilterRole;
-                        return matchesQuery && matchesRole;
-                      })
-                      .map((rec) => {
-                        const roleColors: Record<string, string> = {
-                          manager: 'bg-indigo-50 text-indigo-700 border-indigo-100',
-                          homeowner: 'bg-blue-50 text-blue-700 border-blue-100',
-                          carrier: 'bg-amber-50 text-amber-700 border-amber-100',
-                          contractor: 'bg-purple-50 text-purple-700 border-purple-100'
-                        };
-                        
-                        return (
-                          <tr key={rec.id} className="hover:bg-slate-50/50 transition-colors">
-                            {/* Contact Profile */}
-                            <td className="p-4">
-                              <div className="font-semibold text-slate-900 text-left">{rec.name}</div>
-                              <div className="text-slate-400 text-[11px] font-mono mt-0.5 text-left">{rec.email}</div>
-                            </td>
-                            {/* Mobile Details */}
-                            <td className="p-4 font-mono font-medium text-slate-800 text-left">
-                              {rec.phone}
-                            </td>
-                            {/* Role / Status */}
-                            <td className="p-4 space-y-1 text-left">
-                              <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold border capitalize ${roleColors[rec.role] || 'bg-slate-50 text-slate-700'}`}>
-                                {rec.role === 'manager' ? 'Property Manager' : rec.role === 'carrier' ? 'Insurance Carrier' : rec.role === 'homeowner' ? 'Homeowner' : 'Field Contractor'}
-                              </span>
-                              <div className="flex items-center space-x-1 justify-start">
-                                <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                                <span className="text-[10px] text-slate-400">Enrolled (SMS Verified)</span>
-                              </div>
-                            </td>
-                            {/* Signature Date */}
-                            <td className="p-4 text-slate-500 text-left">
-                              {rec.consentDate}
-                            </td>
-                            {/* IP Signature */}
-                            <td className="p-4 text-left">
-                              <span className="font-mono text-[11px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded border border-slate-200">
-                                {rec.ipAddress}
-                              </span>
-                            </td>
-                            {/* Audit Action */}
-                            <td className="p-4 text-right">
-                              <button
-                                onClick={() => setSelectedConsentRecord(rec)}
-                                className="inline-flex items-center space-x-1 px-3 py-1.5 bg-slate-100 hover:bg-[#468CDC] hover:text-white text-slate-700 rounded-lg text-xs font-bold transition-all cursor-pointer border border-slate-200/50 hover:border-transparent"
-                              >
-                                <Mail className="h-3.5 w-3.5" />
-                                <span className="hidden sm:inline">View Sent Email</span>
-                              </button>
+                {/* Controls panel */}
+                <div className="bg-slate-50 border border-slate-150 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
+                  {/* Search bar */}
+                  <div className="relative w-full md:max-w-md">
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder="Search by name, email, or phone number..."
+                      value={smsSearchQuery}
+                      onChange={(e) => setSmsSearchQuery(e.target.value)}
+                      className="w-full bg-white border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
+                    />
+                  </div>
+
+                  {/* Role Filter Buttons */}
+                  <div className="flex items-center space-x-1 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
+                    <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider mr-2 hidden lg:inline">Filter:</span>
+                    {[
+                      { key: 'all', label: 'All Roles' },
+                      { key: 'homeowner', label: 'Homeowners' },
+                      { key: 'company', label: 'Companies' },
+                      { key: 'contractor', label: 'Contractors' }
+                    ].map(item => (
+                      <button
+                        key={item.key}
+                        onClick={() => setSmsFilterRole(item.key as any)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                          smsFilterRole === item.key
+                            ? 'bg-slate-900 text-white shadow-sm'
+                            : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Registry List / Table */}
+                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse text-xs">
+                      <thead>
+                        <tr className="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
+                          <th className="p-4 text-left">Contact Profile</th>
+                          <th className="p-4 text-left">Mobile Details</th>
+                          <th className="p-4 text-left">Role / Status</th>
+                          <th className="p-4 text-left">Signature Date</th>
+                          <th className="p-4 text-left">IP Signature</th>
+                          <th className="p-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100 text-slate-700">
+                        {smsRecords
+                          .filter(rec => {
+                            const query = smsSearchQuery.toLowerCase().trim();
+                            const matchesQuery = !query || 
+                              rec.name?.toLowerCase().includes(query) ||
+                              rec.phone?.toLowerCase().includes(query) ||
+                              rec.email?.toLowerCase().includes(query);
+                            const matchesRole = smsFilterRole === 'all' || rec.role === smsFilterRole;
+                            return matchesQuery && matchesRole;
+                          })
+                          .map((rec) => {
+                            const roleColors: Record<string, string> = {
+                              homeowner: 'bg-blue-50 text-blue-700 border-blue-100',
+                              company: 'bg-indigo-50 text-indigo-700 border-indigo-100',
+                              contractor: 'bg-purple-50 text-purple-700 border-purple-100',
+                              // fallbacks
+                              manager: 'bg-slate-50 text-slate-700 border-slate-200',
+                              carrier: 'bg-slate-50 text-slate-700 border-slate-200'
+                            };
+
+                            const getRoleLabel = (role: string) => {
+                              if (role === 'homeowner') return 'Homeowner';
+                              if (role === 'company') return 'Company';
+                              if (role === 'contractor') return 'Contractor';
+                              return role ? (role.charAt(0).toUpperCase() + role.slice(1)) : 'Unknown';
+                            };
+                            
+                            return (
+                              <tr key={rec.id} className="hover:bg-slate-50/50 transition-colors">
+                                {/* Contact Profile */}
+                                <td className="p-4 text-left">
+                                  <div className="font-semibold text-slate-900 text-left">{rec.name}</div>
+                                  <div className="text-slate-400 text-[11px] font-mono mt-0.5 text-left">{rec.email}</div>
+                                </td>
+                                {/* Mobile Details */}
+                                <td className="p-4 font-mono font-medium text-slate-800 text-left">
+                                  {rec.phone}
+                                </td>
+                                {/* Role / Status */}
+                                <td className="p-4 space-y-1 text-left">
+                                  <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold border capitalize ${roleColors[rec.role] || 'bg-slate-50 text-slate-700'}`}>
+                                    {getRoleLabel(rec.role)}
+                                  </span>
+                                  <div className="flex items-center space-x-1 justify-start">
+                                    <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                                    <span className="text-[10px] text-slate-400">Enrolled (SMS Verified)</span>
+                                  </div>
+                                </td>
+                                {/* Signature Date */}
+                                <td className="p-4 text-slate-500 text-left">
+                                  {rec.consentDate}
+                                </td>
+                                {/* IP Signature */}
+                                <td className="p-4 text-left">
+                                  <span className="font-mono text-[11px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded border border-slate-200">
+                                    {rec.ipAddress}
+                                  </span>
+                                </td>
+                                {/* Audit Actions */}
+                                <td className="p-4 text-right">
+                                  <div className="flex items-center justify-end space-x-2">
+                                    <button
+                                      onClick={() => setSelectedConsentRecord(rec)}
+                                      className="inline-flex items-center space-x-1 px-3 py-1.5 bg-slate-100 hover:bg-[#468CDC] hover:text-white text-slate-700 rounded-lg text-xs font-bold transition-all cursor-pointer border border-slate-200/50 hover:border-transparent"
+                                      title="View Sent Email Copy"
+                                    >
+                                      <Mail className="h-3.5 w-3.5" />
+                                      <span className="hidden sm:inline">View Email</span>
+                                    </button>
+                                    <button
+                                      onClick={() => handleDeleteRecord(rec.id, rec.name)}
+                                      className="inline-flex items-center justify-center p-1.5 bg-rose-50 hover:bg-rose-500 text-rose-600 hover:text-white rounded-lg transition-all cursor-pointer border border-rose-100 hover:border-transparent"
+                                      title="Delete Consent Record"
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+
+                        {smsRecords.filter(rec => {
+                          const query = smsSearchQuery.toLowerCase().trim();
+                          const matchesQuery = !query || 
+                            rec.name?.toLowerCase().includes(query) ||
+                            rec.phone?.toLowerCase().includes(query) ||
+                            rec.email?.toLowerCase().includes(query);
+                          const matchesRole = smsFilterRole === 'all' || rec.role === smsFilterRole;
+                          return matchesQuery && matchesRole;
+                        }).length === 0 && (
+                          <tr>
+                            <td colSpan={6} className="text-center py-12 text-slate-400 space-y-2">
+                              <div className="text-lg">📭</div>
+                              <p className="text-xs">No matching opt-in consent records found.</p>
+                              <p className="text-[10px] text-slate-400">Try modifying your search keywords or filter settings.</p>
                             </td>
                           </tr>
-                        );
-                      })}
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
 
-                    {smsRecords.filter(rec => {
-                      const query = smsSearchQuery.toLowerCase().trim();
-                      const matchesQuery = !query || 
-                        rec.name.toLowerCase().includes(query) ||
-                        rec.phone.toLowerCase().includes(query) ||
-                        rec.email.toLowerCase().includes(query);
-                      const matchesRole = smsFilterRole === 'all' || rec.role === smsFilterRole;
-                      return matchesQuery && matchesRole;
-                    }).length === 0 && (
-                      <tr>
-                        <td colSpan={6} className="text-center py-12 text-slate-400 space-y-2">
-                          <div className="text-lg">📭</div>
-                          <p className="text-xs">No matching opt-in consent records found.</p>
-                          <p className="text-[10px] text-slate-400">Try modifying your search keywords or filter settings.</p>
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
+                  {/* Table Footer Actions */}
+                  <div className="bg-slate-50/80 px-4 py-3 border-t border-slate-200 flex justify-between items-center text-[11px] text-slate-500">
+                    <span>Database Status: <strong className="text-emerald-600 font-semibold">● SECURE & COMPLIANT (TCPA compliant)</strong></span>
+                    <button
+                      onClick={() => {
+                        if (confirm('Are you sure you want to clear all registrations from the registry database?')) {
+                          localStorage.removeItem('mypro_sms_records');
+                          setSmsRecords([]);
+                        }
+                      }}
+                      className="text-rose-500 hover:text-rose-700 font-semibold flex items-center space-x-1 cursor-pointer focus:outline-none text-[11px]"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                      <span>Clear Registry Database</span>
+                    </button>
+                  </div>
+                </div>
               </div>
-
-              {/* Table Footer Actions */}
-              <div className="bg-slate-50/80 px-4 py-3 border-t border-slate-200 flex justify-between items-center text-[11px] text-slate-500">
-                <span>Database Status: <strong className="text-emerald-600 font-semibold">● SECURE & COMPLIANT (TCPA compliant)</strong></span>
-                <button
-                  onClick={() => {
-                    if (confirm('Are you sure you want to clear custom registrations and restore defaults for demonstration?')) {
-                      localStorage.removeItem('mypro_sms_records');
-                      window.location.reload();
-                    }
-                  }}
-                  className="text-rose-500 hover:text-rose-700 font-semibold flex items-center space-x-1 cursor-pointer focus:outline-none"
-                >
-                  <Trash2 className="h-3 w-3" />
-                  <span>Restore defaults</span>
-                </button>
-              </div>
-            </div>
+            )}
           </div>
 
         </div>

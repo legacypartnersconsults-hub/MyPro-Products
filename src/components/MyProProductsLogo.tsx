@@ -7,7 +7,7 @@ interface MyProProductsLogoProps {
   subText?: string;
 }
 
-export default function MyProProductsLogo({ showText = true, size = 'md', className = '', subText = 'Claims & Dispatch Ecosystem' }: MyProProductsLogoProps) {
+export default function MyProProductsLogo({ showText = true, size = 'md', className = '', subText = 'Ecosystem' }: MyProProductsLogoProps) {
   // Dimensions based on size
   const iconDimensions = {
     sm: { h: 'h-7', w: 'w-7', viewBox: '0 0 140 120' },

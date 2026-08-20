@@ -112,22 +112,25 @@ export default function ProductSuite({ onRequestDemo, onLaunchPortal, onLaunchRe
 
                   {/* Actions */}
                   <div className="mt-8 pt-6 border-t border-slate-100 flex flex-col space-y-3">
-                    {isActive ? (
+                    {isActive && product.id !== 'readyhub' ? (
                       <button
-                        onClick={(e) => { e.stopPropagation(); if (product.id === 'readyhub') { onLaunchReadyHub(); } else { onLaunchPortal(); } }}
-                        className={`w-full text-center py-3 text-white font-bold rounded-xl transition-all flex items-center justify-center space-x-2 shadow-md cursor-pointer ${
-                          product.id === 'readyhub' 
-                            ? 'bg-cyan-500 hover:bg-cyan-600 shadow-cyan-100' 
-                            : 'bg-[#468CDC] hover:bg-[#3b7cbd] shadow-[#468CDC]/10'
-                        }`}
+                        onClick={(e) => { e.stopPropagation(); onLaunchPortal(); }}
+                        className="w-full text-center py-3 text-white font-bold rounded-xl transition-all flex items-center justify-center space-x-2 shadow-md cursor-pointer bg-[#468CDC] hover:bg-[#3b7cbd] shadow-[#468CDC]/10"
                       >
                         <span>Launch App</span>
                         <ArrowUpRight className="h-4.5 w-4.5" />
                       </button>
+                    ) : product.id === 'readyhub' ? (
+                      <button
+                        disabled
+                        className="w-full text-center py-3 bg-cyan-50 text-cyan-600/80 border border-cyan-100 font-bold rounded-xl flex items-center justify-center space-x-2 cursor-not-allowed"
+                      >
+                        <span>In Testing</span>
+                      </button>
                     ) : (
                       <button
                         disabled
-                        className="w-full text-center py-3 bg-slate-100 text-slate-400 font-bold rounded-xl transition-all flex items-center justify-center space-x-2 cursor-not-allowed text-xs"
+                        className="w-full text-center py-3 bg-slate-100 text-slate-400 font-bold rounded-xl flex items-center justify-center space-x-2 cursor-not-allowed text-xs"
                       >
                         <span>Coming Soon</span>
                       </button>
