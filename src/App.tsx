@@ -26,7 +26,7 @@ export default function App() {
     if (typeof window !== 'undefined') {
       const path = window.location.pathname;
       if (path === '/market') return 'market';
-      if (path === '/readyhub') return 'readyhub';
+      if (path === '/readyhub' || path.startsWith('/readyhub')) return 'readyhub';
     }
     return 'corporate';
   });
@@ -36,7 +36,7 @@ export default function App() {
       const path = window.location.pathname;
       if (path === '/market') {
         setActiveView('market');
-      } else if (path === '/readyhub') {
+      } else if (path === '/readyhub' || path.startsWith('/readyhub')) {
         setActiveView('readyhub');
       } else {
         setActiveView('corporate');

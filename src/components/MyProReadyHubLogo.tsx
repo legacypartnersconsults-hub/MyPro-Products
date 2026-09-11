@@ -1,27 +1,39 @@
 import React from 'react';
 
-interface MyProReadyHubLogoProps {
+export interface MyProReadyHubLogoProps {
   showText?: boolean;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'horizontal' | 'stacked' | 'icon';
+  theme?: 'dark' | 'light' | 'auto';
   className?: string;
 }
 
-export default function MyProReadyHubLogo({ showText = true, size = 'md', className = '' }: MyProReadyHubLogoProps) {
+export default function MyProReadyHubLogo({ 
+  showText = true, 
+  size = 'md', 
+  variant = 'horizontal',
+  theme = 'auto',
+  className = '' 
+}: MyProReadyHubLogoProps) {
   // Dimensions based on size
   const iconDimensions = {
     sm: { h: 'h-7', w: 'w-7', viewBox: '0 0 140 120' },
     md: { h: 'h-10', w: 'w-10', viewBox: '0 0 140 120' },
-    lg: { h: 'h-16', w: 'w-16', viewBox: '0 0 140 120' }
+    lg: { h: 'h-16', w: 'w-16', viewBox: '0 0 140 120' },
+    xl: { h: 'h-24', w: 'w-24', viewBox: '0 0 140 120' }
   }[size];
 
   const textSizes = {
     sm: { main: 'text-sm', sub: 'text-[8px]' },
     md: { main: 'text-lg', sub: 'text-[9px]' },
-    lg: { main: 'text-3xl', sub: 'text-xs' }
+    lg: { main: 'text-3xl', sub: 'text-xs' },
+    xl: { main: 'text-4xl', sub: 'text-sm' }
   }[size];
 
+  const isStacked = variant === 'stacked';
+
   return (
-    <div className={`flex items-center space-x-2.5 ${className}`}>
+    <div className={`flex ${isStacked ? 'flex-col items-center text-center space-y-2' : 'items-center space-x-2.5'} ${className}`}>
       {/* Premium Disaster-Preparedness Shield & Home SVG Icon */}
       <svg 
         viewBox="0 0 140 120" 
@@ -65,9 +77,9 @@ export default function MyProReadyHubLogo({ showText = true, size = 'md', classN
         </g>
       </svg>
 
-      {/* Brand Text */}
+      {/* Brand Text without "Secure" */}
       {showText && (
-        <div className="flex flex-col select-none text-left justify-center">
+        <div className={`flex flex-col select-none ${isStacked ? 'items-center text-center' : 'text-left justify-center'}`}>
           <div className={`${textSizes.main} font-extrabold tracking-tight leading-none`}>
             <span className="text-[#6AD5F9]">My</span>
             <span className="text-[#98CC44]">Pro</span>
@@ -76,7 +88,7 @@ export default function MyProReadyHubLogo({ showText = true, size = 'md', classN
             Ready Hub
           </div>
           <span className={`${textSizes.sub} font-bold text-slate-400 tracking-wider block uppercase mt-1 leading-none`}>
-            by MyPro Products &bull; Secure
+            by MyPro Products
           </span>
         </div>
       )}

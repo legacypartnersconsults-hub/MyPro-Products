@@ -7,7 +7,9 @@ import {
   MapPin, AlertCircle, Heart, Key, Clock, Copy, FileCode
 } from 'lucide-react';
 import MyProReadyHubLogo from './MyProReadyHubLogo';
-import { PrivacyPolicyModal, TermsOfServiceModal } from './LegalModals';
+import MyProReadyHubBrandAssets from './MyProReadyHubBrandAssets';
+import { TermsOfServiceModal } from './LegalModals';
+import { MyProReadyHubPrivacyModal, MyProReadyHubPrivacySection } from './MyProReadyHubPrivacyPolicy';
 
 interface MyProReadyHubWebsiteProps {
   onBackToCorporate: () => void;
@@ -36,11 +38,6 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
   const [termsOpen, setTermsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'checklist' | 'scanner' | 'cabinet' | 'alerts'>('checklist');
   const [selectedDisaster, setSelectedDisaster] = useState<'hurricane' | 'wildfire' | 'flood' | 'freeze'>('hurricane');
-  
-  // Logo Studio State
-  const [logoAssetMode, setLogoAssetMode] = useState<'icon' | 'full'>('full');
-  const [copiedLogo, setCopiedLogo] = useState(false);
-  const [logoBgType, setLogoBgType] = useState<'transparent' | 'dark' | 'light'>('transparent');
   
   // 1. Checklist State
   const [checklists, setChecklists] = useState({
@@ -74,88 +71,6 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
       { id: 'z5', text: 'Fill vehicle gas tank fully to prevent fuel line freezes', category: 'Safety', checked: false },
     ]
   });
-
-  const getLogoSvgContent = () => {
-    const bgStyle = {
-      transparent: '',
-      dark: ' style="background:#020617; padding: 20px; border-radius: 8px;"',
-      light: ' style="background:#ffffff; padding: 20px; border-radius: 8px;"'
-    }[logoBgType];
-
-    if (logoAssetMode === 'icon') {
-      return `<svg viewBox="0 0 140 120" fill="none" xmlns="http://www.w3.org/2000/svg"${bgStyle}>
-  <!-- Protective Shield Outline - Color Hex #6AD5F9 -->
-  <path d="M 12 28 C 42 10, 98 10, 128 28 C 128 72, 108 104, 70 118 C 32 104, 12 72, 12 28 Z" stroke="#6AD5F9" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
-  
-  <!-- Brand Mark Group Scaled to Fit Perfectly inside Shield -->
-  <g transform="translate(26.5, 26) scale(0.70)" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Chimney - Color Hex #6AD5F9 -->
-    <rect x="24" y="14" width="11" height="30" fill="#6AD5F9" />
-    <!-- Inner Protected Home Roof - Color Hex #6AD5F9 -->
-    <path d="M 2 58 L 62 12 L 92 38" stroke="#6AD5F9" stroke-width="10" />
-    <!-- Glowing Window/Beacon - Divided into four equal squares - Color Hex #98CC44 -->
-    <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-    <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-    <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-    <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-    <!-- Ready Green Checkmark - Color Hex #98CC44 -->
-    <path d="M 21 78 L 51 104 L 111 58" stroke="#98CC44" stroke-width="11" />
-  </g>
-</svg>`;
-    } else {
-      const textFill1 = logoBgType === 'light' ? '#0f172a' : '#6AD5F9';
-      const textFill2 = '#98CC44';
-      const textFill3 = logoBgType === 'light' ? '#1e293b' : '#6AD5F9';
-      const subTextFill = logoBgType === 'light' ? '#475569' : '#94a3b8';
-
-      return `<svg viewBox="0 0 440 120" fill="none" xmlns="http://www.w3.org/2000/svg"${bgStyle}>
-  <g transform="translate(10, 0)">
-    <!-- Protective Shield Outline - Color Hex #6AD5F9 -->
-    <path d="M 12 28 C 42 10, 98 10, 128 28 C 128 72, 108 104, 70 118 C 32 104, 12 72, 12 28 Z" stroke="#6AD5F9" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
-    
-    <!-- Brand Mark Group Scaled to Fit Perfectly inside Shield -->
-    <g transform="translate(26.5, 26) scale(0.70)" stroke-linecap="round" stroke-linejoin="round">
-      <!-- Chimney - Color Hex #6AD5F9 -->
-      <rect x="24" y="14" width="11" height="30" fill="#6AD5F9" />
-      <!-- Inner Protected Home Roof - Color Hex #6AD5F9 -->
-      <path d="M 2 58 L 62 12 L 92 38" stroke="#6AD5F9" stroke-width="10" />
-      <!-- Glowing Window/Beacon - Divided into four equal squares - Color Hex #98CC44 -->
-      <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <!-- Ready Green Checkmark - Color Hex #98CC44 -->
-      <path d="M 21 78 L 51 104 L 111 58" stroke="#98CC44" stroke-width="11" />
-    </g>
-  </g>
-  <text x="160" y="54" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" letter-spacing="-1">
-    <tspan fill="${textFill1}">My</tspan><tspan fill="${textFill2}">Pro</tspan>
-  </text>
-  <text x="160" y="88" fill="${textFill3}" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="900" letter-spacing="-1">Ready Hub</text>
-  <text x="160" y="108" fill="${subTextFill}" font-family="system-ui, -apple-system, sans-serif" font-size="10" font-weight="bold" letter-spacing="1">BY MYPRO PRODUCTS • SECURE</text>
-</svg>`;
-    }
-  };
-
-  const handleCopyLogoCode = () => {
-    const code = getLogoSvgContent();
-    navigator.clipboard.writeText(code);
-    setCopiedLogo(true);
-    setTimeout(() => setCopiedLogo(false), 2000);
-  };
-
-  const handleDownloadLogoSvg = () => {
-    const code = getLogoSvgContent();
-    const blob = new Blob([code], { type: 'image/svg+xml' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `mypro-readyhub-logo-${logoAssetMode}-${logoBgType}.svg`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
 
   const toggleChecklistItem = (disaster: 'hurricane' | 'wildfire' | 'flood' | 'freeze', id: string) => {
     setChecklists(prev => ({
@@ -1223,142 +1138,13 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
 
         </div>
 
-        {/* LOGO STUDIO & DOWNLOAD TOOL */}
-        <div id="readyhub-logo-studio" className="mt-16 p-8 bg-slate-900/60 border border-slate-800 rounded-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 h-40 w-40 bg-gradient-to-bl from-cyan-500/10 to-transparent rounded-bl-full pointer-events-none" />
-          
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Info Column */}
-            <div className="lg:col-span-5 space-y-4">
-              <span className="inline-flex items-center space-x-1.5 text-[10px] font-bold text-cyan-400 bg-cyan-950/40 px-2.5 py-1 rounded-full border border-cyan-800/40 uppercase tracking-wider">
-                <FileCode className="h-3 w-3" />
-                <span>Vector Branding Suite</span>
-              </span>
-              <h3 className="text-2xl font-extrabold text-white tracking-tight">
-                Ready Hub Logo & Brand Mark Exporter
-              </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
-                The brand asset features the protective outer security shield, our signature interior refuge home structure with a 4-pane active glowing window, and the green certification checkmark of safety readiness—now perfectly fitted within the safety boundary.
-              </p>
-              
-              <div className="space-y-3 pt-2">
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2">
-                    1. Brand Asset Format
-                  </label>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setLogoAssetMode('full')}
-                      className={`flex-1 py-2 px-3 rounded-lg border font-bold text-xs transition-all cursor-pointer text-center ${
-                        logoAssetMode === 'full'
-                          ? 'bg-cyan-950 text-cyan-400 border-cyan-800'
-                          : 'bg-slate-950 text-slate-400 border-slate-900 hover:bg-slate-900/50'
-                      }`}
-                    >
-                      Full Logo with Typography
-                    </button>
-                    <button
-                      onClick={() => setLogoAssetMode('icon')}
-                      className={`flex-1 py-2 px-3 rounded-lg border font-bold text-xs transition-all cursor-pointer text-center ${
-                        logoAssetMode === 'icon'
-                          ? 'bg-cyan-950 text-cyan-400 border-cyan-800'
-                          : 'bg-slate-950 text-slate-400 border-slate-900 hover:bg-slate-900/50'
-                      }`}
-                    >
-                      Brand Mark Icon Only
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-2">
-                    2. Background Presentation
-                  </label>
-                  <div className="flex gap-2">
-                    {(['transparent', 'dark', 'light'] as const).map((bg) => (
-                      <button
-                        key={bg}
-                        onClick={() => setLogoBgType(bg)}
-                        className={`flex-1 py-1.5 px-2 rounded-lg border font-bold text-xs capitalize transition-all cursor-pointer text-center ${
-                          logoBgType === bg
-                            ? 'bg-slate-800 text-white border-slate-700'
-                            : 'bg-slate-950 text-slate-500 border-slate-900 hover:bg-slate-900/30'
-                        }`}
-                      >
-                        {bg}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Preview & Action Column */}
-            <div className="lg:col-span-7 space-y-4">
-              <div className="bg-slate-950 border border-slate-800 rounded-xl p-6 flex flex-col items-center justify-center relative min-h-[180px]">
-                {/* Checkerboard Pattern for Transparent */}
-                {logoBgType === 'transparent' && (
-                  <div className="absolute inset-0 opacity-[0.03] bg-[linear-gradient(45deg,#ccc_25%,transparent_25%),linear-gradient(-45deg,#ccc_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#ccc_75%),linear-gradient(-45deg,transparent_75%,#ccc_75%)] bg-[size:16px_16px] bg-[position:0_0,0_8px,8px_-8px,8px_0px] pointer-events-none" />
-                )}
-                
-                <div 
-                  className={`transition-all duration-300 p-6 rounded-lg ${
-                    logoBgType === 'dark' ? 'bg-[#020617] border border-slate-900' : logoBgType === 'light' ? 'bg-white border border-slate-200' : ''
-                  }`}
-                >
-                  {logoAssetMode === 'icon' ? (
-                    <MyProReadyHubLogo showText={false} size="lg" />
-                  ) : (
-                    <MyProReadyHubLogo showText={true} size="lg" />
-                  )}
-                </div>
-
-                <span className="absolute bottom-2 right-3 text-[10px] font-mono text-slate-600">
-                  Live Studio Preview
-                </span>
-              </div>
-
-              {/* Action Buttons */}
-              <div className="grid grid-cols-2 gap-4">
-                <button
-                  onClick={handleCopyLogoCode}
-                  className="flex items-center justify-center space-x-2 py-3 px-4 bg-slate-950 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-900 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer active:scale-95"
-                >
-                  {copiedLogo ? (
-                    <>
-                      <Check className="h-4 w-4 text-lime-400" />
-                      <span className="text-lime-400">Copied SVG to Clipboard!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="h-4 w-4 text-cyan-400" />
-                      <span>Copy SVG Code</span>
-                    </>
-                  )}
-                </button>
-
-                <button
-                  onClick={handleDownloadLogoSvg}
-                  className="flex items-center justify-center space-x-2 py-3 px-4 bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 text-slate-950 rounded-xl text-xs font-bold transition-all cursor-pointer shadow-md shadow-cyan-950 active:scale-95"
-                >
-                  <Download className="h-4 w-4" />
-                  <span>Download SVG File</span>
-                </button>
-              </div>
-
-              {/* Source Preview Code (Truncated display) */}
-              <div className="bg-slate-950 border border-slate-850 rounded-lg p-3 font-mono text-[10px] text-slate-500 relative max-h-[85px] overflow-y-auto">
-                <div className="flex justify-between items-center text-slate-600 text-[9px] font-bold uppercase tracking-wider mb-1.5 pb-1 border-b border-slate-900">
-                  <span>VECTOR SOURCE OUTPUT</span>
-                  <span>SVG XML FORMAT</span>
-                </div>
-                <pre className="text-slate-400 leading-normal truncate whitespace-pre-wrap select-all">
-                  {getLogoSvgContent()}
-                </pre>
-              </div>
-            </div>
-          </div>
+        {/* STORE BRANDING & ASSET SUITE */}
+        <div className="mt-16">
+          <MyProReadyHubBrandAssets />
         </div>
+
+        {/* GOOGLE & APPLE COMPLIANT PRIVACY POLICY SECTION */}
+        <MyProReadyHubPrivacySection onOpenFullPolicy={() => setPrivacyOpen(true)} />
       </section>
 
       {/* 5. Footer and Certifications */}
@@ -1388,8 +1174,8 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
         </div>
       </footer>
 
-      {/* Legal Modals for Carrier and User Compliance */}
-      <PrivacyPolicyModal isOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
+      {/* Official MyPro Ready Hub Privacy Policy Modal (Apple & Google Compliant) */}
+      <MyProReadyHubPrivacyModal isOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
       <TermsOfServiceModal isOpen={termsOpen} onClose={() => setTermsOpen(false)} />
 
     </div>
