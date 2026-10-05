@@ -519,7 +519,7 @@ export default function MyProReadyHubBrandAssets() {
               <li><strong className="text-slate-300">Apple App Store:</strong> Strict 1024×1024 square PNG, opaque solid navy/black, centered optical safe margins.</li>
               <li><strong className="text-slate-300">Google Play Store:</strong> 512×512 32-bit PNG, ready for dynamic Android squircle masks.</li>
               <li><strong className="text-slate-300">Full Logo:</strong> Cleaned &quot;Secure&quot; text to retain only authoritative <code className="text-cyan-400 font-mono">BY MYPRO PRODUCTS</code>.</li>
-              <li><strong className="text-slate-300">Privacy Compliance:</strong> Meets Apple 5.1 &amp; Google User Data policies with public URL (<code className="text-cyan-400 font-mono">/readyhub#privacy-policy</code>).</li>
+              <li><strong className="text-slate-300">Store URLs:</strong> Privacy policy <code className="text-cyan-400 font-mono">/readyhub/privacy</code> &middot; account deletion <code className="text-cyan-400 font-mono">/readyhub/delete-account</code>.</li>
             </ul>
           </div>
 

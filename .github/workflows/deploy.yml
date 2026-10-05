@@ -36,6 +36,10 @@ jobs:
         run: |
           cp CNAME dist/CNAME
           cp dist/index.html dist/404.html
+          # Serve /readyhub with a real 200 (not just via the 404.html fallback),
+          # since it is the URL given to the app stores.
+          mkdir -p dist/readyhub
+          cp dist/index.html dist/readyhub/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
