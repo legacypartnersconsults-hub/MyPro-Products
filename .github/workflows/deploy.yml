@@ -40,6 +40,8 @@ jobs:
           # since it is the URL given to the app stores.
           mkdir -p dist/readyhub
           cp dist/index.html dist/readyhub/index.html
+          mkdir -p dist/readyhub/brand-assets
+          cp dist/index.html dist/readyhub/brand-assets/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

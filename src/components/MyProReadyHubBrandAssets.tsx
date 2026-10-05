@@ -423,14 +423,14 @@ export default function MyProReadyHubBrandAssets() {
                 },
                 { 
                   id: 'logo-horizontal' as AssetFormat, 
-                  title: 'Full Logo &mdash; Horizontal', 
+                  title: 'Full Logo — Horizontal', 
                   spec: 'Vector SVG + 1840×520 Hi-Res PNG • Clean Subtext',
                   badge: 'Header / Web',
                   icon: FileCode
                 },
                 { 
                   id: 'logo-stacked' as AssetFormat, 
-                  title: 'Full Logo &mdash; Stacked Centered', 
+                  title: 'Full Logo — Stacked Centered', 
                   spec: 'Vector SVG + 1280×960 Hi-Res PNG • Hero / Splash',
                   badge: 'Splash Screen',
                   icon: Shield
