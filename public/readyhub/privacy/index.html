@@ -42,7 +42,7 @@ footer a{margin-right:16px}
 <p>Location: your ZIP code (which we convert to approximate coordinates) and, only if you choose &quot;Current Location&quot;, your device's precise location at the time you use the app. We keep your most recent location so we can show local conditions and send alerts. We do not track your location continuously in the background.</p>
 <p>Contacts: if you tap &quot;Import from contacts&quot;, the app reads only the single contact you pick (name, phone, email) to fill in an emergency contact. We never upload your address book.</p>
 <p>Notifications: your device's push-notification token and your notification preferences.</p>
-<p>Subscription and referral information: your plan, trial or subscription status, price, and any promo or referral code you enter. Payments are handled by the Apple App Store or Google Play; we never receive your card number.</p>
+<p>Subscription and referral information: your plan, trial or subscription status and its start, renewal and end dates, the price charged, the store's transaction identifier, and any promo or referral code you enter. Payments are handled by the Apple App Store or Google Play; we never receive your card number. When you subscribe, restore a purchase or open the app, our server confirms your subscription directly with Apple or Google and records the result.</p>
 <p>Technical information: our servers keep standard logs (such as IP address, request time and errors) for security and troubleshooting. Settings such as your vault lock stay on your device. We do not currently use third-party analytics, advertising or crash-reporting SDKs, and we do not use advertising identifiers or tracking cookies.</p>
 </section>
 <section>
@@ -68,7 +68,7 @@ footer a{margin-right:16px}
   <li>Apple Push Notification service and Google Firebase Cloud Messaging — to deliver push notifications to your device.</li>
   <li>Weather, hazard and map sources — the National Weather Service, USGS, FEMA, RainViewer (radar), Esri (map tiles), Open-Meteo, OpenStreetMap (Nominatim and Overpass) and Zippopotam. Requests to them include the ZIP code or coordinates needed to return local results, and they can see your IP address.</li>
   <li>Google Fonts and Unsplash — the app loads fonts and a welcome-screen image from these services, which can see your IP address.</li>
-  <li>Apple and Google — they process purchases and subscriptions in their stores under their own privacy policies.</li>
+  <li>Apple and Google — they process purchases and subscriptions in their stores under their own privacy policies. Our server also sends them your subscription's transaction identifier to confirm its status, and they notify our server when a subscription renews, is cancelled or is refunded.</li>
   <li>GitHub Pages — hosts the web version of the app.</li>
 </ul>
 <p>Emergency messages (SOS, Safe and broadcast) are composed in your phone's own messaging app and sent by you to the contacts you choose; we do not send or see them. We may also disclose information if required by law, to protect safety or rights, or in connection with a sale or merger of the business. A promo or referral code's owner is credited when you use their code but does not receive your personal information.</p>
