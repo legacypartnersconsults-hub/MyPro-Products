@@ -9,7 +9,7 @@ import {
 import MyProReadyHubLogo from './MyProReadyHubLogo';
 import MyProReadyHubBrandAssets from './MyProReadyHubBrandAssets';
 import { TermsOfServiceModal } from './LegalModals';
-import { MyProReadyHubPrivacyModal, MyProReadyHubPrivacySection } from './MyProReadyHubPrivacyPolicy';
+import { MyProReadyHubPrivacySection } from './MyProReadyHubPrivacyPolicy';
 
 interface MyProReadyHubWebsiteProps {
   onBackToCorporate: () => void;
@@ -34,7 +34,6 @@ interface UploadedDocument {
 }
 
 export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo }: MyProReadyHubWebsiteProps) {
-  const [privacyOpen, setPrivacyOpen] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'checklist' | 'scanner' | 'cabinet' | 'alerts'>('checklist');
   const [selectedDisaster, setSelectedDisaster] = useState<'hurricane' | 'wildfire' | 'flood' | 'freeze'>('hurricane');
@@ -399,8 +398,8 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
               <div className="text-2xl font-bold text-lime-400 mt-1">98% Match Rate</div>
             </div>
             <div className="p-4 bg-slate-900/50 border border-slate-800/80 rounded-xl">
-              <div className="text-xs text-slate-500 font-semibold uppercase tracking-widest">Encryption Level</div>
-              <div className="text-2xl font-bold text-white mt-1">AES-256 Bit</div>
+              <div className="text-xs text-slate-500 font-semibold uppercase tracking-widest">Data Protection</div>
+              <div className="text-2xl font-bold text-white mt-1">Encrypted</div>
             </div>
             <div className="p-4 bg-slate-900/50 border border-slate-800/80 rounded-xl">
               <div className="text-xs text-slate-500 font-semibold uppercase tracking-widest">Zip Tracking</div>
@@ -471,10 +470,10 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
             <div className="pt-6 border-t border-slate-800 mt-6 px-3">
               <div className="flex items-center space-x-2 text-[11px] text-slate-500 font-semibold mb-2">
                 <Lock className="h-3.5 w-3.5 text-lime-400" />
-                <span>LOCAL & SECURE STORAGE</span>
+                <span>PRIVATE CLOUD STORAGE</span>
               </div>
               <p className="text-[10px] text-slate-600 leading-normal">
-                All uploaded documents, prescription lists, and video scanned logs are encrypted on-device. No data leaves your secure zone.
+                Your documents, prescription lists and scan results are stored in your private account, encrypted in transit and at rest, with an encrypted offline copy on your phone.
               </p>
             </div>
           </div>
@@ -1063,7 +1062,7 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
                 <div className="h-6 w-6 bg-lime-500/15 border border-lime-500/30 rounded-full flex items-center justify-center text-lime-400">
                   <Lock className="h-3.5 w-3.5" />
                 </div>
-                <span className="text-[11px] text-slate-400 font-medium">Safe and HIPAA compliant health documentation data.</span>
+                <span className="text-[11px] text-slate-400 font-medium">Health details stay in your private account and are never sold or used for ads.</span>
               </div>
 
               <div className="flex items-center space-x-3">
@@ -1119,9 +1118,9 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
             <div className="h-10 w-10 bg-lime-950 border border-lime-800 rounded-lg flex items-center justify-center mb-4 text-lime-400">
               <ShieldCheck className="h-5 w-5" />
             </div>
-            <h3 className="text-base font-bold text-white">Cryptographic Device Vault</h3>
+            <h3 className="text-base font-bold text-white">Private Encrypted Vault</h3>
             <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-              All documents are stored using zero-knowledge on-device AES security, enabling instant medical and identity access even with local telecom cell drops.
+              Documents are stored in your private account, encrypted in transit and at rest, and the app keeps an encrypted offline copy on your phone so key records stay reachable when the signal drops.
             </p>
           </div>
 
@@ -1144,7 +1143,7 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
         </div>
 
         {/* GOOGLE & APPLE COMPLIANT PRIVACY POLICY SECTION */}
-        <MyProReadyHubPrivacySection onOpenFullPolicy={() => setPrivacyOpen(true)} />
+        <MyProReadyHubPrivacySection />
       </section>
 
       {/* 5. Footer and Certifications */}
@@ -1165,17 +1164,13 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
             <span>&bull;</span>
             <button onClick={() => setTermsOpen(true)} className="hover:text-cyan-400 cursor-pointer focus:outline-none">Terms & Conditions</button>
             <span>&bull;</span>
-            <button onClick={() => setPrivacyOpen(true)} className="hover:text-cyan-400 cursor-pointer focus:outline-none">Privacy Policy</button>
+            <a href="/readyhub/privacy/" className="hover:text-cyan-400">Privacy Policy</a>
             <span>&bull;</span>
-            <span>HIPAA Compliant</span>
-            <span>&bull;</span>
-            <span>FEMA-Certified Layout</span>
+            <a href="/readyhub/delete-account/" className="hover:text-cyan-400">Delete Your Account</a>
           </div>
         </div>
       </footer>
 
-      {/* Official MyPro Ready Hub Privacy Policy Modal (Apple & Google Compliant) */}
-      <MyProReadyHubPrivacyModal isOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
       <TermsOfServiceModal isOpen={termsOpen} onClose={() => setTermsOpen(false)} />
 
     </div>
