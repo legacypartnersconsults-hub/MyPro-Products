@@ -13,6 +13,7 @@ import MyProMarketWebsite from './components/MyProMarketWebsite';
 import MyProMarketSignIn from './components/MyProMarketSignIn';
 import MyProMarketPortal from './components/MyProMarketPortal';
 import MyProReadyHubWebsite from './components/MyProReadyHubWebsite';
+import MyProReadyHubBrandAssetsPage from './components/MyProReadyHubBrandAssetsPage';
 import { PrivacyPolicyModal, TermsOfServiceModal } from './components/LegalModals';
 
 export default function App() {
@@ -21,11 +22,12 @@ export default function App() {
   const [preselectedAudience, setPreselectedAudience] = useState<string>('');
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
-  const [activeView, setActiveView] = useState<'corporate' | 'market' | 'readyhub' | 'signin' | 'portal'>(() => {
+  const [activeView, setActiveView] = useState<'corporate' | 'market' | 'readyhub' | 'readyhub-brand' | 'signin' | 'portal'>(() => {
     // Basic path-based detection on load
     if (typeof window !== 'undefined') {
       const path = window.location.pathname;
       if (path === '/market') return 'market';
+      if (path.startsWith('/readyhub/brand-assets')) return 'readyhub-brand';
       if (path === '/readyhub' || path.startsWith('/readyhub')) return 'readyhub';
     }
     return 'corporate';
@@ -36,6 +38,8 @@ export default function App() {
       const path = window.location.pathname;
       if (path === '/market') {
         setActiveView('market');
+      } else if (path.startsWith('/readyhub/brand-assets')) {
+        setActiveView('readyhub-brand');
       } else if (path === '/readyhub' || path.startsWith('/readyhub')) {
         setActiveView('readyhub');
       } else {
@@ -97,6 +101,10 @@ export default function App() {
         />
       </>
     );
+  }
+
+  if (activeView === 'readyhub-brand') {
+    return <MyProReadyHubBrandAssetsPage />;
   }
 
   if (activeView === 'readyhub') {
