@@ -168,6 +168,16 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
                 Scan a room, a prescription label or a policy and the app reads it for you, using Google&rsquo;s AI. It always asks first.
               </p>
             </div>
+            {/* Fills the open ninth spot in the grid. On large screens Mason is
+                sized to the row the cards set, so the section doesn't grow. */}
+            <div className="sm:col-span-2 lg:col-span-1 relative flex justify-center">
+              <img
+                src="/readyhub/readyranger-mason-hurricane.webp" width={969} height={1000} loading="lazy"
+                alt="ReadyRanger Mason in a red cap, holding a phone with the Ready Hub hurricane checklist, next to sandbags and an emergency kit"
+                className="w-full max-w-[240px] h-auto lg:max-w-none lg:absolute lg:inset-0 lg:h-full lg:object-contain"
+                style={{ filter: 'drop-shadow(0 14px 22px rgba(11,20,38,0.18))' }}
+              />
+            </div>
           </div>
         </div>
       </section>
