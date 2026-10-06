@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import {
   ArrowLeft, ArrowRight, Bell, CheckSquare, Compass, Gauge, Lock, Map as MapIcon, MapPin, Sparkles,
 } from 'lucide-react';
@@ -67,6 +67,36 @@ const SCREENS = [
   { src: '/readyhub/screens/comms.jpg', title: 'Emergency Comms', body: 'One-tap calling for local emergency services.' },
   { src: '/readyhub/screens/mason.jpg', title: 'Ask Mason', body: 'Answers drawn from your own household data.' },
 ];
+
+const MASONS = [
+  { src: '/readyhub/readyranger-mason-hurricane.webp', alt: 'ReadyRanger Mason in a red cap, holding a phone with the Ready Hub hurricane checklist, next to sandbags and an emergency kit' },
+  { src: '/readyhub/readyranger-mason-wildfire.webp', alt: 'ReadyRanger Mason in orange wildfire gear, holding a phone with the Ready Hub wildfire alert and a fire extinguisher' },
+  { src: '/readyhub/readyranger-mason-winter-storm.webp', alt: 'ReadyRanger Mason in winter gear and goggles, holding a phone in Ready Hub winter mode and a portable power station' },
+];
+
+// The hurricane, wildfire and winter storm Masons take turns in one spot.
+// People who ask for reduced motion see only the first one.
+function MasonRotator() {
+  const [shown, setShown] = useState(0);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = window.setInterval(() => setShown((i) => (i + 1) % MASONS.length), 4000);
+    return () => window.clearInterval(id);
+  }, []);
+
+  return (
+    <div className="relative w-full max-w-[240px] aspect-square lg:max-w-none lg:absolute lg:inset-0 lg:aspect-auto">
+      {MASONS.map((m, i) => (
+        <img
+          key={m.src} src={m.src} alt={m.alt} width={900} height={1000} loading="lazy"
+          aria-hidden={i !== shown}
+          className="absolute inset-0 w-full h-full object-contain transition-opacity duration-700"
+          style={{ opacity: i === shown ? 1 : 0, filter: 'drop-shadow(0 14px 22px rgba(11,20,38,0.18))' }}
+        />
+      ))}
+    </div>
+  );
+}
 
 export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo }: MyProReadyHubWebsiteProps) {
   const [termsOpen, setTermsOpen] = useState(false);
@@ -171,12 +201,7 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
             {/* Fills the open ninth spot in the grid. On large screens Mason is
                 sized to the row the cards set, so the section doesn't grow. */}
             <div className="sm:col-span-2 lg:col-span-1 relative flex justify-center">
-              <img
-                src="/readyhub/readyranger-mason-hurricane.webp" width={969} height={1000} loading="lazy"
-                alt="ReadyRanger Mason in a red cap, holding a phone with the Ready Hub hurricane checklist, next to sandbags and an emergency kit"
-                className="w-full max-w-[240px] h-auto lg:max-w-none lg:absolute lg:inset-0 lg:h-full lg:object-contain"
-                style={{ filter: 'drop-shadow(0 14px 22px rgba(11,20,38,0.18))' }}
-              />
+              <MasonRotator />
             </div>
           </div>
         </div>
