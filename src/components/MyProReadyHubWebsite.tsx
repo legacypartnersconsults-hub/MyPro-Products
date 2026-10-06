@@ -131,11 +131,12 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
               className="relative w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[460px] h-auto"
               style={{ filter: 'drop-shadow(0 24px 40px rgba(0,0,0,0.45))' }}
             />
+            {/* Same type as the headline, at half its size */}
             <figcaption
-              className="relative -mt-2 rounded-2xl px-4 py-2.5 text-[13px] lg:mr-[12%]"
-              style={{ background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.14)', color: 'rgba(255,255,255,0.85)' }}
+              className="relative mt-2 text-center lg:mr-[6%] max-w-[460px]"
+              style={{ fontSize: 'clamp(1.05rem, 2.5vw, 1.7rem)', fontWeight: 700, lineHeight: 1.2, color: '#6AD5F9' }}
             >
-              Meet <span style={{ color: '#6AD5F9', fontWeight: 700 }}>ReadyRanger Mason</span>, your preparedness advisor.
+              Meet ReadyRanger Mason, your preparedness advisor.
             </figcaption>
           </figure>
         </div>
