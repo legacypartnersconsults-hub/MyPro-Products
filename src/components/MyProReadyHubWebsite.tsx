@@ -119,10 +119,26 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
             <p style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.55)', marginTop: 18 }}>7-day free trial &middot; No charge until the trial ends &middot; Cancel anytime</p>
           </div>
 
-          <div className="relative flex justify-center lg:justify-end" aria-hidden={false}>
-            <Phone src="/readyhub/screens/home.jpg" alt="MyPro Ready Hub home screen showing local risk, MyReadyScore and ReadyRanger Mason" eager className="w-[220px] sm:w-[250px] z-10" />
-            <Phone src="/readyhub/screens/mason.jpg" alt="Ask Mason, the in-app preparedness advisor" eager className="hidden sm:block w-[210px] -ml-10 mt-14 opacity-95" />
-          </div>
+          <figure className="relative flex flex-col items-center lg:items-end">
+            <div
+              aria-hidden
+              className="absolute left-1/2 lg:left-auto lg:right-[8%] top-[8%] w-[78%] max-w-[420px] aspect-square rounded-full -translate-x-1/2 lg:translate-x-0"
+              style={{ background: 'radial-gradient(circle, rgba(106,213,249,0.28) 0%, rgba(106,213,249,0) 70%)' }}
+            />
+            <img
+              src="/readyhub/readyranger-mason.webp" width={1224} height={1200} loading="eager"
+              alt="ReadyRanger Mason holding up a phone showing the MyPro Ready Hub app icon"
+              className="relative w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[460px] h-auto"
+              style={{ filter: 'drop-shadow(0 24px 40px rgba(0,0,0,0.45))' }}
+            />
+            {/* Same type as the headline, at half its size */}
+            <figcaption
+              className="relative mt-2 text-center lg:mr-[6%] max-w-[460px]"
+              style={{ fontSize: 'clamp(1.05rem, 2.5vw, 1.7rem)', fontWeight: 700, lineHeight: 1.2, color: '#6AD5F9' }}
+            >
+              Meet ReadyRanger Mason, your preparedness advisor.
+            </figcaption>
+          </figure>
         </div>
       </section>
 
