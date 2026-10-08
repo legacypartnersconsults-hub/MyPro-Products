@@ -405,21 +405,23 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-70 pointer-events-none" />
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
+          <div className="lg:grid lg:grid-cols-[1fr_auto] lg:gap-12 lg:items-center lg:text-left">
+          <div>
           
           <span className="inline-flex items-center space-x-1.5 bg-white/10 border border-white/20 text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-6">
             <ShieldCheck className="h-3.5 w-3.5 text-[#98c44E]" />
             <span>100% Insured & Active State Licensed Network</span>
           </span>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-nunito text-white tracking-tight max-w-4xl mx-auto leading-[1.1]">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-nunito text-white tracking-tight max-w-4xl mx-auto lg:mx-0 leading-[1.1]">
             Restore Peace of Mind with MyPro Market
           </h1>
 
-          <p className="text-lg sm:text-xl text-white font-nunito mt-6 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg sm:text-xl text-white font-nunito mt-6 max-w-3xl mx-auto lg:mx-0 leading-relaxed">
             Stop searching for unreliable contractors. MyPro Market matches insurance carriers, insurance agents, property managers and homeowners with pre-vetted contractors immediately.
           </p>
 
-          <div className="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4">
+          <div className="mt-8 flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-4">
             <button
               onClick={() => onRequestDemo('market')}
               className="w-full sm:w-auto px-8 py-4 bg-white text-[#468CDC] hover:bg-slate-50 font-bold rounded-xl transition-all shadow-lg shadow-black/10 flex items-center justify-center space-x-2"
@@ -436,6 +438,17 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
               <span>Launch App</span>
               <ArrowRight className="h-5 w-5" />
             </a>
+          </div>
+
+          </div>
+
+          {/* Mason as a contractor, holding a phone with the MyPro Market symbol */}
+          <img
+            src="/mypro-market-mason.webp" width={695} height={1200} loading="eager"
+            alt="Mason dressed as a contractor in a white hard hat and tool belt, holding a phone with the MyPro Market symbol"
+            className="mx-auto mt-12 lg:mt-0 w-[200px] sm:w-[240px] lg:w-[300px] h-auto"
+            style={{ filter: 'drop-shadow(0 24px 36px rgba(11,20,38,0.35))' }}
+          />
           </div>
 
           {/* Social Proof Stats Banner */}
