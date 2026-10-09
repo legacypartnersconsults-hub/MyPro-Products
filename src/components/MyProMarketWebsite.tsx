@@ -444,9 +444,9 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
 
           {/* Mason as a contractor, holding a phone with the MyPro Market symbol */}
           <img
-            src="/mypro-market-mason.webp" width={695} height={1200} loading="eager"
-            alt="Mason dressed as a contractor in a white hard hat and tool belt, holding a phone with the MyPro Market symbol"
-            className="mx-auto mt-12 lg:mt-0 w-[200px] sm:w-[240px] lg:w-[300px] h-auto"
+            src="/mypro-market-mason.webp" width={996} height={1100} loading="eager"
+            alt="Mason, a friendly robot contractor in a white hard hat and tool belt, holding a phone with the MyPro Market symbol"
+            className="mx-auto mt-12 lg:mt-0 w-[240px] sm:w-[300px] lg:w-[420px] h-auto"
             style={{ filter: 'drop-shadow(0 24px 36px rgba(11,20,38,0.35))' }}
           />
           </div>
