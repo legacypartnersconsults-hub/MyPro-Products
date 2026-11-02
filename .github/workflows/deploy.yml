@@ -42,6 +42,9 @@ jobs:
           cp dist/index.html dist/readyhub/index.html
           mkdir -p dist/readyhub/brand-assets
           cp dist/index.html dist/readyhub/brand-assets/index.html
+          # MyPro Products brand assets page, linked from the site footer.
+          mkdir -p dist/brand
+          cp dist/index.html dist/brand/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

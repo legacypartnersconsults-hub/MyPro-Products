@@ -1,0 +1,15 @@
+{
+  "brand": "MyPro Products",
+  "version": "1.0 (November 2026)",
+  "colors": [
+    {"name": "MyPro Blue", "role": "Primary: logo, highlights", "hex": "#468CDC", "rgb": [70,140,220], "cmyk": [68,36,0,14]},
+    {"name": "Stone", "role": "Accent: logo check, \"Pro\"", "hex": "#BCB6A5", "rgb": [188,182,165], "cmyk": [0,3,12,26]},
+    {"name": "Deep Blue", "role": "Buttons, links and blue text on white", "hex": "#2F6DB5", "rgb": [47,109,181], "cmyk": [74,40,0,29]},
+    {"name": "Stone Dark", "role": "Stone-toned text on white", "hex": "#7A7464", "rgb": [122,116,100], "cmyk": [0,5,18,52]},
+    {"name": "Ink", "role": "Headlines, dark backgrounds", "hex": "#0F172A", "rgb": [15,23,42], "cmyk": [64,45,0,84]},
+    {"name": "Slate", "role": "Body copy, captions", "hex": "#64748B", "rgb": [100,116,139], "cmyk": [28,17,0,45]},
+    {"name": "Linen", "role": "Soft section backgrounds", "hex": "#F5F3EE", "rgb": [245,243,238], "cmyk": [0,1,3,4]},
+    {"name": "White", "role": "Main background", "hex": "#FFFFFF", "rgb": [255,255,255], "cmyk": [0,0,0,0]}
+  ],
+  "typeface": "Inter (Google Fonts). Headlines ExtraBold 800, subheads SemiBold 600, body Regular 400. Fallback: Arial."
+}

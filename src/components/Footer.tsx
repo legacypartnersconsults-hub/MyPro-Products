@@ -154,6 +154,7 @@ export default function Footer({
             <span className="hover:text-white cursor-pointer" onClick={onOpenPrivacy}>Privacy Policy</span>
             <span className="hover:text-white cursor-pointer" onClick={onOpenTerms}>Terms of Service</span>
             <span className="hover:text-white cursor-pointer">API Reference</span>
+            <a href="/brand" className="hover:text-white">Brand Assets</a>
             <span className="flex items-center space-x-1 text-green-400">
               <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse"></span>
               <span>All Systems Operational</span>

@@ -10,9 +10,9 @@ interface MyProProductsLogoProps {
 export default function MyProProductsLogo({ showText = true, size = 'md', className = '', subText = 'Ecosystem' }: MyProProductsLogoProps) {
   // Dimensions based on size
   const iconDimensions = {
-    sm: { h: 'h-7', w: 'w-7', viewBox: '0 0 140 120' },
-    md: { h: 'h-10', w: 'w-10', viewBox: '0 0 140 120' },
-    lg: { h: 'h-16', w: 'w-16', viewBox: '0 0 140 120' }
+    sm: { h: 'h-7', w: 'w-7' },
+    md: { h: 'h-10', w: 'w-10' },
+    lg: { h: 'h-16', w: 'w-16' }
   }[size];
 
   const textSizes = {
@@ -23,37 +23,28 @@ export default function MyProProductsLogo({ showText = true, size = 'md', classN
 
   return (
     <div className={`flex items-center space-x-2.5 ${className}`}>
-      {/* Precision Vector SVG Icon */}
-      <svg 
-        viewBox="0 0 140 120" 
-        className={`${iconDimensions.w} ${iconDimensions.h} flex-shrink-0`} 
-        fill="none" 
+      {/* Brand mark (v1.0 brand kit, see /brand). Both roof slopes and the long arm of the
+          check share one angle, every stroke is 10 units, and the mark is centred in its box. */}
+      <svg
+        viewBox="4 4 112 112"
+        className={`${iconDimensions.w} ${iconDimensions.h} flex-shrink-0`}
+        fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
-        {/* Blue Roof & Chimney - Color Hex #468CDC */}
-        <rect x="24" y="14" width="11" height="30" fill="#468CDC" />
-        <path 
-          d="M 2 58 L 62 12 L 92 38" 
-          stroke="#468CDC" 
-          strokeWidth="10" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-        />
-        
-        {/* Window (4 panes) - Color Hex #468CDC */}
-        <rect x="51" y="44" width="10" height="10" fill="#468CDC" rx="1.5" />
-        <rect x="63" y="44" width="10" height="10" fill="#468CDC" rx="1.5" />
-        <rect x="51" y="56" width="10" height="10" fill="#468CDC" rx="1.5" />
-        <rect x="63" y="56" width="10" height="10" fill="#468CDC" rx="1.5" />
-        
-        {/* Accent Checkmark Framing the Bottom - Color Hex #BCB6A5 */}
-        <path 
-          d="M 21 78 L 51 104 L 111 58" 
-          stroke="#BCB6A5" 
-          strokeWidth="11" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-        />
+        <g strokeLinecap="round" strokeLinejoin="round" strokeWidth="10">
+          {/* Chimney, roof and window - MyPro Blue #468CDC */}
+          <path d="M26 25H36V38.78L26 46.61Z" fill="#468CDC" stroke="none" />
+          <path d="M14 56L60 20L106 56" stroke="#468CDC" />
+          {/* Checkmark - Stone #BCB6A5 */}
+          <path d="M29 82L52 100L94 67" stroke="#BCB6A5" />
+        </g>
+        <g fill="#468CDC">
+          <rect x="49" y="46" width="10" height="10" rx="1.5" />
+          <rect x="61" y="46" width="10" height="10" rx="1.5" />
+          <rect x="49" y="58" width="10" height="10" rx="1.5" />
+          <rect x="61" y="58" width="10" height="10" rx="1.5" />
+        </g>
       </svg>
 
       {/* Brand Text */}
