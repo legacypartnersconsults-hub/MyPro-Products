@@ -11,9 +11,10 @@ interface ProductSuiteProps {
   onRequestDemo: (productId: string) => void;
   onLaunchPortal: () => void;
   onLaunchReadyHub: () => void;
+  onLaunchClaimAssist: () => void;
 }
 
-export default function ProductSuite({ onRequestDemo, onLaunchPortal, onLaunchReadyHub }: ProductSuiteProps) {
+export default function ProductSuite({ onRequestDemo, onLaunchPortal, onLaunchReadyHub, onLaunchClaimAssist }: ProductSuiteProps) {
   const [selectedProduct, setSelectedProduct] = useState<string>('market');
 
   return (
@@ -128,6 +129,14 @@ export default function ProductSuite({ onRequestDemo, onLaunchPortal, onLaunchRe
                         className="w-full text-center py-3 bg-cyan-50 text-cyan-600/80 border border-cyan-100 font-bold rounded-xl flex items-center justify-center space-x-2 cursor-not-allowed"
                       >
                         <span>In Testing</span>
+                      </button>
+                    ) : product.id === 'claimassist' ? (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); onLaunchClaimAssist(); }}
+                        className="w-full text-center py-3 text-white font-bold rounded-xl transition-all flex items-center justify-center space-x-2 shadow-md cursor-pointer bg-[#5B2BD9] hover:bg-[#4A20BE] shadow-[#5B2BD9]/10"
+                      >
+                        <span>Get Early Access</span>
+                        <ArrowRight className="h-4.5 w-4.5" />
                       </button>
                     ) : (
                       <button

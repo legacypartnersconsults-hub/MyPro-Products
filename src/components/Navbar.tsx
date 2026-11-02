@@ -11,9 +11,10 @@ interface NavbarProps {
   onNavigateToSection: (sectionId: string) => void;
   onLaunchPortal: () => void;
   onLaunchReadyHub: () => void;
+  onLaunchClaimAssist: () => void;
 }
 
-export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPortal, onLaunchReadyHub }: NavbarProps) {
+export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPortal, onLaunchReadyHub, onLaunchClaimAssist }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [productsDropdownOpen, setProductsDropdownOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -99,7 +100,9 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
                             : 'opacity-75 hover:bg-slate-50/50'
                         }`}
                         onClick={() => {
-                          if (isActive) {
+                          if (product.id === 'claimassist') {
+                            onLaunchClaimAssist();
+                          } else if (isActive) {
                             if (product.id === 'market') {
                               onLaunchPortal();
                             } else if (product.id === 'readyhub') {
@@ -152,7 +155,7 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
                           )}
                           {!isActive && (
                             <span className="inline-flex items-center text-[11px] font-medium text-slate-400 mt-1.5 hover:text-blue-600">
-                              Join Waitlist &rarr;
+                              Get Early Access &rarr;
                             </span>
                           )}
                         </div>
@@ -235,7 +238,7 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
               Upcoming Solutions
             </div>
             <button
-              onClick={() => { onRequestDemo('claimassist'); setIsOpen(false); }}
+              onClick={() => { onLaunchClaimAssist(); setIsOpen(false); }}
               className="w-full flex items-center justify-between p-3 rounded-lg bg-slate-50/80 hover:bg-slate-50 text-left"
             >
               <div className="flex items-center space-x-3">
