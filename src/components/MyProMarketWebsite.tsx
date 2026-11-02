@@ -68,6 +68,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [smsSubmitted, setSmsSubmitted] = useState(false);
   const [smsSaving, setSmsSaving] = useState(false);
+  const [smsReceipt, setSmsReceipt] = useState<{ name: string; phone: string; email: string; role: string } | null>(null);
   const [smsError, setSmsError] = useState('');
 
   // Legal Modal States
@@ -117,11 +118,16 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
 
     setSmsSaving(true);
     try {
+      const submitted = { name: smsName.trim(), email: smsEmail.trim(), role: smsRole };
       await submitSmsConsent({
-        full_name: smsName.trim(),
+        full_name: submitted.name,
         phone: `+1${cleanPhone}`,
-        email: smsEmail.trim(),
-        account_role: smsRole,
+        email: submitted.email,
+        account_role: submitted.role,
+      });
+      setSmsReceipt({
+        ...submitted,
+        phone: `(${cleanPhone.slice(0, 3)}) ${cleanPhone.slice(3, 6)}-${cleanPhone.slice(6)}`,
       });
       setSmsSubmitted(true);
     } catch {
@@ -1151,19 +1157,19 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                   <div className="bg-white border border-slate-200 rounded-xl p-4 max-w-md mx-auto text-left text-xs space-y-2 shadow-sm">
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-500 font-medium">Name:</span>
-                      <span className="font-semibold text-slate-900">{smsName}</span>
+                      <span className="font-semibold text-slate-900">{smsReceipt?.name}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-500 font-medium">Mobile Phone:</span>
-                      <span className="font-mono font-semibold text-slate-900">{smsPhone}</span>
+                      <span className="font-mono font-semibold text-slate-900">{smsReceipt?.phone}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-500 font-medium">Email:</span>
-                      <span className="font-mono text-slate-800">{smsEmail}</span>
+                      <span className="font-mono text-slate-800">{smsReceipt?.email}</span>
                     </div>
                     <div className="flex justify-between py-1">
                       <span className="text-slate-500 font-medium">Role:</span>
-                      <span className="capitalize font-bold text-[#468CDC]">{smsRole}</span>
+                      <span className="capitalize font-bold text-[#468CDC]">{smsReceipt?.role}</span>
                     </div>
                   </div>
 
@@ -1171,6 +1177,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                     <button
                       onClick={() => {
                         setSmsSubmitted(false);
+                        setSmsReceipt(null);
                         setSmsName('');
                         setSmsPhone('');
                         setSmsEmail('');
