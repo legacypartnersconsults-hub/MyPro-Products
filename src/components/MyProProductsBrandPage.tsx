@@ -86,7 +86,7 @@ export default function MyProProductsBrandPage() {
               Please use these files as supplied.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <a href={ZIP} download className="inline-flex items-center gap-2 rounded-lg bg-[#468CDC] hover:bg-[#3B7CBD] px-5 py-3 text-sm font-bold text-white transition-colors">
+              <a href={ZIP} download className="inline-flex items-center gap-2 rounded-lg bg-[#2F6DB5] hover:bg-[#255A96] px-5 py-3 text-sm font-bold text-white transition-colors">
                 <Download className="h-4 w-4" /> Download full kit (.zip)
               </a>
               <a href={GUIDE} target="_blank" rel="noopener" className="inline-flex items-center gap-2 rounded-lg border border-slate-600 hover:border-slate-400 px-5 py-3 text-sm font-bold text-white transition-colors">
@@ -223,7 +223,7 @@ export default function MyProProductsBrandPage() {
                 className="text-left rounded-xl border border-slate-200 overflow-hidden hover:shadow-md transition-shadow focus:outline-none focus-visible:ring-2 focus-visible:ring-[#468CDC]"
               >
                 <div className={`${c.main ? 'h-28' : 'h-20'} relative ${c.hex === '#FFFFFF' ? 'border-b border-slate-200' : ''}`} style={{ background: c.hex }}>
-                  <span className={`absolute top-2 right-2 inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-semibold ${copied === c.hex ? 'bg-white text-slate-900' : 'bg-black/20 text-white'}`}>
+                  <span className={`absolute top-2 right-2 inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-semibold ${copied === c.hex ? 'bg-white text-slate-900' : 'bg-slate-900/85 text-white'}`}>
                     {copied === c.hex ? <><Check className="h-3 w-3" /> Copied</> : <><Copy className="h-3 w-3" /> Copy</>}
                   </span>
                 </div>
