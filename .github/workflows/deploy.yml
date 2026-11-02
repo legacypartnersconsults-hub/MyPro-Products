@@ -51,6 +51,9 @@ jobs:
           mkdir -p dist/market/brand
           cp dist/index.html dist/market/index.html
           cp dist/index.html dist/market/brand/index.html
+          # MyPro Claim Assist product page.
+          mkdir -p dist/claimassist
+          cp dist/index.html dist/claimassist/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -16,6 +16,7 @@ import MyProReadyHubWebsite from './components/MyProReadyHubWebsite';
 import MyProReadyHubBrandAssetsPage from './components/MyProReadyHubBrandAssetsPage';
 import MyProProductsBrandPage from './components/MyProProductsBrandPage';
 import MyProMarketBrandPage from './components/MyProMarketBrandPage';
+import MyProClaimAssistWebsite from './components/MyProClaimAssistWebsite';
 import { PrivacyPolicyModal, TermsOfServiceModal } from './components/LegalModals';
 
 export default function App() {
@@ -24,11 +25,12 @@ export default function App() {
   const [preselectedAudience, setPreselectedAudience] = useState<string>('');
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
-  const [activeView, setActiveView] = useState<'corporate' | 'market' | 'readyhub' | 'readyhub-brand' | 'brand' | 'market-brand' | 'signin' | 'portal'>(() => {
+  const [activeView, setActiveView] = useState<'corporate' | 'market' | 'readyhub' | 'readyhub-brand' | 'brand' | 'market-brand' | 'claimassist' | 'signin' | 'portal'>(() => {
     // Basic path-based detection on load
     if (typeof window !== 'undefined') {
       const path = window.location.pathname;
       if (path === '/market' || path === '/market/') return 'market';
+      if (path === '/claimassist' || path === '/claimassist/') return 'claimassist';
       if (path === '/market/brand' || path === '/market/brand/') return 'market-brand';
       if (path === '/brand' || path === '/brand/') return 'brand';
       if (path.startsWith('/readyhub/brand-assets')) return 'readyhub-brand';
@@ -42,6 +44,8 @@ export default function App() {
       const path = window.location.pathname;
       if (path === '/market' || path === '/market/') {
         setActiveView('market');
+      } else if (path === '/claimassist' || path === '/claimassist/') {
+        setActiveView('claimassist');
       } else if (path === '/market/brand' || path === '/market/brand/') {
         setActiveView('market-brand');
       } else if (path === '/brand' || path === '/brand/') {
@@ -83,6 +87,12 @@ export default function App() {
     setActiveView('readyhub');
   };
 
+  const handleLaunchClaimAssist = () => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.history.pushState({}, '', '/claimassist');
+    setActiveView('claimassist');
+  };
+
   const handleBackToCorporate = () => {
     window.scrollTo({ top: 0, behavior: 'instant' });
     window.history.pushState({}, '', '/');
@@ -109,6 +119,10 @@ export default function App() {
         />
       </>
     );
+  }
+
+  if (activeView === 'claimassist') {
+    return <MyProClaimAssistWebsite onBackToCorporate={handleBackToCorporate} />;
   }
 
   if (activeView === 'market-brand') {
@@ -175,6 +189,7 @@ export default function App() {
         onNavigateToSection={handleNavigateToSection}
         onLaunchPortal={handleLaunchPortal}
         onLaunchReadyHub={handleLaunchReadyHub}
+        onLaunchClaimAssist={handleLaunchClaimAssist}
       />
 
       {/* 2. Main Hero Presentation Section */}
@@ -189,6 +204,7 @@ export default function App() {
         onRequestDemo={(p) => handleOpenDemoForm(p)}
         onLaunchPortal={handleLaunchPortal}
         onLaunchReadyHub={handleLaunchReadyHub}
+        onLaunchClaimAssist={handleLaunchClaimAssist}
       />
 
       {/* 5. Footer and Certifications */}
