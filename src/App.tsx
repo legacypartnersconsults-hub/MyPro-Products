@@ -28,7 +28,7 @@ export default function App() {
     // Basic path-based detection on load
     if (typeof window !== 'undefined') {
       const path = window.location.pathname;
-      if (path === '/market') return 'market';
+      if (path === '/market' || path === '/market/') return 'market';
       if (path === '/market/brand' || path === '/market/brand/') return 'market-brand';
       if (path === '/brand' || path === '/brand/') return 'brand';
       if (path.startsWith('/readyhub/brand-assets')) return 'readyhub-brand';
@@ -40,7 +40,7 @@ export default function App() {
   useEffect(() => {
     const handlePopState = () => {
       const path = window.location.pathname;
-      if (path === '/market') {
+      if (path === '/market' || path === '/market/') {
         setActiveView('market');
       } else if (path === '/market/brand' || path === '/market/brand/') {
         setActiveView('market-brand');

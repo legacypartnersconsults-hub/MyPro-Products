@@ -46,7 +46,10 @@ jobs:
           mkdir -p dist/brand
           cp dist/index.html dist/brand/index.html
           # MyPro Market brand assets page, linked from the Market page footer.
+          # Creating dist/market makes Pages redirect /market to /market/, so the
+          # Market page itself is served from market/index.html too.
           mkdir -p dist/market/brand
+          cp dist/index.html dist/market/index.html
           cp dist/index.html dist/market/brand/index.html
 
       - name: Upload artifact
