@@ -3,6 +3,7 @@ import { Menu, X, ChevronDown, ArrowUpRight, Shield, Layers, ShieldAlert, Databa
 import { products } from '../data';
 import MyProMarketLogo from './MyProMarketLogo';
 import MyProReadyHubLogo from './MyProReadyHubLogo';
+import MyProClaimsAssistLogo from './MyProClaimsAssistLogo';
 import MyProProductsLogo from './MyProProductsLogo';
 
 interface NavbarProps {
@@ -124,7 +125,7 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
                         }`}>
                           {product.id === 'market' && <MyProMarketLogo showText={false} size="sm" />}
                           {product.id === 'readyhub' && <MyProReadyHubLogo showText={false} size="sm" />}
-                          {product.id === 'claimassist' && <ShieldAlert className="h-5 w-5 text-purple-600" />}
+                          {product.id === 'claimassist' && <MyProClaimsAssistLogo showText={false} size="sm" theme="tile" />}
                         </div>
                         <div className="flex-grow">
                           <div className="flex items-center space-x-2">
@@ -238,7 +239,7 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
               className="w-full flex items-center justify-between p-3 rounded-lg bg-slate-50/80 hover:bg-slate-50 text-left"
             >
               <div className="flex items-center space-x-3">
-                <ShieldAlert className="h-5 w-5 text-purple-600" />
+                <MyProClaimsAssistLogo showText={false} size="sm" theme="tile" />
                 <div>
                   <div className="text-sm font-bold">MyPro Claim Assist</div>
                   <div className="text-xs text-slate-500">Homeowner Claim Helper</div>

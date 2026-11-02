@@ -5,6 +5,7 @@ import { products } from '../data';
 import { Product } from '../types';
 import MyProMarketLogo from './MyProMarketLogo';
 import MyProReadyHubLogo from './MyProReadyHubLogo';
+import MyProClaimsAssistLogo from './MyProClaimsAssistLogo';
 
 interface ProductSuiteProps {
   onRequestDemo: (productId: string) => void;
@@ -53,17 +54,7 @@ export default function ProductSuite({ onRequestDemo, onLaunchPortal, onLaunchRe
                 onClick={() => setSelectedProduct(product.id)}
               >
                 {/* Product Badge */}
-                <div className="p-6 pb-0 flex justify-between items-start">
-                  <div className={`p-1.5 rounded-xl border ${
-                    product.id === 'market' || product.id === 'readyhub'
-                      ? 'bg-slate-50 border-slate-100' 
-                      : 'bg-purple-50 border-purple-100 text-purple-700'
-                  }`}>
-                    {product.id === 'market' && <MyProMarketLogo showText={false} size="md" />}
-                    {product.id === 'readyhub' && <MyProReadyHubLogo showText={false} size="md" />}
-                    {product.id === 'claimassist' && <ShieldAlert className="h-6 w-6 m-1 text-purple-600" />}
-                  </div>
-
+                <div className="p-6 pb-0 flex justify-end items-start">
                   <div>
                     {product.status === 'active' ? (
                       <span className="text-xs font-bold bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full uppercase tracking-wider">
@@ -85,13 +76,24 @@ export default function ProductSuite({ onRequestDemo, onLaunchPortal, onLaunchRe
                   </div>
                 </div>
 
+                {/* Product logo */}
+                <div className="px-6 pt-3 h-24 flex items-center">
+                  {/* Large logo, except in the narrow three-column cards between lg and xl */}
+                  {(['lg', 'md'] as const).map((sz) => (
+                    <div key={sz} className={sz === 'lg' ? 'lg:hidden xl:block' : 'hidden lg:block xl:hidden'}>
+                      {product.id === 'market' && <MyProMarketLogo size={sz} />}
+                      {product.id === 'readyhub' && <MyProReadyHubLogo size={sz} />}
+                      {product.id === 'claimassist' && <MyProClaimsAssistLogo size={sz} />}
+                    </div>
+                  ))}
+                </div>
+
                 {/* Content */}
                 <div className="p-6 flex-grow flex flex-col justify-between">
                   <div>
-                    <h3 className="text-xl font-extrabold text-slate-900 mt-4 group-hover:text-[#468CDC]">
-                      {product.name}
-                    </h3>
-                    <p className={`text-sm font-semibold mt-1 ${product.id === 'readyhub' ? 'text-cyan-600' : 'text-[#468CDC]'}`}>
+                    {/* The product's logo above already shows its name */}
+                    <h3 className="sr-only">{product.name}</h3>
+                    <p className={`text-sm font-semibold mt-2 ${product.id === 'readyhub' ? 'text-cyan-600' : product.id === 'claimassist' ? 'text-[#5B2BD9]' : 'text-[#468CDC]'}`}>
                       {product.tagline}
                     </p>
                     <p className="text-sm text-slate-600 mt-4 leading-relaxed">
