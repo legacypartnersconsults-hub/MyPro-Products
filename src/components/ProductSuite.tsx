@@ -78,9 +78,14 @@ export default function ProductSuite({ onRequestDemo, onLaunchPortal, onLaunchRe
 
                 {/* Product logo */}
                 <div className="px-6 pt-3 h-24 flex items-center">
-                  {product.id === 'market' && <MyProMarketLogo size="lg" />}
-                  {product.id === 'readyhub' && <MyProReadyHubLogo size="lg" />}
-                  {product.id === 'claimassist' && <MyProClaimsAssistLogo size="lg" />}
+                  {/* Large logo, except in the narrow three-column cards between lg and xl */}
+                  {(['lg', 'md'] as const).map((sz) => (
+                    <div key={sz} className={sz === 'lg' ? 'lg:hidden xl:block' : 'hidden lg:block xl:hidden'}>
+                      {product.id === 'market' && <MyProMarketLogo size={sz} />}
+                      {product.id === 'readyhub' && <MyProReadyHubLogo size={sz} />}
+                      {product.id === 'claimassist' && <MyProClaimsAssistLogo size={sz} />}
+                    </div>
+                  ))}
                 </div>
 
                 {/* Content */}
