@@ -22,6 +22,9 @@ export interface BrandKitConfig {
   colorIntro: string;
   lowContrastBg: string;   // background for the "low contrast" don't
   sample: { headline: ReactNode; subhead: string; body: string };
+  appIcons?: { suffix: string; label: string }[]; // app icon files, default white + blue
+  whiteLogoBg?: string;    // background behind the one-color white logo, default MyPro Blue
+  markNote?: string;       // caption for the mark on its own
 }
 
 type Variant = 'color' | 'reversed' | 'white' | 'black';
@@ -30,6 +33,11 @@ const VARIANTS: { id: Variant; label: string; use: string; bg: string; border?: 
   { id: 'reversed', label: 'Reversed', use: 'Dark backgrounds', bg: '#0F172A' },
   { id: 'white', label: 'White', use: 'Blue or photo backgrounds', bg: '#468CDC' },
   { id: 'black', label: 'Black', use: 'One-color print', bg: '#FFFFFF', border: true },
+];
+
+const DEFAULT_APP_ICONS = [
+  { suffix: '', label: 'App icon, white' },
+  { suffix: '-blue', label: 'App icon, blue' },
 ];
 
 const LOGOS = [
@@ -118,7 +126,7 @@ export default function BrandKitPage({ config: c }: { config: BrandKitConfig }) 
               <div key={logo.id}>
                 <div className="flex flex-wrap items-baseline justify-between gap-2 mb-4">
                   <h3 className="text-lg font-bold">{logo.title}</h3>
-                  <p className="text-sm text-slate-500">{logo.note}</p>
+                  <p className="text-sm text-slate-500">{logo.id === 'mark' && c.markNote ? c.markNote : logo.note}</p>
                 </div>
                 <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
                   {VARIANTS.map((v) => {
@@ -127,7 +135,7 @@ export default function BrandKitPage({ config: c }: { config: BrandKitConfig }) 
                       <div key={v.id} className="rounded-xl border border-slate-200 overflow-hidden flex flex-col">
                         <div
                           className={`flex items-center justify-center px-6 py-8 min-h-40 ${v.border ? 'border-b border-slate-200' : ''}`}
-                          style={{ background: v.bg }}
+                          style={{ background: v.id === 'white' && c.whiteLogoBg ? c.whiteLogoBg : v.bg }}
                         >
                           <img src={file(`${logo.folder}/SVG`, `${base}.svg`)} alt={`${logo.title}, ${v.label.toLowerCase()}`} className={`${logo.h} max-w-full`} loading="lazy" />
                         </div>
@@ -153,10 +161,11 @@ export default function BrandKitPage({ config: c }: { config: BrandKitConfig }) 
             <div>
               <h3 className="text-lg font-bold mb-4">App icon and favicon</h3>
               <div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
-                {[
-                  { src: `${KIT}/02-App-Icon/${P}-app-icon.svg`, label: 'App icon, white', files: [['SVG', `${P}-app-icon.svg`], ['PNG 1024', `${P}-app-icon-1024px.png`], ['PNG 512', `${P}-app-icon-512px.png`]] },
-                  { src: `${KIT}/02-App-Icon/${P}-app-icon-blue.svg`, label: 'App icon, blue', files: [['SVG', `${P}-app-icon-blue.svg`], ['PNG 1024', `${P}-app-icon-blue-1024px.png`], ['PNG 512', `${P}-app-icon-blue-512px.png`]] },
-                ].map((icon) => (
+                {(c.appIcons ?? DEFAULT_APP_ICONS).map(({ suffix, label }) => ({
+                  src: `${KIT}/02-App-Icon/${P}-app-icon${suffix}.svg`,
+                  label,
+                  files: [['SVG', `${P}-app-icon${suffix}.svg`], ['PNG 1024', `${P}-app-icon${suffix}-1024px.png`], ['PNG 512', `${P}-app-icon${suffix}-512px.png`]],
+                })).map((icon) => (
                   <div key={icon.label} className="rounded-xl border border-slate-200 overflow-hidden">
                     <div className="bg-slate-100 flex items-center justify-center py-8">
                       <img src={icon.src} alt={icon.label} className="h-24 w-24 rounded-[22%] shadow-md" loading="lazy" />

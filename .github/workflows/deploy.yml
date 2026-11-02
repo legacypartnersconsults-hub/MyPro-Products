@@ -52,8 +52,10 @@ jobs:
           cp dist/index.html dist/market/index.html
           cp dist/index.html dist/market/brand/index.html
           # MyPro Claim Assist product page.
-          mkdir -p dist/claimassist
+          mkdir -p dist/claimassist/brand
           cp dist/index.html dist/claimassist/index.html
+          # MyPro Claim Assist brand assets page, linked from its footer.
+          cp dist/index.html dist/claimassist/brand/index.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

@@ -322,7 +322,10 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
           <p className="text-center">
             &copy; {new Date().getFullYear()} MyPro Claim Assist, a MyPro Products company · <a href="mailto:jruland@myproproducts.com" className="text-[#6AD5F9] hover:underline">jruland@myproproducts.com</a>
           </p>
-          <button onClick={onBackToCorporate} className="hover:text-white">Return to MyPro Products</button>
+          <div className="flex items-center gap-5">
+            <a href="/claimassist/brand" className="hover:text-white">Brand Assets</a>
+            <button onClick={onBackToCorporate} className="hover:text-white">Return to MyPro Products</button>
+          </div>
         </div>
       </footer>
     </div>

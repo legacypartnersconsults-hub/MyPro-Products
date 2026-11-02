@@ -1,0 +1,12 @@
+/* MyPro Claim Assist brand colors */
+:root {
+  --ca-claim-purple: #5B2BD9;
+  --ca-ready-hub-blue: #6AD5F9;
+  --ca-deep-purple: #2E1384;
+  --ca-light-blue: #B4ECFD;
+  --ca-night: #140A36;
+  --ca-slate: #64748B;
+  --ca-lavender: #F3EFFD;
+  --ca-white: #FFFFFF;
+  --ca-tile-gradient: linear-gradient(135deg, #6D3BE9, #2E1384);
+}

@@ -1,0 +1,41 @@
+{
+  "brand": "MyPro Claim Assist",
+  "colors": [
+    {
+      "name": "Claim Purple",
+      "hex": "#5B2BD9"
+    },
+    {
+      "name": "Ready Hub Blue",
+      "hex": "#6AD5F9"
+    },
+    {
+      "name": "Deep Purple",
+      "hex": "#2E1384"
+    },
+    {
+      "name": "Light Blue",
+      "hex": "#B4ECFD"
+    },
+    {
+      "name": "Night",
+      "hex": "#140A36"
+    },
+    {
+      "name": "Slate",
+      "hex": "#64748B"
+    },
+    {
+      "name": "Lavender",
+      "hex": "#F3EFFD"
+    },
+    {
+      "name": "White",
+      "hex": "#FFFFFF"
+    }
+  ],
+  "tileGradient": [
+    "#6D3BE9",
+    "#2E1384"
+  ]
+}
