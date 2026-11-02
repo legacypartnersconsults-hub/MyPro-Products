@@ -69,7 +69,7 @@ function EarlyAccessForm() {
     e.preventDefault();
     setError('');
     if (!name.trim()) return setError('Please enter your name.');
-    if (!/^\S+@\S+\.\S+$/.test(email.trim())) return setError('Please enter a valid email address.');
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) return setError('Please enter a valid email address.');
     if (!/^\d{5}$/.test(zip.trim())) return setError('Please enter a 5-digit ZIP code.');
     setStatus('sending');
     try {
@@ -78,7 +78,7 @@ function EarlyAccessForm() {
         email: email.trim().toLowerCase(),
         zip_code: zip.trim(),
         filed_claim_before: filed === '' ? null : filed === 'yes',
-        claim_experience: experience.trim() || null,
+        claim_experience: filed === 'yes' ? experience.trim() || null : null,
         what_would_have_helped: helped.trim() || null,
       });
       setStatus('done');
