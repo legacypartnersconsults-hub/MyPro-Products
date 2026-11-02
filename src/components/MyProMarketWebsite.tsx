@@ -1847,6 +1847,8 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
             <button onClick={() => setPrivacyOpen(true)} className="hover:text-slate-200 cursor-pointer focus:outline-none">Privacy Policy</button>
             <span className="text-slate-700 hidden sm:inline">|</span>
             <button onClick={onBackToCorporate} className="hover:text-slate-200 cursor-pointer focus:outline-none">Return to MyPro Products Homepage</button>
+            <span className="text-slate-700 hidden sm:inline">|</span>
+            <a href="/market/brand" className="hover:text-slate-200">Brand Assets</a>
           </div>
         </div>
       </footer>

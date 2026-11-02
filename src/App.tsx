@@ -15,6 +15,7 @@ import MyProMarketPortal from './components/MyProMarketPortal';
 import MyProReadyHubWebsite from './components/MyProReadyHubWebsite';
 import MyProReadyHubBrandAssetsPage from './components/MyProReadyHubBrandAssetsPage';
 import MyProProductsBrandPage from './components/MyProProductsBrandPage';
+import MyProMarketBrandPage from './components/MyProMarketBrandPage';
 import { PrivacyPolicyModal, TermsOfServiceModal } from './components/LegalModals';
 
 export default function App() {
@@ -23,11 +24,12 @@ export default function App() {
   const [preselectedAudience, setPreselectedAudience] = useState<string>('');
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
-  const [activeView, setActiveView] = useState<'corporate' | 'market' | 'readyhub' | 'readyhub-brand' | 'brand' | 'signin' | 'portal'>(() => {
+  const [activeView, setActiveView] = useState<'corporate' | 'market' | 'readyhub' | 'readyhub-brand' | 'brand' | 'market-brand' | 'signin' | 'portal'>(() => {
     // Basic path-based detection on load
     if (typeof window !== 'undefined') {
       const path = window.location.pathname;
       if (path === '/market') return 'market';
+      if (path === '/market/brand' || path === '/market/brand/') return 'market-brand';
       if (path === '/brand' || path === '/brand/') return 'brand';
       if (path.startsWith('/readyhub/brand-assets')) return 'readyhub-brand';
       if (path === '/readyhub' || path.startsWith('/readyhub')) return 'readyhub';
@@ -40,6 +42,8 @@ export default function App() {
       const path = window.location.pathname;
       if (path === '/market') {
         setActiveView('market');
+      } else if (path === '/market/brand' || path === '/market/brand/') {
+        setActiveView('market-brand');
       } else if (path === '/brand' || path === '/brand/') {
         setActiveView('brand');
       } else if (path.startsWith('/readyhub/brand-assets')) {
@@ -105,6 +109,10 @@ export default function App() {
         />
       </>
     );
+  }
+
+  if (activeView === 'market-brand') {
+    return <MyProMarketBrandPage />;
   }
 
   if (activeView === 'brand') {
