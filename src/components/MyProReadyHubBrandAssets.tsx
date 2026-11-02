@@ -17,6 +17,7 @@ import {
   Share2
 } from 'lucide-react';
 import MyProReadyHubLogo from './MyProReadyHubLogo';
+import { RH_CYAN, RH_GREEN, readyHubEmblem, readyHubHorizontal, readyHubStacked, RH_HORIZONTAL_SIZE, RH_STACKED_SIZE } from './readyHubLogoArt';
 
 export type AssetFormat = 
   | 'app-store-apple' 
@@ -52,211 +53,55 @@ export default function MyProReadyHubBrandAssets() {
     const bgColor = bgStyles[bg].hex;
     const isLightBg = bg === 'light';
 
-    // Text fills
-    const textFill1 = isLightBg ? '#0f172a' : '#6AD5F9';
-    const textFill2 = '#98CC44';
-    const textFill3 = isLightBg ? '#1e293b' : '#6AD5F9';
-    const subTextFill = isLightBg ? '#475569' : '#94a3b8';
+    // Wordmark fills: brand cyan/green on dark, ink on light backgrounds
+    const fills = {
+      my: isLightBg ? '#0f172a' : RH_CYAN,
+      pro: RH_GREEN,
+      name: isLightBg ? '#1e293b' : RH_CYAN,
+      tag: isLightBg ? '#475569' : '#94a3b8',
+    };
+
+    const open = (w: number, h: number) =>
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${customWidth || w}" height="${customHeight || h}">`;
+    const fill = (w: number, h: number, color = bgColor) =>
+      isTransparent ? '' : `<rect width="${w}" height="${h}" fill="${color}"/>`;
+    // Centre content of size cw x ch inside a w x h artboard, scaled to fit within the padding.
+    const place = (content: string, cw: number, ch: number, w: number, h: number, padX: number, padY: number) => {
+      const s = Math.min((w - 2 * padX) / cw, (h - 2 * padY) / ch);
+      return `<g transform="translate(${((w - cw * s) / 2).toFixed(2)} ${((h - ch * s) / 2).toFixed(2)}) scale(${s.toFixed(4)})">${content}</g>`;
+    };
+    const glow = (id: string, w: number, opacity: number) => isTransparent ? '' :
+      `<defs><radialGradient id="${id}" cx="50%" cy="35%" r="70%"><stop offset="0%" stop-color="${RH_CYAN}" stop-opacity="${opacity}"/>` +
+      `<stop offset="65%" stop-color="${bgColor}" stop-opacity="0"/></radialGradient></defs><rect width="${w}" height="${w}" fill="url(#${id})"/>`;
 
     if (format === 'app-store-apple') {
-      // 1024 x 1024 Apple App Store Master Icon (No alpha for Apple store standard)
-      const fillRect = !isTransparent ? `<rect width="1024" height="1024" fill="${bgColor === 'transparent' ? '#020617' : bgColor}"/>` : '';
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="${customWidth || 1024}" height="${customHeight || 1024}">
-  <defs>
-    <radialGradient id="appStoreGlow" cx="50%" cy="35%" r="70%">
-      <stop offset="0%" stop-color="#6AD5F9" stop-opacity="0.15" />
-      <stop offset="60%" stop-color="#020617" stop-opacity="0" />
-    </radialGradient>
-    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="12" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-  </defs>
-  ${fillRect}
-  ${!isTransparent ? `<rect width="1024" height="1024" fill="url(#appStoreGlow)" />` : ''}
-  
-  <!-- Centered Scaled Brand Shield Emblem (Centered on 1024x1024 canvas) -->
-  <g transform="translate(192, 172) scale(4.57)">
-    <!-- Protective Shield Outline - Color Hex #6AD5F9 -->
-    <path 
-      d="M 12 28 C 42 10, 98 10, 128 28 C 128 72, 108 104, 70 118 C 32 104, 12 72, 12 28 Z" 
-      stroke="#6AD5F9" 
-      stroke-width="9" 
-      stroke-linecap="round" 
-      stroke-linejoin="round" 
-    />
-    
-    <!-- Brand Mark Group Scaled inside Shield -->
-    <g transform="translate(26.5, 26) scale(0.70)" stroke-linecap="round" stroke-linejoin="round">
-      <!-- Chimney - Color Hex #6AD5F9 -->
-      <rect x="24" y="14" width="11" height="30" fill="#6AD5F9" />
-
-      <!-- Inner Protected Home Roof - Color Hex #6AD5F9 -->
-      <path 
-        d="M 2 58 L 62 12 L 92 38" 
-        stroke="#6AD5F9" 
-        stroke-width="10" 
-      />
-      
-      <!-- Glowing Beacon / Window (Four Squares) - Color Hex #98CC44 -->
-      <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-
-      <!-- Ready Green Checkmark - Color Hex #98CC44 -->
-      <path 
-        d="M 21 78 L 51 104 L 111 58" 
-        stroke="#98CC44" 
-        stroke-width="11" 
-      />
-    </g>
-  </g>
-</svg>`;
+      // 1024 x 1024 Apple App Store icon (Apple requires no alpha, so a transparent choice falls back to navy)
+      const base = isTransparent ? '<rect width="1024" height="1024" fill="#020617"/>' : fill(1024, 1024);
+      return `${open(1024, 1024)}${base}${glow('appStoreGlow', 1024, 0.15)}${place(readyHubEmblem(), 120, 120, 1024, 1024, 200, 200)}</svg>`;
     }
 
     if (format === 'play-store-google') {
-      // 512 x 512 Google Play Store Master Icon
-      const fillRect = !isTransparent ? `<rect width="512" height="512" fill="${bgColor}"/>` : '';
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="${customWidth || 512}" height="${customHeight || 512}">
-  <defs>
-    <radialGradient id="playStoreGlow" cx="50%" cy="35%" r="70%">
-      <stop offset="0%" stop-color="#6AD5F9" stop-opacity="0.18" />
-      <stop offset="70%" stop-color="${bgColor === 'transparent' ? '#020617' : bgColor}" stop-opacity="0" />
-    </radialGradient>
-  </defs>
-  ${fillRect}
-  ${!isTransparent ? `<rect width="512" height="512" fill="url(#playStoreGlow)" />` : ''}
-  
-  <!-- Centered Scaled Brand Shield Emblem (Centered on 512x512 canvas) -->
-  <g transform="translate(96, 86) scale(2.285)">
-    <!-- Protective Shield Outline - Color Hex #6AD5F9 -->
-    <path 
-      d="M 12 28 C 42 10, 98 10, 128 28 C 128 72, 108 104, 70 118 C 32 104, 12 72, 12 28 Z" 
-      stroke="#6AD5F9" 
-      stroke-width="9" 
-      stroke-linecap="round" 
-      stroke-linejoin="round" 
-    />
-    
-    <!-- Brand Mark Group Scaled inside Shield -->
-    <g transform="translate(26.5, 26) scale(0.70)" stroke-linecap="round" stroke-linejoin="round">
-      <!-- Chimney - Color Hex #6AD5F9 -->
-      <rect x="24" y="14" width="11" height="30" fill="#6AD5F9" />
-
-      <!-- Inner Protected Home Roof - Color Hex #6AD5F9 -->
-      <path 
-        d="M 2 58 L 62 12 L 92 38" 
-        stroke="#6AD5F9" 
-        stroke-width="10" 
-      />
-      
-      <!-- Glowing Beacon / Window (Four Squares) - Color Hex #98CC44 -->
-      <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-
-      <!-- Ready Green Checkmark - Color Hex #98CC44 -->
-      <path 
-        d="M 21 78 L 51 104 L 111 58" 
-        stroke="#98CC44" 
-        stroke-width="11" 
-      />
-    </g>
-  </g>
-</svg>`;
+      // 512 x 512 Google Play icon
+      return `${open(512, 512)}${fill(512, 512)}${glow('playStoreGlow', 512, 0.18)}${place(readyHubEmblem(), 120, 120, 512, 512, 100, 100)}</svg>`;
     }
 
     if (format === 'android-adaptive') {
-      // 192 x 192 Android Adaptive Launcher Icon
-      const fillRect = !isTransparent ? `<rect width="192" height="192" fill="${bgColor}"/>` : '';
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" width="${customWidth || 192}" height="${customHeight || 192}">
-  ${fillRect}
-  <g transform="translate(36, 32) scale(0.857)">
-    <path d="M 12 28 C 42 10, 98 10, 128 28 C 128 72, 108 104, 70 118 C 32 104, 12 72, 12 28 Z" stroke="#6AD5F9" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
-    <g transform="translate(26.5, 26) scale(0.70)" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="24" y="14" width="11" height="30" fill="#6AD5F9" />
-      <path d="M 2 58 L 62 12 L 92 38" stroke="#6AD5F9" stroke-width="10" />
-      <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <path d="M 21 78 L 51 104 L 111 58" stroke="#98CC44" stroke-width="11" />
-    </g>
-  </g>
-</svg>`;
+      // 192 x 192 Android launcher icon, emblem kept inside the 66% safe zone
+      return `${open(192, 192)}${fill(192, 192)}${place(readyHubEmblem(), 120, 120, 192, 192, 36, 36)}</svg>`;
     }
 
     if (format === 'brandmark-only') {
-      // Pure Brand Mark Icon SVG (viewBox 140x120)
-      const fillRect = !isTransparent ? `<rect width="140" height="120" fill="${bgColor}"/>` : '';
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 120" width="${customWidth || 140}" height="${customHeight || 120}">
-  ${fillRect}
-  <path d="M 12 28 C 42 10, 98 10, 128 28 C 128 72, 108 104, 70 118 C 32 104, 12 72, 12 28 Z" stroke="#6AD5F9" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
-  <g transform="translate(26.5, 26) scale(0.70)" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="24" y="14" width="11" height="30" fill="#6AD5F9" />
-    <path d="M 2 58 L 62 12 L 92 38" stroke="#6AD5F9" stroke-width="10" />
-    <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-    <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-    <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-    <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-    <path d="M 21 78 L 51 104 L 111 58" stroke="#98CC44" stroke-width="11" />
-  </g>
-</svg>`;
+      // Emblem only on a 140 x 120 artboard
+      return `${open(140, 120)}${fill(140, 120)}<g transform="translate(10 0)">${readyHubEmblem()}</g></svg>`;
     }
 
     if (format === 'logo-stacked') {
-      // Stacked Vertical Full Logo (Emblem Top, Text Centered Below, NO "Secure")
-      const fillRect = !isTransparent ? `<rect width="320" height="240" fill="${bgColor}"/>` : '';
-      return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 240" width="${customWidth || 320}" height="${customHeight || 240}">
-  ${fillRect}
-  <!-- Centered Emblem -->
-  <g transform="translate(90, 16)">
-    <path d="M 12 28 C 42 10, 98 10, 128 28 C 128 72, 108 104, 70 118 C 32 104, 12 72, 12 28 Z" stroke="#6AD5F9" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
-    <g transform="translate(26.5, 26) scale(0.70)" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="24" y="14" width="11" height="30" fill="#6AD5F9" />
-      <path d="M 2 58 L 62 12 L 92 38" stroke="#6AD5F9" stroke-width="10" />
-      <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <path d="M 21 78 L 51 104 L 111 58" stroke="#98CC44" stroke-width="11" />
-    </g>
-  </g>
-  
-  <!-- Centered Typography (NO "Secure" text) -->
-  <text x="160" y="162" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="28" font-weight="900" letter-spacing="-0.5">
-    <tspan fill="${textFill1}">My</tspan><tspan fill="${textFill2}">Pro</tspan> <tspan fill="${textFill3}">Ready Hub</tspan>
-  </text>
-  <text x="160" y="188" text-anchor="middle" fill="${subTextFill}" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="800" letter-spacing="1.5">
-    BY MYPRO PRODUCTS
-  </text>
-</svg>`;
+      // Emblem centred above "MyPro Ready Hub" and the tagline
+      return `${open(320, 240)}${fill(320, 240)}${place(readyHubStacked(fills), RH_STACKED_SIZE.width, RH_STACKED_SIZE.height, 320, 240, 24, 18)}</svg>`;
     }
 
-    // Default: Horizontal Full Logo (Emblem Left, Text Right, NO "Secure" text)
-    const fillRect = !isTransparent ? `<rect width="460" height="130" fill="${bgColor}"/>` : '';
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 130" width="${customWidth || 460}" height="${customHeight || 130}">
-  ${fillRect}
-  <g transform="translate(16, 5)">
-    <path d="M 12 28 C 42 10, 98 10, 128 28 C 128 72, 108 104, 70 118 C 32 104, 12 72, 12 28 Z" stroke="#6AD5F9" stroke-width="9" stroke-linecap="round" stroke-linejoin="round" />
-    <g transform="translate(26.5, 26) scale(0.70)" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="24" y="14" width="11" height="30" fill="#6AD5F9" />
-      <path d="M 2 58 L 62 12 L 92 38" stroke="#6AD5F9" stroke-width="10" />
-      <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-      <path d="M 21 78 L 51 104 L 111 58" stroke="#98CC44" stroke-width="11" />
-    </g>
-  </g>
-  <text x="175" y="58" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="900" letter-spacing="-1">
-    <tspan fill="${textFill1}">My</tspan><tspan fill="${textFill2}">Pro</tspan>
-  </text>
-  <text x="175" y="92" fill="${textFill3}" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="900" letter-spacing="-1">Ready Hub</text>
-  <text x="175" y="112" fill="${subTextFill}" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="10" font-weight="800" letter-spacing="1.2">BY MYPRO PRODUCTS</text>
-</svg>`;
+    // Default: horizontal logo, emblem left and wordmark right
+    return `${open(460, 130)}${fill(460, 130)}${place(readyHubHorizontal(fills), RH_HORIZONTAL_SIZE.width, RH_HORIZONTAL_SIZE.height, 460, 130, 20, 5)}</svg>`;
   };
 
   // Convert SVG to High-Res PNG & Download

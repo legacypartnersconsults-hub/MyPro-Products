@@ -1,4 +1,4 @@
-import React from 'react';
+import { RH_SHIELD_PATH, RH_EMBLEM_LAYOUT } from './readyHubLogoArt';
 
 export interface MyProReadyHubLogoProps {
   showText?: boolean;
@@ -17,10 +17,10 @@ export default function MyProReadyHubLogo({
 }: MyProReadyHubLogoProps) {
   // Dimensions based on size
   const iconDimensions = {
-    sm: { h: 'h-7', w: 'w-7', viewBox: '0 0 140 120' },
-    md: { h: 'h-10', w: 'w-10', viewBox: '0 0 140 120' },
-    lg: { h: 'h-16', w: 'w-16', viewBox: '0 0 140 120' },
-    xl: { h: 'h-24', w: 'w-24', viewBox: '0 0 140 120' }
+    sm: { h: 'h-7', w: 'w-7' },
+    md: { h: 'h-10', w: 'w-10' },
+    lg: { h: 'h-16', w: 'w-16' },
+    xl: { h: 'h-24', w: 'w-24' }
   }[size];
 
   const textSizes = {
@@ -34,46 +34,34 @@ export default function MyProReadyHubLogo({
 
   return (
     <div className={`flex ${isStacked ? 'flex-col items-center text-center space-y-2' : 'items-center space-x-2.5'} ${className}`}>
-      {/* Premium Disaster-Preparedness Shield & Home SVG Icon */}
-      <svg 
-        viewBox="0 0 140 120" 
-        className={`${iconDimensions.w} ${iconDimensions.h} flex-shrink-0`} 
-        fill="none" 
+      {/* Ready Hub emblem (brand kit v2): a symmetric shield around the refined MyPro
+          house-and-check mark, centred on both axes. Same artwork as readyHubLogoArt.ts. */}
+      <svg
+        viewBox="0 0 120 120"
+        className={`${iconDimensions.w} ${iconDimensions.h} flex-shrink-0`}
+        fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        aria-hidden="true"
       >
-        {/* Protective Shield Outline - Color Hex #6AD5F9 */}
-        <path 
-          d="M 12 28 C 42 10, 98 10, 128 28 C 128 72, 108 104, 70 118 C 32 104, 12 72, 12 28 Z" 
-          stroke="#6AD5F9" 
-          strokeWidth="9" 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-        />
-        
-        {/* Brand Mark Group Scaled to Fit Perfectly inside Shield */}
-        <g transform="translate(26.5, 26) scale(0.70)" strokeLinecap="round" strokeLinejoin="round">
-          {/* Chimney - Color Hex #6AD5F9 */}
-          <rect x="24" y="14" width="11" height="30" fill="#6AD5F9" />
-
-          {/* Inner Protected Home Roof - Color Hex #6AD5F9 */}
-          <path 
-            d="M 2 58 L 62 12 L 92 38" 
-            stroke="#6AD5F9" 
-            strokeWidth="10" 
-          />
-          
-          {/* Glowing Window/Beacon - Divided into four equal squares - Color Hex #98CC44 */}
-          <rect x="51" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-          <rect x="63" y="44" width="10" height="10" fill="#98CC44" rx="1.5" />
-          <rect x="51" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-          <rect x="63" y="56" width="10" height="10" fill="#98CC44" rx="1.5" />
-
-          {/* Ready Green Checkmark - Color Hex #98CC44 */}
-          <path 
-            d="M 21 78 L 51 104 L 111 58" 
-            stroke="#98CC44" 
-            strokeWidth="11" 
-          />
+        <g transform="translate(0 -2.6)">
+          {/* Shield - Cyan #6AD5F9 */}
+          <path d={RH_SHIELD_PATH} stroke="#6AD5F9" strokeWidth={RH_EMBLEM_LAYOUT.shieldStroke} strokeLinejoin="round" />
+          <g transform={`translate(60 ${RH_EMBLEM_LAYOUT.houseCenterY}) scale(${RH_EMBLEM_LAYOUT.houseScale}) translate(-60 -60)`}>
+            <g strokeLinecap="round" strokeLinejoin="round" strokeWidth="10">
+              {/* Chimney and roof - Cyan #6AD5F9 */}
+              <path d="M26 25H36V38.78L26 46.61Z" fill="#6AD5F9" stroke="none" />
+              <path d="M14 56L60 20L106 56" stroke="#6AD5F9" />
+              {/* Ready check - Green #98CC44 */}
+              <path d="M29 82L52 100L94 67" stroke="#98CC44" />
+            </g>
+            {/* Window - Green #98CC44 */}
+            <g fill="#98CC44">
+              <rect x="49" y="46" width="10" height="10" rx="1.5" />
+              <rect x="61" y="46" width="10" height="10" rx="1.5" />
+              <rect x="49" y="58" width="10" height="10" rx="1.5" />
+              <rect x="61" y="58" width="10" height="10" rx="1.5" />
+            </g>
+          </g>
         </g>
       </svg>
 
