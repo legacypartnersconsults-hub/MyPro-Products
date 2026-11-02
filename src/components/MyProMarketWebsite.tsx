@@ -1,48 +1,25 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import MyProMarketLogo from './MyProMarketLogo';
+import { submitSmsConsent } from './smsConsent';
 import { PrivacyPolicyModal, TermsOfServiceModal } from './LegalModals';
-import { 
-  ShieldCheck, 
-  Layers, 
-  MapPin, 
-  Clock, 
-  User, 
-  CheckCircle2, 
-  ArrowLeft, 
-  TrendingUp, 
-  Search, 
-  DollarSign, 
-  Activity, 
-  ArrowRight, 
-  ChevronRight, 
-  Briefcase, 
-  Building, 
-  Shield,
-  HelpCircle,
-  Star,
-  Zap,
+import {
+  ShieldCheck,
+  Clock,
+  User,
+  CheckCircle2,
+  ArrowLeft,
+  TrendingUp,
+  DollarSign,
+  Activity,
+  ArrowRight,
   Phone,
   Check,
   MessageSquare,
   Sparkles,
   Award,
   ArrowUpRight,
-  AlertTriangle,
-  Calculator,
-  Users,
-  Home,
-  CheckCircle,
-  Mail,
-  FileText,
-  Trash2,
-  Filter,
-  Database,
-  Lock,
-  Unlock,
-  Key,
-  Download,
-  Eye
+  Calculator
 } from 'lucide-react';
 import { audiences } from '../data';
 import { Audience } from '../types';
@@ -52,9 +29,6 @@ interface MyProMarketWebsiteProps {
   onRequestDemo: (productId?: string, audienceId?: string) => void;
   onLaunchApp?: () => void;
 }
-
-// In-memory module cache to guarantee records survive cross-tab switching, unmounts, and iframe sandboxes
-let memorySmsRecordsCache: any[] = [];
 
 export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, onLaunchApp }: MyProMarketWebsiteProps) {
   const [activeTab, setActiveTab] = useState<'managers' | 'carriers' | 'contractors' | 'agents' | 'homeowners'>('managers');
@@ -93,156 +67,8 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
   const [termsConsent, setTermsConsent] = useState(false); // Separate Terms/Privacy consent
   const [privacyConsent, setPrivacyConsent] = useState(false);
   const [smsSubmitted, setSmsSubmitted] = useState(false);
-  const [lastSubmittedRecord, setLastSubmittedRecord] = useState<any | null>(null);
+  const [smsSaving, setSmsSaving] = useState(false);
   const [smsError, setSmsError] = useState('');
-
-  // Persistent & Searchable SMS Records State (Loads live saved registrations with memory fallback)
-  const [smsRecords, setSmsRecords] = useState<any[]>(() => {
-    // 1. Check in-memory module cache first
-    if (memorySmsRecordsCache.length > 0) {
-      return memorySmsRecordsCache;
-    }
-    // 2. Check localStorage
-    try {
-      const saved = localStorage.getItem('mypro_sms_records');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          // Filter out legacy mock records only if any
-          const validRecords = parsed.filter((r: any) => 
-            r.id !== 'SMS_REC_01' && 
-            r.id !== 'SMS_REC_02' && 
-            r.id !== 'SMS_REC_03'
-          );
-          memorySmsRecordsCache = validRecords;
-          return validRecords;
-        }
-      }
-    } catch (e) {
-      console.warn('Could not read from localStorage, using empty state', e);
-    }
-    return [];
-  });
-
-  const [smsSearchQuery, setSmsSearchQuery] = useState('');
-  const [smsFilterRole, setSmsFilterRole] = useState<'all' | 'homeowner' | 'company' | 'contractor'>('all');
-  const [selectedConsentRecord, setSelectedConsentRecord] = useState<any | null>(null);
-
-  // SMS Consent Registry Password Gate States
-  const [registryPassword, setRegistryPassword] = useState<string>(() => {
-    return localStorage.getItem('mypro_sms_admin_password') || '';
-  });
-  const [isRegistryUnlocked, setIsRegistryUnlocked] = useState<boolean>(() => {
-    return sessionStorage.getItem('mypro_sms_registry_unlocked') === 'true';
-  });
-  const [adminEmailInput, setAdminEmailInput] = useState('');
-  const [adminPasswordInput, setAdminPasswordInput] = useState('');
-  const [adminConfirmPasswordInput, setAdminConfirmPasswordInput] = useState('');
-  const [adminGateError, setAdminGateError] = useState('');
-
-  // One-click Auditor Preview Unlock (allows checking saved submissions without password lock)
-  const handleAuditorUnlock = () => {
-    sessionStorage.setItem('mypro_sms_registry_unlocked', 'true');
-    setIsRegistryUnlocked(true);
-  };
-
-  // CSV Export for Compliance Audits
-  const handleExportCsv = () => {
-    if (smsRecords.length === 0) return;
-    const headers = ['Record ID', 'Full Name', 'Phone Number', 'Email', 'Account Role', 'Consent Date', 'IP Signature', 'Status'];
-    const rows = smsRecords.map(r => [
-      `"${r.id || ''}"`,
-      `"${(r.name || '').replace(/"/g, '""')}"`,
-      `"${(r.phone || '').replace(/"/g, '""')}"`,
-      `"${(r.email || '').replace(/"/g, '""')}"`,
-      `"${(r.role || '').replace(/"/g, '""')}"`,
-      `"${(r.consentDate || '').replace(/"/g, '""')}"`,
-      `"${(r.ipAddress || '').replace(/"/g, '""')}"`,
-      `"${(r.status || 'active').replace(/"/g, '""')}"`
-    ]);
-    const csvContent = [headers.join(','), ...rows.map(row => row.join(','))].join('\n');
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', `mypro-sms-consent-registry-${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
-  };
-
-  // Password Setup Handler
-  const handleSetupPassword = (e: React.FormEvent) => {
-    e.preventDefault();
-    setAdminGateError('');
-
-    const email = adminEmailInput.trim().toLowerCase();
-    if (email !== 'jruland@myproproducts.com' && !email.includes('@')) {
-      setAdminGateError('Please enter a valid administrator email address.');
-      return;
-    }
-
-    if (adminPasswordInput.length < 6) {
-      setAdminGateError('Password must be at least 6 characters long.');
-      return;
-    }
-
-    if (adminPasswordInput !== adminConfirmPasswordInput) {
-      setAdminGateError('Passwords do not match.');
-      return;
-    }
-
-    localStorage.setItem('mypro_sms_admin_password', adminPasswordInput);
-    setRegistryPassword(adminPasswordInput);
-    
-    // Auto login
-    sessionStorage.setItem('mypro_sms_registry_unlocked', 'true');
-    setIsRegistryUnlocked(true);
-    
-    // Clear inputs
-    setAdminEmailInput('');
-    setAdminPasswordInput('');
-    setAdminConfirmPasswordInput('');
-    setAdminGateError('');
-  };
-
-  // Password Login Handler
-  const handleLoginRegistry = (e: React.FormEvent) => {
-    e.preventDefault();
-    setAdminGateError('');
-
-    const email = adminEmailInput.trim().toLowerCase();
-    if (adminPasswordInput === registryPassword || adminPasswordInput === 'admin123' || adminPasswordInput === 'mypro2026') {
-      sessionStorage.setItem('mypro_sms_registry_unlocked', 'true');
-      setIsRegistryUnlocked(true);
-      setAdminEmailInput('');
-      setAdminPasswordInput('');
-      setAdminGateError('');
-    } else {
-      setAdminGateError('Invalid administrator credentials.');
-    }
-  };
-
-  // Lock Registry Handler
-  const handleLockRegistry = () => {
-    sessionStorage.removeItem('mypro_sms_registry_unlocked');
-    setIsRegistryUnlocked(false);
-  };
-
-  // Individual Record Deletion Handler
-  const handleDeleteRecord = (id: string, name: string) => {
-    if (confirm(`Are you sure you want to permanently delete the SMS consent profile for ${name}? This action is irreversible.`)) {
-      const updated = smsRecords.filter(rec => rec.id !== id);
-      memorySmsRecordsCache = updated;
-      setSmsRecords(updated);
-      try {
-        localStorage.setItem('mypro_sms_records', JSON.stringify(updated));
-      } catch (err) {
-        console.error(err);
-      }
-    }
-  };
 
   // Legal Modal States
   const [privacyOpen, setPrivacyOpen] = useState(false);
@@ -258,7 +84,7 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
   const financialSavings = hoursSavedByMyPro * averageHourlyCost;
   const turnaroundDaysReduction = 14;
 
-  const handleSmsSubmit = (e: React.FormEvent) => {
+  const handleSmsSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSmsError('');
 
@@ -266,12 +92,13 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
       setSmsError('Please enter your full name.');
       return;
     }
-    const cleanPhone = smsPhone.replace(/\D/g, '');
-    if (cleanPhone.length < 10) {
+    let cleanPhone = smsPhone.replace(/\D/g, '');
+    if (cleanPhone.length === 11 && cleanPhone.startsWith('1')) cleanPhone = cleanPhone.slice(1);
+    if (cleanPhone.length !== 10) {
       setSmsError('Please enter a valid 10-digit mobile phone number.');
       return;
     }
-    if (!smsEmail.trim() || !smsEmail.includes('@')) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(smsEmail.trim())) {
       setSmsError('Please enter a valid email address.');
       return;
     }
@@ -288,41 +115,20 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
       return;
     }
 
-    // Format phone number nicely
-    const formattedPhone = `(${cleanPhone.slice(0, 3)}) ${cleanPhone.slice(3, 6)}-${cleanPhone.slice(6)}`;
-    const now = new Date();
-    const formattedDate = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const ip = `198.51.100.${Math.floor(Math.random() * 254) + 1}`; // Simulated public IP
-
-    const newRecord = {
-      id: `REC-${Date.now()}`,
-      name: smsName.trim(),
-      phone: formattedPhone,
-      email: smsEmail.trim(),
-      role: smsRole,
-      consentDate: formattedDate,
-      ipAddress: ip,
-      status: 'active',
-      emailSentStatus: 'sent',
-      emailSentTimestamp: formattedDate
-    };
-
-    const updatedRecords = [newRecord, ...smsRecords];
-    memorySmsRecordsCache = updatedRecords;
-    setSmsRecords(updatedRecords);
+    setSmsSaving(true);
     try {
-      localStorage.setItem('mypro_sms_records', JSON.stringify(updatedRecords));
-    } catch (err) {
-      console.warn('LocalStorage write failed, memory cache updated', err);
+      await submitSmsConsent({
+        full_name: smsName.trim(),
+        phone: `+1${cleanPhone}`,
+        email: smsEmail.trim(),
+        account_role: smsRole,
+      });
+      setSmsSubmitted(true);
+    } catch {
+      setSmsError('Sorry, we could not save your opt-in. Please try again, or email jruland@myproproducts.com.');
+    } finally {
+      setSmsSaving(false);
     }
-
-    // Auto-unlock registry so the user immediately sees the saved record in the table below
-    setIsRegistryUnlocked(true);
-    sessionStorage.setItem('mypro_sms_registry_unlocked', 'true');
-
-    // Set submitted state and store record
-    setLastSubmittedRecord(newRecord);
-    setSmsSubmitted(true);
   };
 
   const faqs = [
@@ -1319,9 +1125,10 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
 
                   <button
                     type="submit"
-                    className="w-full text-center py-3 bg-[#468CDC] hover:bg-[#3b7cbd] text-white font-bold rounded-xl transition-all shadow-md text-sm mt-4 cursor-pointer"
+                    disabled={smsSaving}
+                    className="w-full text-center py-3 bg-[#468CDC] hover:bg-[#3b7cbd] disabled:opacity-60 disabled:cursor-wait text-white font-bold rounded-xl transition-all shadow-md text-sm mt-4 cursor-pointer"
                   >
-                    Enroll in Text Alerts
+                    {smsSaving ? 'Saving…' : 'Enroll in Text Alerts'}
                   </button>
                 </form>
               ) : (
@@ -1334,9 +1141,9 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                     <CheckCircle2 className="h-8 w-8" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900 font-nunito">Opt-In Registration Recorded & Saved!</h3>
+                    <h3 className="text-xl font-bold text-slate-900 font-nunito">You're Enrolled in Text Alerts</h3>
                     <p className="text-xs text-slate-500 mt-1">
-                      Your consent has been permanently logged in the compliance database and confirmation email dispatched.
+                      Your SMS consent has been recorded. Reply STOP to any message to opt out at any time.
                     </p>
                   </div>
 
@@ -1344,58 +1151,26 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
                   <div className="bg-white border border-slate-200 rounded-xl p-4 max-w-md mx-auto text-left text-xs space-y-2 shadow-sm">
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-500 font-medium">Name:</span>
-                      <span className="font-semibold text-slate-900">{lastSubmittedRecord?.name || smsName}</span>
+                      <span className="font-semibold text-slate-900">{smsName}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-500 font-medium">Mobile Phone:</span>
-                      <span className="font-mono font-semibold text-slate-900">{lastSubmittedRecord?.phone || smsPhone}</span>
+                      <span className="font-mono font-semibold text-slate-900">{smsPhone}</span>
                     </div>
                     <div className="flex justify-between py-1 border-b border-slate-100">
                       <span className="text-slate-500 font-medium">Email:</span>
-                      <span className="font-mono text-slate-800">{lastSubmittedRecord?.email || smsEmail}</span>
-                    </div>
-                    <div className="flex justify-between py-1 border-b border-slate-100">
-                      <span className="text-slate-500 font-medium">Role:</span>
-                      <span className="capitalize font-bold text-[#468CDC]">{lastSubmittedRecord?.role || smsRole}</span>
+                      <span className="font-mono text-slate-800">{smsEmail}</span>
                     </div>
                     <div className="flex justify-between py-1">
-                      <span className="text-slate-500 font-medium">Registry Status:</span>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-green-50 text-green-700 border border-green-200">
-                        ACTIVE_CONSENT (Saved to Registry)
-                      </span>
+                      <span className="text-slate-500 font-medium">Role:</span>
+                      <span className="capitalize font-bold text-[#468CDC]">{smsRole}</span>
                     </div>
                   </div>
 
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                     <button
                       onClick={() => {
-                        const el = document.getElementById('sms-consent-registry');
-                        if (el) {
-                          el.scrollIntoView({ behavior: 'smooth' });
-                        }
-                      }}
-                      className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold bg-[#468CDC] hover:bg-[#3b7cbd] text-white rounded-lg transition-colors flex items-center justify-center space-x-1.5 shadow-sm cursor-pointer"
-                    >
-                      <Database className="h-3.5 w-3.5" />
-                      <span>View in Registry Table &darr;</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        if (lastSubmittedRecord) {
-                          setSelectedConsentRecord(lastSubmittedRecord);
-                        } else if (smsRecords.length > 0) {
-                          setSelectedConsentRecord(smsRecords[0]);
-                        }
-                      }}
-                      className="w-full sm:w-auto px-4 py-2.5 text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white rounded-lg transition-colors flex items-center justify-center space-x-1.5 shadow-sm cursor-pointer"
-                    >
-                      <Mail className="h-3.5 w-3.5" />
-                      <span>View Sent Email Record</span>
-                    </button>
-                    <button
-                      onClick={() => {
                         setSmsSubmitted(false);
-                        setLastSubmittedRecord(null);
                         setSmsName('');
                         setSmsPhone('');
                         setSmsEmail('');
@@ -1414,361 +1189,6 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
 
             </div>
 
-          </div>
-
-          {/* Searchable SMS Consent Registry */}
-          <div id="sms-consent-registry" className="border-t border-slate-200/80 mt-16 pt-16 text-left">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-              <div>
-                <div className="flex items-center space-x-2">
-                  <Database className="h-5 w-5 text-[#468CDC]" />
-                  <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight font-nunito">Vetted SMS Consent Registry</h3>
-                </div>
-                <p className="text-xs text-slate-500 mt-1">
-                  Compliance and audit tracking database for completed SMS Opt-In Consent forms. Searchable in real-time.
-                </p>
-              </div>
-              
-              {/* Quick statistics and CSV Export */}
-              <div className="flex flex-wrap items-center gap-2.5 text-xs">
-                <div className="bg-slate-50 border border-slate-150 rounded-lg px-3 py-2">
-                  <span className="text-slate-400 block text-[9px] uppercase font-bold tracking-wider">Total Enrolled</span>
-                  <span className="text-slate-800 font-extrabold text-sm">{smsRecords.length}</span>
-                </div>
-                <div className="bg-green-50 border border-green-150 rounded-lg px-3 py-2">
-                  <span className="text-green-600 block text-[9px] uppercase font-bold tracking-wider">Active Consent</span>
-                  <span className="text-green-800 font-extrabold text-sm">
-                    {smsRecords.filter(r => r.status === 'active').length}
-                  </span>
-                </div>
-                {smsRecords.length > 0 && (
-                  <button
-                    type="button"
-                    onClick={handleExportCsv}
-                    className="flex items-center space-x-1.5 bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 rounded-lg px-3 py-2 text-xs font-bold transition-all shadow-xs cursor-pointer"
-                    title="Download SMS Consent Registry as CSV"
-                  >
-                    <Download className="h-3.5 w-3.5 text-[#468CDC]" />
-                    <span>Export CSV</span>
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {!isRegistryUnlocked ? (
-              /* ACCESS GATE LOCKED STATE */
-              <div className="max-w-md mx-auto mt-8 bg-slate-50 border border-slate-200 rounded-2xl p-6 sm:p-8 shadow-sm">
-                <div className="flex flex-col items-center text-center mb-6">
-                  <div className="h-12 w-12 rounded-full bg-[#468CDC]/10 flex items-center justify-center text-[#468CDC] mb-3">
-                    <Lock className="h-5 w-5" />
-                  </div>
-                  <h4 className="text-lg font-bold text-slate-900 tracking-tight font-nunito">
-                    {registryPassword ? 'Secure Registry Access Gate' : 'Configure Administrator Access'}
-                  </h4>
-                  <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                    {registryPassword 
-                      ? 'Protected by owner-defined master password. Access restricted to compliance managers and auditors.' 
-                      : 'No administrator password has been set up yet. Please configure the secure credentials to protect consumer consent logs.'}
-                  </p>
-                </div>
-
-                {adminGateError && (
-                  <div className="bg-rose-50 border border-rose-150 rounded-xl p-3 mb-5 text-xs text-rose-700 flex items-start space-x-2">
-                    <AlertTriangle className="h-4 w-4 text-rose-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-[11px] leading-tight">{adminGateError}</span>
-                  </div>
-                )}
-
-                {registryPassword ? (
-                  /* LOGIN FORM */
-                  <form onSubmit={handleLoginRegistry} className="space-y-4 text-left">
-                    <div>
-                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Admin Account Username</label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="jruland@myproproducts.com"
-                        value={adminEmailInput}
-                        onChange={(e) => setAdminEmailInput(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Administrator Password</label>
-                      <input
-                        type="password"
-                        required
-                        placeholder="••••••••"
-                        value={adminPasswordInput}
-                        onChange={(e) => setAdminPasswordInput(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full py-2.5 px-4 bg-[#468CDC] hover:bg-[#3b7cbd] text-white rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 shadow-sm hover:shadow cursor-pointer"
-                    >
-                      <Unlock className="h-3.5 w-3.5" />
-                      <span>Unlock Consent Registry</span>
-                    </button>
-                  </form>
-                ) : (
-                  /* INITIAL SETUP FORM */
-                  <form onSubmit={handleSetupPassword} className="space-y-4 text-left">
-                    <div>
-                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Owner/Admin Username</label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="jruland@myproproducts.com"
-                        value={adminEmailInput}
-                        onChange={(e) => setAdminEmailInput(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
-                      />
-                      <span className="text-[10px] text-slate-400 mt-1 block">Your owner/admin account username must match <strong className="text-slate-600">jruland@myproproducts.com</strong> to setup access.</span>
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Desired Master Password</label>
-                      <input
-                        type="password"
-                        required
-                        placeholder="At least 6 characters"
-                        value={adminPasswordInput}
-                        onChange={(e) => setAdminPasswordInput(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1">Confirm Master Password</label>
-                      <input
-                        type="password"
-                        required
-                        placeholder="••••••••"
-                        value={adminConfirmPasswordInput}
-                        onChange={(e) => setAdminConfirmPasswordInput(e.target.value)}
-                        className="w-full bg-white border border-slate-200 rounded-lg px-3.5 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full py-2.5 px-4 bg-[#468CDC] hover:bg-[#3b7cbd] text-white rounded-lg text-xs font-bold transition-all flex items-center justify-center space-x-1.5 shadow-sm hover:shadow cursor-pointer"
-                    >
-                      <Key className="h-3.5 w-3.5" />
-                      <span>Set Access Key & Enter</span>
-                    </button>
-                  </form>
-                )}
-
-                {/* Instant Auditor Preview Mode */}
-                <div className="mt-5 pt-4 border-t border-slate-200 text-center">
-                  <button
-                    type="button"
-                    onClick={handleAuditorUnlock}
-                    className="text-xs text-[#468CDC] hover:text-[#3b7cbd] font-bold inline-flex items-center space-x-1.5 cursor-pointer bg-white px-3.5 py-2 rounded-lg border border-slate-200 hover:border-slate-300 shadow-xs"
-                  >
-                    <Eye className="h-3.5 w-3.5" />
-                    <span>Auditor / Reviewer Quick Access</span>
-                  </button>
-                  <p className="text-[10px] text-slate-400 mt-1">
-                    Directly view all saved consent registrations in read-only audit mode.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              /* UNLOCKED FULL REGISTRY ACCESS STATE */
-              <div className="space-y-6">
-                
-                {/* Admin Session Banner */}
-                <div className="bg-slate-900 text-slate-100 rounded-xl px-5 py-4 flex flex-col sm:flex-row justify-between items-center gap-3">
-                  <div className="flex items-center space-x-2.5">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-xs font-bold text-slate-300">Authorized Admin Session Active:</span>
-                    <strong className="text-xs text-white font-mono">jruland@myproproducts.com</strong>
-                  </div>
-                  <button
-                    onClick={handleLockRegistry}
-                    className="px-3 py-1.5 border border-slate-700 hover:border-slate-500 rounded-lg text-[11px] font-bold text-slate-300 hover:text-white transition-colors cursor-pointer focus:outline-none flex items-center space-x-1"
-                  >
-                    <Lock className="h-3 w-3" />
-                    <span>Lock Registry Access</span>
-                  </button>
-                </div>
-
-                {/* Controls panel */}
-                <div className="bg-slate-50 border border-slate-150 rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
-                  {/* Search bar */}
-                  <div className="relative w-full md:max-w-md">
-                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                    <input
-                      type="text"
-                      placeholder="Search by name, email, or phone number..."
-                      value={smsSearchQuery}
-                      onChange={(e) => setSmsSearchQuery(e.target.value)}
-                      className="w-full bg-white border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-xs text-slate-800 focus:outline-none focus:border-[#468CDC] focus:ring-1 focus:ring-[#468CDC]"
-                    />
-                  </div>
-
-                  {/* Role Filter Buttons */}
-                  <div className="flex items-center space-x-1 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 scrollbar-none">
-                    <span className="text-[11px] text-slate-400 font-bold uppercase tracking-wider mr-2 hidden lg:inline">Filter:</span>
-                    {[
-                      { key: 'all', label: 'All Roles' },
-                      { key: 'homeowner', label: 'Homeowners' },
-                      { key: 'company', label: 'Companies' },
-                      { key: 'contractor', label: 'Contractors' }
-                    ].map(item => (
-                      <button
-                        key={item.key}
-                        onClick={() => setSmsFilterRole(item.key as any)}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
-                          smsFilterRole === item.key
-                            ? 'bg-slate-900 text-white shadow-sm'
-                            : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-100'
-                        }`}
-                      >
-                        {item.label}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Registry List / Table */}
-                <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse text-xs">
-                      <thead>
-                        <tr className="bg-slate-50 border-b border-slate-200 text-slate-400 font-bold uppercase tracking-wider text-[10px]">
-                          <th className="p-4 text-left">Contact Profile</th>
-                          <th className="p-4 text-left">Mobile Details</th>
-                          <th className="p-4 text-left">Role / Status</th>
-                          <th className="p-4 text-left">Signature Date</th>
-                          <th className="p-4 text-left">IP Signature</th>
-                          <th className="p-4 text-right">Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-100 text-slate-700">
-                        {smsRecords
-                          .filter(rec => {
-                            const query = smsSearchQuery.toLowerCase().trim();
-                            const matchesQuery = !query || 
-                              rec.name?.toLowerCase().includes(query) ||
-                              rec.phone?.toLowerCase().includes(query) ||
-                              rec.email?.toLowerCase().includes(query);
-                            const matchesRole = smsFilterRole === 'all' || rec.role === smsFilterRole;
-                            return matchesQuery && matchesRole;
-                          })
-                          .map((rec) => {
-                            const roleColors: Record<string, string> = {
-                              homeowner: 'bg-blue-50 text-blue-700 border-blue-100',
-                              company: 'bg-indigo-50 text-indigo-700 border-indigo-100',
-                              contractor: 'bg-purple-50 text-purple-700 border-purple-100',
-                              // fallbacks
-                              manager: 'bg-slate-50 text-slate-700 border-slate-200',
-                              carrier: 'bg-slate-50 text-slate-700 border-slate-200'
-                            };
-
-                            const getRoleLabel = (role: string) => {
-                              if (role === 'homeowner') return 'Homeowner';
-                              if (role === 'company') return 'Company';
-                              if (role === 'contractor') return 'Contractor';
-                              return role ? (role.charAt(0).toUpperCase() + role.slice(1)) : 'Unknown';
-                            };
-                            
-                            return (
-                              <tr key={rec.id} className="hover:bg-slate-50/50 transition-colors">
-                                {/* Contact Profile */}
-                                <td className="p-4 text-left">
-                                  <div className="font-semibold text-slate-900 text-left">{rec.name}</div>
-                                  <div className="text-slate-400 text-[11px] font-mono mt-0.5 text-left">{rec.email}</div>
-                                </td>
-                                {/* Mobile Details */}
-                                <td className="p-4 font-mono font-medium text-slate-800 text-left">
-                                  {rec.phone}
-                                </td>
-                                {/* Role / Status */}
-                                <td className="p-4 space-y-1 text-left">
-                                  <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold border capitalize ${roleColors[rec.role] || 'bg-slate-50 text-slate-700'}`}>
-                                    {getRoleLabel(rec.role)}
-                                  </span>
-                                  <div className="flex items-center space-x-1 justify-start">
-                                    <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                                    <span className="text-[10px] text-slate-400">Enrolled (SMS Verified)</span>
-                                  </div>
-                                </td>
-                                {/* Signature Date */}
-                                <td className="p-4 text-slate-500 text-left">
-                                  {rec.consentDate}
-                                </td>
-                                {/* IP Signature */}
-                                <td className="p-4 text-left">
-                                  <span className="font-mono text-[11px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded border border-slate-200">
-                                    {rec.ipAddress}
-                                  </span>
-                                </td>
-                                {/* Audit Actions */}
-                                <td className="p-4 text-right">
-                                  <div className="flex items-center justify-end space-x-2">
-                                    <button
-                                      onClick={() => setSelectedConsentRecord(rec)}
-                                      className="inline-flex items-center space-x-1 px-3 py-1.5 bg-slate-100 hover:bg-[#468CDC] hover:text-white text-slate-700 rounded-lg text-xs font-bold transition-all cursor-pointer border border-slate-200/50 hover:border-transparent"
-                                      title="View Sent Email Copy"
-                                    >
-                                      <Mail className="h-3.5 w-3.5" />
-                                      <span className="hidden sm:inline">View Email</span>
-                                    </button>
-                                    <button
-                                      onClick={() => handleDeleteRecord(rec.id, rec.name)}
-                                      className="inline-flex items-center justify-center p-1.5 bg-rose-50 hover:bg-rose-500 text-rose-600 hover:text-white rounded-lg transition-all cursor-pointer border border-rose-100 hover:border-transparent"
-                                      title="Delete Consent Record"
-                                    >
-                                      <Trash2 className="h-3.5 w-3.5" />
-                                    </button>
-                                  </div>
-                                </td>
-                              </tr>
-                            );
-                          })}
-
-                        {smsRecords.filter(rec => {
-                          const query = smsSearchQuery.toLowerCase().trim();
-                          const matchesQuery = !query || 
-                            rec.name?.toLowerCase().includes(query) ||
-                            rec.phone?.toLowerCase().includes(query) ||
-                            rec.email?.toLowerCase().includes(query);
-                          const matchesRole = smsFilterRole === 'all' || rec.role === smsFilterRole;
-                          return matchesQuery && matchesRole;
-                        }).length === 0 && (
-                          <tr>
-                            <td colSpan={6} className="text-center py-12 text-slate-400 space-y-2">
-                              <div className="text-lg">📭</div>
-                              <p className="text-xs">No matching opt-in consent records found.</p>
-                              <p className="text-[10px] text-slate-400">Try modifying your search keywords or filter settings.</p>
-                            </td>
-                          </tr>
-                        )}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* Table Footer Actions */}
-                  <div className="bg-slate-50/80 px-4 py-3 border-t border-slate-200 flex justify-between items-center text-[11px] text-slate-500">
-                    <span>Database Status: <strong className="text-emerald-600 font-semibold">● SECURE & COMPLIANT (TCPA compliant)</strong></span>
-                    <button
-                      onClick={() => {
-                        if (confirm('Are you sure you want to clear all registrations from the registry database?')) {
-                          localStorage.removeItem('mypro_sms_records');
-                          setSmsRecords([]);
-                        }
-                      }}
-                      className="text-rose-500 hover:text-rose-700 font-semibold flex items-center space-x-1 cursor-pointer focus:outline-none text-[11px]"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                      <span>Clear Registry Database</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
 
         </div>
@@ -1857,169 +1277,6 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
       <PrivacyPolicyModal isOpen={privacyOpen} onClose={() => setPrivacyOpen(false)} />
       <TermsOfServiceModal isOpen={termsOpen} onClose={() => setTermsOpen(false)} />
 
-      {/* Searchable SMS Consent Certificate & Simulated Sent Email Copy Modal */}
-      <AnimatePresence>
-        {selectedConsentRecord && (
-          <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 15 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 15 }}
-              className="bg-white rounded-2xl shadow-xl border border-slate-200 max-w-2xl w-full overflow-hidden text-left"
-            >
-              {/* Header */}
-              <div className="bg-slate-950 text-white p-5 flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  <ShieldCheck className="h-5 w-5 text-[#98CC44]" />
-                  <div>
-                    <h3 className="font-bold text-sm tracking-tight font-nunito text-left">SMS Opt-In Compliance Record</h3>
-                    <p className="text-[11px] text-slate-400">Verifiable Consent Audit & Sent Copy Proof</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setSelectedConsentRecord(null)}
-                  className="text-slate-400 hover:text-white font-bold text-lg focus:outline-none"
-                >
-                  ✕
-                </button>
-              </div>
-
-              {/* Body */}
-              <div className="p-6 space-y-6 max-h-[70vh] overflow-y-auto text-left">
-                {/* Visual Status Header */}
-                <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-start space-x-3">
-                  <CheckCircle className="h-5 w-5 text-emerald-600 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <h4 className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Consent Active & Email Sent Successfully</h4>
-                    <p className="text-xs text-emerald-700 mt-1 leading-relaxed text-left">
-                      A copy of the completed consent form was transmitted to <strong className="font-semibold text-emerald-900">{selectedConsentRecord.email}</strong> on <span className="font-semibold">{selectedConsentRecord.emailSentTimestamp}</span>.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Certificate Left Column */}
-                  <div className="border border-slate-200 rounded-xl p-4 space-y-3 bg-slate-50/50 text-left">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Compliance Meta</span>
-                    
-                    <div className="space-y-2 text-xs">
-                      <div className="flex justify-between py-1 border-b border-slate-100">
-                        <span className="text-slate-500">Record ID:</span>
-                        <span className="font-mono font-medium text-slate-800">{selectedConsentRecord.id}</span>
-                      </div>
-                      <div className="flex justify-between py-1 border-b border-slate-100">
-                        <span className="text-slate-500">Enrollment Role:</span>
-                        <span className="capitalize font-semibold text-[#468CDC]">{selectedConsentRecord.role}</span>
-                      </div>
-                      <div className="flex justify-between py-1 border-b border-slate-100">
-                        <span className="text-slate-500">Date Logged:</span>
-                        <span className="font-medium text-slate-800">{selectedConsentRecord.consentDate}</span>
-                      </div>
-                      <div className="flex justify-between py-1 border-b border-slate-100">
-                        <span className="text-slate-500">IP Signature:</span>
-                        <span className="font-mono font-medium text-slate-800">{selectedConsentRecord.ipAddress}</span>
-                      </div>
-                      <div className="flex justify-between py-1 border-b border-slate-100">
-                        <span className="text-slate-500">Opt-In Status:</span>
-                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-bold bg-green-50 text-green-700 border border-green-200">
-                          ACTIVE_CONSENT
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Right Column: Verifiable Legal Consent Details */}
-                  <div className="border border-slate-200 rounded-xl p-4 space-y-2 text-left">
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Consent Signature Details</span>
-                    <div className="space-y-1.5 text-[11px] text-slate-600 leading-relaxed">
-                      <p><strong>Signed by:</strong> {selectedConsentRecord.name}</p>
-                      <p><strong>Device Mobile:</strong> {selectedConsentRecord.phone}</p>
-                      <p className="pt-2 border-t border-slate-100">
-                        <strong>Consent Clause Accepted:</strong>
-                        <span className="block text-slate-500 italic mt-1 leading-normal bg-slate-50 p-2 rounded border border-slate-100 text-[10px]">
-                          &quot;I explicitly consent and agree to receive automated notifications, dispatches, and informational text messages (SMS) from MyPro Market regarding active jobs, dispatches, and property claim status updates...&quot;
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Email Transmitted Section */}
-                <div className="border border-slate-200 rounded-xl overflow-hidden text-left">
-                  <div className="bg-slate-100 px-4 py-2.5 border-b border-slate-200 flex justify-between items-center text-xs">
-                    <span className="font-bold text-slate-700 flex items-center space-x-1">
-                      <Mail className="h-3.5 w-3.5 text-slate-500" />
-                      <span>Transmitted Email Copy (Inbound Proof)</span>
-                    </span>
-                    <span className="text-[10px] bg-slate-200 text-slate-600 font-bold px-1.5 py-0.5 rounded">MIME Content</span>
-                  </div>
-                  <div className="p-4 bg-[#F8FAFC] font-mono text-[11px] text-slate-800 space-y-3 leading-relaxed border-b border-slate-150">
-                    <div className="space-y-1 text-[11px] text-slate-500 pb-3 border-b border-slate-200/80">
-                      <p><strong>From:</strong> MyPro Products Compliance &lt;compliance@myproproducts.com&gt;</p>
-                      <p><strong>To:</strong> &quot;{selectedConsentRecord.name}&quot; &lt;{selectedConsentRecord.email}&gt;</p>
-                      <p><strong>Subject:</strong> [MyPro Market] Verifiable SMS Opt-In Consent Form Copy</p>
-                      <p><strong>Date Sent:</strong> {selectedConsentRecord.emailSentTimestamp}</p>
-                    </div>
-                    <div className="pt-2 text-slate-700 whitespace-pre-wrap leading-normal font-sans text-xs">
-                      {`Hello ${selectedConsentRecord.name},
-
-This is an automated copy of your completed SMS Opt-In Consent Form submitted on our website. Please retain this email for your records.
-
-==================================================
-REGISTRATION & COMPLIANCE VERIFICATION DETAILS
-==================================================
-• Name: ${selectedConsentRecord.name}
-• Mobile Number: ${selectedConsentRecord.phone}
-• Registered Email: ${selectedConsentRecord.email}
-• Selected Role: ${selectedConsentRecord.role.toUpperCase()}
-• Consent Log Date: ${selectedConsentRecord.consentDate}
-• Signature IP Reference: ${selectedConsentRecord.ipAddress}
-• Terms of Service Accepted: Yes (Version 2026.1)
-• Privacy Policy Accepted: Yes (Version 2026.1)
-
-==================================================
-LEGAL CONSENT CLAUSE AGREED
-==================================================
-"I explicitly consent and agree to receive automated notifications, dispatches, and informational text messages (SMS) from MyPro Market regarding active jobs, dispatches, and property claim status updates at the mobile number provided. Message & data rates may apply. Msg frequency varies by active job. I can reply STOP at any time to opt-out."
-
-==================================================
-OPT-OUT & UNSUBSCRIBE INSTRUCTIONS
-==================================================
-You may withdraw your consent or update your notification preferences at any time:
-1. To unsubscribe instantly: Reply STOP to any text message received on your mobile device.
-2. For help or customer support: Reply HELP to any text message, or reach out to our team at compliance@myproproducts.com.
-
-Thank you for choosing MyPro Products.
-
-Best regards,
-MyPro Products Compliance & Audit Division`}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Footer */}
-              <div className="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-between items-center">
-                <button
-                  onClick={() => {
-                    alert('Certificate and Outbound Email Copy downloaded successfully to your local machine as a PDF archive!');
-                  }}
-                  className="px-4 py-2 text-xs font-bold bg-[#468CDC] hover:bg-[#3b7cbd] text-white rounded-lg transition-colors flex items-center space-x-1 cursor-pointer focus:outline-none"
-                >
-                  <FileText className="h-3.5 w-3.5" />
-                  <span>Download Compliance PDF</span>
-                </button>
-                <button
-                  onClick={() => setSelectedConsentRecord(null)}
-                  className="px-4 py-2 text-xs font-bold bg-slate-200 text-slate-700 hover:bg-slate-300 rounded-lg transition-colors cursor-pointer focus:outline-none"
-                >
-                  Close Record
-                </button>
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
 
     </div>
   );

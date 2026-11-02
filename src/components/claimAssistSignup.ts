@@ -1,10 +1,7 @@
 // Early-access sign-ups for MyPro Claim Assist.
 // Rows go to the `claim_assist_signups` table in the MyPro Market Supabase project.
-// The publishable key below is meant to be public: row-level security on that table
-// lets visitors insert a sign-up but never read, change or delete one.
 
-const SUPABASE_URL = 'https://scwyvdxevyydcjnbwqtm.supabase.co';
-const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_SSdm3QQUh2pyXhc1EKOjwQ_dP8TU7VX';
+import { insertPublicRow } from './supabaseInsert';
 
 export interface ClaimAssistSignup {
   full_name: string;
@@ -15,17 +12,6 @@ export interface ClaimAssistSignup {
   what_would_have_helped: string | null;
 }
 
-export async function submitClaimAssistSignup(signup: ClaimAssistSignup): Promise<void> {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/claim_assist_signups`, {
-    method: 'POST',
-    headers: {
-      apikey: SUPABASE_PUBLISHABLE_KEY,
-      'Content-Type': 'application/json',
-      Prefer: 'return=minimal',
-    },
-    body: JSON.stringify({ ...signup, source: 'myproproducts.com/claimassist' }),
-  });
-  if (!res.ok) {
-    throw new Error(`Sign-up failed (${res.status})`);
-  }
+export function submitClaimAssistSignup(signup: ClaimAssistSignup): Promise<void> {
+  return insertPublicRow('claim_assist_signups', { ...signup, source: 'myproproducts.com/claimassist' });
 }
