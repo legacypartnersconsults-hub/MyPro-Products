@@ -16,6 +16,7 @@ import MyProReadyHubWebsite from './components/MyProReadyHubWebsite';
 import MyProReadyHubBrandAssetsPage from './components/MyProReadyHubBrandAssetsPage';
 import MyProProductsBrandPage from './components/MyProProductsBrandPage';
 import MyProMarketBrandPage from './components/MyProMarketBrandPage';
+import MyProClaimAssistBrandPage from './components/MyProClaimAssistBrandPage';
 import MyProClaimAssistWebsite from './components/MyProClaimAssistWebsite';
 import { PrivacyPolicyModal, TermsOfServiceModal } from './components/LegalModals';
 
@@ -25,13 +26,14 @@ export default function App() {
   const [preselectedAudience, setPreselectedAudience] = useState<string>('');
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [termsOpen, setTermsOpen] = useState(false);
-  const [activeView, setActiveView] = useState<'corporate' | 'market' | 'readyhub' | 'readyhub-brand' | 'brand' | 'market-brand' | 'claimassist' | 'signin' | 'portal'>(() => {
+  const [activeView, setActiveView] = useState<'corporate' | 'market' | 'readyhub' | 'readyhub-brand' | 'brand' | 'market-brand' | 'claimassist' | 'claimassist-brand' | 'signin' | 'portal'>(() => {
     // Basic path-based detection on load
     if (typeof window !== 'undefined') {
       const path = window.location.pathname;
       if (path === '/market' || path === '/market/') return 'market';
       if (path === '/claimassist' || path === '/claimassist/') return 'claimassist';
       if (path === '/market/brand' || path === '/market/brand/') return 'market-brand';
+      if (path === '/claimassist/brand' || path === '/claimassist/brand/') return 'claimassist-brand';
       if (path === '/brand' || path === '/brand/') return 'brand';
       if (path.startsWith('/readyhub/brand-assets')) return 'readyhub-brand';
       if (path === '/readyhub' || path.startsWith('/readyhub')) return 'readyhub';
@@ -46,6 +48,8 @@ export default function App() {
         setActiveView('market');
       } else if (path === '/claimassist' || path === '/claimassist/') {
         setActiveView('claimassist');
+      } else if (path === '/claimassist/brand' || path === '/claimassist/brand/') {
+        setActiveView('claimassist-brand');
       } else if (path === '/market/brand' || path === '/market/brand/') {
         setActiveView('market-brand');
       } else if (path === '/brand' || path === '/brand/') {
@@ -123,6 +127,10 @@ export default function App() {
 
   if (activeView === 'claimassist') {
     return <MyProClaimAssistWebsite onBackToCorporate={handleBackToCorporate} />;
+  }
+
+  if (activeView === 'claimassist-brand') {
+    return <MyProClaimAssistBrandPage />;
   }
 
   if (activeView === 'market-brand') {
