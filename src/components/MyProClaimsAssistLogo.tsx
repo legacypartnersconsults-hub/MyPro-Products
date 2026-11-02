@@ -1,4 +1,4 @@
-// MyPro Claims Assist logo (concepts A1 and A3). The house and check are the same
+// MyPro Claim Assist logo (concepts A1 and A3). The house and check are the same
 // refined MyPro mark used by MyPro Products, Market and Ready Hub; an umbrella sits
 // over the house. Colors: Claims Purple #5B2BD9 and Ready Hub Blue #6AD5F9.
 
@@ -76,7 +76,7 @@ export default function MyProClaimsAssistLogo({ showText = true, size = 'md', th
             <span className="text-[#6AD5F9]">Pro</span>
           </div>
           <div className={`${text.sub} font-extrabold tracking-tight leading-none mt-0.5 ${theme === 'light' ? 'text-[#5B2BD9]' : 'text-white'}`}>
-            Claims Assist
+            Claim Assist
           </div>
         </div>
       )}
