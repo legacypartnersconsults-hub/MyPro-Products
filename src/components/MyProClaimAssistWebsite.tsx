@@ -1,7 +1,7 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
 import {
   ArrowLeft, ArrowRight, FileText, Camera, Receipt, BookOpenCheck, MessagesSquare, Scale,
-  CheckCircle2, Lock, Loader2, ShieldCheck, Clock3,
+  CheckCircle2, Lock, Loader2, ShieldCheck, Clock3, Sparkles,
 } from 'lucide-react';
 import MyProClaimsAssistLogo from './MyProClaimsAssistLogo';
 import { submitClaimAssistSignup } from './claimAssistSignup';
@@ -231,6 +231,7 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
             <MyProClaimsAssistLogo size="md" />
           </button>
           <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+            <button onClick={() => go('meet-mason')} className="hover:text-[#5B2BD9]">Meet Mason</button>
             <button onClick={() => go('how-it-works')} className="hover:text-[#5B2BD9]">How It Works</button>
             <button onClick={() => go('early-access')} className="hover:text-[#5B2BD9]">Early Access</button>
             <button onClick={onBackToCorporate} className="inline-flex items-center gap-1 hover:text-[#5B2BD9]"><ArrowLeft className="h-4 w-4" /> MyPro Products</button>
@@ -266,6 +267,46 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
             <p className="mt-5 text-sm text-white/70">Built for homeowners by the team behind MyPro Market and MyPro Ready Hub.</p>
           </div>
           <ClaimPreview />
+        </div>
+      </section>
+
+      {/* Meet Mason, the AI assistant in the Claim Assist app */}
+      <section id="meet-mason" className="scroll-mt-20 py-20 sm:py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-12 md:grid-cols-[0.9fr_1.1fr] items-center">
+          <div className="mx-auto w-full max-w-sm">
+            <img
+              src="/claim-assist-mason-claim-pro-v1.webp" width={816} height={1276} loading="lazy"
+              alt="Mason, Your Claim Pro: a friendly robot in a black MyPro Claim Assist cap and shirt, holding a phone showing the Claim Assist app and a Claim Documentation clipboard"
+              className="w-full h-auto rounded-3xl shadow-xl ring-1 ring-slate-200"
+            />
+          </div>
+          <div>
+            <div className="text-xs font-bold uppercase tracking-[0.16em] text-[#5B2BD9]">Meet Mason</div>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-extrabold tracking-tight">
+              Mason, <span className="text-[#5B2BD9]">Your Claim Pro</span>
+            </h2>
+            <p className="mt-4 text-lg text-slate-600 leading-relaxed">
+              Mason is the AI assistant inside the MyPro Claim Assist app. He works beside you from the first photo to the final settlement, so you never have to figure out the next step alone.
+            </p>
+            <ul className="mt-6 space-y-3">
+              {[
+                'Walks you through documenting your claim and every room of damage',
+                'Keeps receipts and invoices organized and totaled',
+                'Explains your policy, coverages and deductibles in plain English',
+                'Reminds you when an adjuster or contractor follow-up is due',
+              ].map((t) => (
+                <li key={t} className="flex items-start gap-3 text-slate-700">
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#5B2BD9]" />
+                  <span>{t}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-8 flex flex-wrap items-center gap-4">
+              <button onClick={() => go('early-access')} className="inline-flex items-center gap-2 rounded-xl bg-[#5B2BD9] hover:bg-[#4A20BE] px-6 py-3 text-base font-bold text-white transition-colors">
+                <Sparkles className="h-5 w-5" /> Get early access to Mason
+              </button>
+            </div>
+          </div>
         </div>
       </section>
 
