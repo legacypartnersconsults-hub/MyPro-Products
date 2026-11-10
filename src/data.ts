@@ -51,7 +51,7 @@ export const products: Product[] = [
       'Step-by-step claims roadmaps customized to your insurance carrier',
       'Receipt & estimate organizer to keep track of every repair expense',
       'Auto claim tracking: vehicle details, repair shop, people involved, injuries & medical visits',
-      'Secure claims communications log with adjusters, contractors and repair shops',
+      'Communications log with adjusters, contractors and repair shops, plus emailing claim documents to your adjuster',
       'Interactive checklist to identify overlooked claim line items'
     ],
     benefits: [

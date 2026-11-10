@@ -1,7 +1,7 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
 import {
   ArrowLeft, ArrowRight, FileText, Camera, Receipt, BookOpenCheck, MessagesSquare, Scale,
-  CheckCircle2, Lock, Loader2, ShieldCheck, Clock3, Sparkles, Car, Wrench, Users, HeartPulse, Siren, TrendingDown,
+  CheckCircle2, Lock, Loader2, ShieldCheck, Clock3, Sparkles, Mail, Car, Wrench, Users, HeartPulse, Siren, TrendingDown,
 } from 'lucide-react';
 import MyProClaimsAssistLogo from './MyProClaimsAssistLogo';
 import { submitClaimAssistSignup } from './claimAssistSignup';
@@ -34,7 +34,7 @@ const STEPS = [
   {
     icon: MessagesSquare,
     title: 'Adjuster, Contractor & Repair Shop Communication',
-    body: 'Keep a running log of every call, email and visit with your adjuster, contractors or repair shop, with reminders so follow-ups never slip.',
+    body: 'Keep a running log of every call, email and visit with your adjuster, contractors or repair shop, with reminders so follow-ups never slip. Send your claim documents to your adjuster in one email.',
   },
   {
     icon: Scale,
@@ -310,11 +310,12 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
       {/* Meet Mason, the AI assistant in the Claim Assist app */}
       <section id="meet-mason" className="scroll-mt-20 py-20 sm:py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-12 md:grid-cols-[0.9fr_1.1fr] items-center">
-          <div className="mx-auto w-full max-w-sm">
+          <div className="relative mx-auto w-full max-w-sm">
+            <div className="absolute inset-x-6 top-10 bottom-4 rounded-full bg-gradient-to-br from-[#6AD5F9]/30 to-[#5B2BD9]/20 blur-3xl" aria-hidden="true" />
             <img
-              src="/claim-assist-mason-claim-pro-v1.webp" width={816} height={1276} loading="lazy"
+              src="/claim-assist-mason-claim-pro-cutout-v1.webp" width={816} height={1101} loading="lazy"
               alt="Mason, Your Claim Pro: a friendly robot in a black MyPro Claim Assist cap and shirt, holding a phone showing the Claim Assist app and a Claim Documentation clipboard"
-              className="w-full h-auto rounded-3xl shadow-xl ring-1 ring-slate-200"
+              className="relative w-full h-auto drop-shadow-xl"
             />
           </div>
           <div>
@@ -399,6 +400,18 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
               </li>
             ))}
           </ol>
+          <div className="mt-8 rounded-2xl bg-gradient-to-br from-[#6D3BE9] to-[#2E1384] p-6 sm:p-8 text-white grid gap-6 md:grid-cols-[auto_1fr] items-start">
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/25">
+              <Mail className="h-6 w-6 text-[#6AD5F9]" />
+            </span>
+            <div>
+              <div className="text-xs font-bold uppercase tracking-[0.16em] text-[#6AD5F9]">New · Email documents to your adjuster</div>
+              <h3 className="mt-1 text-xl sm:text-2xl font-extrabold">Send your adjuster everything in one email</h3>
+              <p className="mt-2 text-white/85 leading-relaxed max-w-3xl">
+                Pick the photos, estimates, receipts, police reports and policy documents you want to send, for a home or auto claim. Claim Assist opens a new email to your adjuster with the files attached and a numbered CSV list describing each one, offers smaller copies of large photos, and can log the email on your claim timeline.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
