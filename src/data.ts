@@ -43,20 +43,21 @@ export const products: Product[] = [
   {
     id: 'claimassist',
     name: 'MyPro Claim Assist',
-    tagline: 'Insurance Claims Management & Documentation for Homeowners',
-    description: 'Empowering homeowners through complex recovery. MyPro Claim Assist is a dedicated, secure application designed specifically to help homeowners organize, document, and manage their property damage claims, communications, and repair receipts.',
+    tagline: 'Home & Auto Insurance Claims Management & Documentation',
+    description: 'Empowering homeowners and drivers through complex recovery. MyPro Claim Assist is a dedicated, secure application that helps you organize, document, and manage your home or auto insurance claim, from damage photos and repair receipts to adjuster communications.',
     status: 'upcoming',
     badge: 'Coming Soon',
     features: [
       'Step-by-step claims roadmaps customized to your insurance carrier',
       'Receipt & estimate organizer to keep track of every repair expense',
-      'Secure claims communications log with adjusters and contractors',
+      'Auto claim tracking: vehicle details, repair shop, people involved, injuries & medical visits',
+      'Secure claims communications log with adjusters, contractors and repair shops',
       'Interactive checklist to identify overlooked claim line items'
     ],
     benefits: [
-      'Helps homeowners secure higher, fairer claim payouts from carriers',
+      'Helps homeowners and drivers secure higher, fairer claim payouts from carriers',
       'Dramatically reduces anxiety and administrative confusion during repairs',
-      'Maintains an audit-ready digital folder of all claim and construction records'
+      'Maintains an audit-ready digital folder of all claim, repair and medical records'
     ]
   }
 ];

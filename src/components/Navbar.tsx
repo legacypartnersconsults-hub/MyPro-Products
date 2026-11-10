@@ -245,7 +245,7 @@ export default function Navbar({ onRequestDemo, onNavigateToSection, onLaunchPor
                 <MyProClaimsAssistLogo showText={false} size="sm" theme="tile" />
                 <div>
                   <div className="text-sm font-bold">MyPro Claim Assist</div>
-                  <div className="text-xs text-slate-500">Homeowner Claim Helper</div>
+                  <div className="text-xs text-slate-500">Home & Auto Claim Helper</div>
                 </div>
               </div>
               <span className="text-[10px] font-semibold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-100">Coming Soon</span>

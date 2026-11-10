@@ -69,7 +69,7 @@ export default function Hero({ onRequestDemo, onExploreSuite, onLaunchPortal }: 
             </div>
             <div className="flex items-center space-x-1.5">
               <ShieldCheck className="h-4.5 w-4.5 text-[#BCB6A5]" />
-              <span>Claim Management & Documentation for Homeowners</span>
+              <span>Home & Auto Claim Management & Documentation</span>
             </div>
           </motion.div>
 
