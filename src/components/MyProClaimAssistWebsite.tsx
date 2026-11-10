@@ -1,13 +1,14 @@
 import { useState, type FormEvent, type ReactNode } from 'react';
 import {
   ArrowLeft, ArrowRight, FileText, Camera, Receipt, BookOpenCheck, MessagesSquare, Scale,
-  CheckCircle2, Lock, Loader2, ShieldCheck, Clock3, Sparkles,
+  CheckCircle2, Lock, Loader2, ShieldCheck, Clock3, Sparkles, Mail, Car, Wrench, Users, HeartPulse, Siren, TrendingDown,
 } from 'lucide-react';
 import MyProClaimsAssistLogo from './MyProClaimsAssistLogo';
 import { submitClaimAssistSignup } from './claimAssistSignup';
 
 // MyPro Claim Assist product page (/claimassist): hero, how it works, and an
-// early-access sign-up that also asks about past claim experiences.
+// early-access sign-up that also asks about past claim experiences. Covers both
+// homeowners and auto claims.
 
 const STEPS = [
   {
@@ -28,17 +29,52 @@ const STEPS = [
   {
     icon: BookOpenCheck,
     title: 'Insurance Policy Review',
-    body: 'Upload your policy and get a plain-English summary of your coverages, limits and deductibles, plus the line items homeowners most often overlook.',
+    body: 'Upload your home or auto policy and get a plain-English summary of your coverages, limits and deductibles, plus the line items people most often overlook.',
   },
   {
     icon: MessagesSquare,
-    title: 'Adjuster & Contractor Communication',
-    body: 'Keep a running log of every call, email and visit with your adjuster and contractors, with reminders so follow-ups never slip.',
+    title: 'Adjuster, Contractor & Repair Shop Communication',
+    body: 'Keep a running log of every call, email and visit with your adjuster, contractors or repair shop, with reminders so follow-ups never slip. Send your claim documents to your adjuster in one email.',
   },
   {
     icon: Scale,
     title: 'Settlement Review',
     body: 'Compare the settlement offer against your documented losses and estimates, and see where a supplement or second look may be worth requesting.',
+  },
+];
+
+// What an auto claim adds in the app (see "Add auto insurance claims" in the
+// MyProClaimAssist repo).
+const AUTO_FEATURES = [
+  {
+    icon: Car,
+    title: 'Vehicle & Loss Details',
+    body: 'Record the year, make, model, VIN, plate and mileage, where the loss happened, and your insurer and adjuster, all on the claim.',
+  },
+  {
+    icon: Wrench,
+    title: 'Repair Shop Tracking',
+    body: 'Keep your repair shop, its estimate and the insurer\'s appraisal side by side, so differences are easy to spot and question.',
+  },
+  {
+    icon: Users,
+    title: 'People Involved',
+    body: 'Log drivers, passengers, the other driver and their insurance, witnesses and your attorney, with contact details in one place.',
+  },
+  {
+    icon: HeartPulse,
+    title: 'Injuries & Medical Visits',
+    body: 'Track each injury and a log of medical visits, plus medical bills, prescriptions, travel to appointments and lost wages.',
+  },
+  {
+    icon: Siren,
+    title: 'Auto Evidence & Expenses',
+    body: 'Organize scene photos, police reports, witness statements and medical records, and total rental car, towing and storage costs.',
+  },
+  {
+    icon: TrendingDown,
+    title: 'Diminished Value Evaluator',
+    body: 'Mason gives a rough range for the value your vehicle lost after repairs, with an action plan for raising it with the insurer.',
   },
 ];
 
@@ -95,7 +131,7 @@ function EarlyAccessForm() {
         </div>
         <h3 className="mt-5 text-2xl font-extrabold text-slate-900">You're on the list, {name.trim().split(' ')[0]}.</h3>
         <p className="mt-2 text-slate-600 max-w-md mx-auto">
-          We'll email {email.trim()} when early access opens. Thank you for sharing your experience, it helps us build the tool homeowners actually need.
+          We'll email {email.trim()} when early access opens. Thank you for sharing your experience, it helps us build the tool people actually need.
         </p>
       </div>
     );
@@ -116,7 +152,7 @@ function EarlyAccessForm() {
           <input className={inputCls} value={zip} onChange={(e) => setZip(e.target.value.replace(/\D/g, '').slice(0, 5))} inputMode="numeric" autoComplete="postal-code" placeholder="33101" required />
         </Field>
         <fieldset>
-          <legend className="block text-sm font-semibold text-slate-800">Have you ever filed a property insurance claim?</legend>
+          <legend className="block text-sm font-semibold text-slate-800">Have you ever filed a home or auto insurance claim?</legend>
           <div className="mt-1.5 grid grid-cols-2 gap-2">
             {(['yes', 'no'] as const).map((v) => (
               <button
@@ -232,6 +268,7 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
           </button>
           <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
             <button onClick={() => go('meet-mason')} className="hover:text-[#5B2BD9]">Meet Mason</button>
+            <button onClick={() => go('auto-claims')} className="hover:text-[#5B2BD9]">Auto Claims</button>
             <button onClick={() => go('how-it-works')} className="hover:text-[#5B2BD9]">How It Works</button>
             <button onClick={() => go('early-access')} className="hover:text-[#5B2BD9]">Early Access</button>
             <button onClick={onBackToCorporate} className="inline-flex items-center gap-1 hover:text-[#5B2BD9]"><ArrowLeft className="h-4 w-4" /> MyPro Products</button>
@@ -251,10 +288,10 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
               <ShieldCheck className="h-3.5 w-3.5" /> Coming soon · Early access open
             </span>
             <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05]">
-              Navigate Your Property Insurance Claim <span className="text-[#6AD5F9]">With Confidence</span>
+              Navigate Your Home or Auto Insurance Claim <span className="text-[#6AD5F9]">With Confidence</span>
             </h1>
             <p className="mt-6 text-lg text-white/85 max-w-xl leading-relaxed">
-              MyPro Claim Assist is your step-by-step guide through a property damage claim. Document the damage, track every receipt, understand your policy and keep your adjuster conversations organized, all in one secure app.
+              MyPro Claim Assist is your step-by-step guide through a homeowners or auto insurance claim. Document the damage, track every receipt, understand your policy and keep your adjuster conversations organized, all in one secure app.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <button onClick={() => go('early-access')} className="inline-flex items-center gap-2 rounded-xl bg-[#6AD5F9] hover:bg-[#8BE0FB] px-6 py-3.5 text-base font-bold text-[#2E1384] transition-colors">
@@ -264,7 +301,7 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
                 See how it works
               </button>
             </div>
-            <p className="mt-5 text-sm text-white/70">Built for homeowners by the team behind MyPro Market and MyPro Ready Hub.</p>
+            <p className="mt-5 text-sm text-white/70">Built for homeowners and drivers by the team behind MyPro Market and MyPro Ready Hub.</p>
           </div>
           <ClaimPreview />
         </div>
@@ -273,11 +310,12 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
       {/* Meet Mason, the AI assistant in the Claim Assist app */}
       <section id="meet-mason" className="scroll-mt-20 py-20 sm:py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid gap-12 md:grid-cols-[0.9fr_1.1fr] items-center">
-          <div className="mx-auto w-full max-w-sm">
+          <div className="relative mx-auto w-full max-w-sm">
+            <div className="absolute inset-x-6 top-10 bottom-4 rounded-full bg-gradient-to-br from-[#6AD5F9]/30 to-[#5B2BD9]/20 blur-3xl" aria-hidden="true" />
             <img
-              src="/claim-assist-mason-claim-pro-v1.webp" width={816} height={1276} loading="lazy"
+              src="/claim-assist-mason-claim-pro-cutout-v1.webp" width={816} height={1101} loading="lazy"
               alt="Mason, Your Claim Pro: a friendly robot in a black MyPro Claim Assist cap and shirt, holding a phone showing the Claim Assist app and a Claim Documentation clipboard"
-              className="w-full h-auto rounded-3xl shadow-xl ring-1 ring-slate-200"
+              className="relative w-full h-auto drop-shadow-xl"
             />
           </div>
           <div>
@@ -293,7 +331,8 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
                 'Walks you through documenting your claim and every room of damage',
                 'Keeps receipts and invoices organized and totaled',
                 'Explains your policy, coverages and deductibles in plain English',
-                'Reminds you when an adjuster or contractor follow-up is due',
+                'Reminds you when an adjuster, contractor or repair shop follow-up is due',
+                'Knows auto claims too, and estimates diminished value after a repair',
               ].map((t) => (
                 <li key={t} className="flex items-start gap-3 text-slate-700">
                   <CheckCircle2 className="mt-0.5 h-5 w-5 flex-shrink-0 text-[#5B2BD9]" />
@@ -307,6 +346,33 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
               </button>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Auto claims */}
+      <section id="auto-claims" className="scroll-mt-20 py-20 sm:py-24 bg-white border-t border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl">
+            <div className="text-xs font-bold uppercase tracking-[0.16em] text-[#5B2BD9]">New · Auto claims</div>
+            <h2 className="mt-2 text-3xl sm:text-4xl font-extrabold tracking-tight">Track your auto claim, too</h2>
+            <p className="mt-4 text-slate-600 text-lg">
+              Start a claim as Homeowners or Auto. Auto claims get their own screens for the vehicle, the repair shop, everyone involved and any injuries, so a car accident is as organized as a roof leak.
+            </p>
+          </div>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {AUTO_FEATURES.map((f) => (
+              <div key={f.title} className="rounded-2xl bg-slate-50 p-6 ring-1 ring-slate-200">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#6AD5F9]/20 text-[#5B2BD9]">
+                  <f.icon className="h-5 w-5" />
+                </span>
+                <h3 className="mt-4 text-lg font-extrabold text-slate-900">{f.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{f.body}</p>
+              </div>
+            ))}
+          </div>
+          <p className="mt-8 text-sm text-slate-500">
+            Mason, the Coverage Detector, Policy Analyzer and Settlement Assistant all work on auto claims, with an auto policy form and an auto "Mistakes to avoid" list.
+          </p>
         </div>
       </section>
 
@@ -334,6 +400,18 @@ export default function MyProClaimAssistWebsite({ onBackToCorporate }: { onBackT
               </li>
             ))}
           </ol>
+          <div className="mt-8 rounded-2xl bg-gradient-to-br from-[#6D3BE9] to-[#2E1384] p-6 sm:p-8 text-white grid gap-6 md:grid-cols-[auto_1fr] items-start">
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/15 ring-1 ring-white/25">
+              <Mail className="h-6 w-6 text-[#6AD5F9]" />
+            </span>
+            <div>
+              <div className="text-xs font-bold uppercase tracking-[0.16em] text-[#6AD5F9]">New · Email documents to your adjuster</div>
+              <h3 className="mt-1 text-xl sm:text-2xl font-extrabold">Send your adjuster everything in one email</h3>
+              <p className="mt-2 text-white/85 leading-relaxed max-w-3xl">
+                Pick the photos, estimates, receipts, police reports and policy documents you want to send, for a home or auto claim. Claim Assist opens a new email to your adjuster with the files attached and a numbered CSV list describing each one, offers smaller copies of large photos, and can log the email on your claim timeline.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
