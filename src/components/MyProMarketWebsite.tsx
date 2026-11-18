@@ -159,118 +159,86 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans antialiased selection:bg-market-blue/20 selection:text-market-blue">
       
-      {/* 1. standalone Banner notifying that it is part of MyPro Products umbrella */}
-      <div className="bg-[#468CDC] text-white text-xs px-4 py-2.5 flex flex-col sm:flex-row justify-between items-center space-y-1.5 sm:space-y-0 shadow-sm border-b border-[#397bc7] relative z-50">
-        <div className="flex items-center space-x-3">
-          <span className="font-medium text-white">
-            MyPro Market ensures everyone stays in touch and on the same page.
-          </span>
-          <span className="hidden sm:inline text-white/40">|</span>
-          <a href="#sms-optin" className="font-semibold text-white hover:text-slate-200 underline flex items-center space-x-1">
-            <span>Opt In to Text Alerts &rarr;</span>
+      {/* Header: same layout as the Claim Assist page (logo, section links, one call to action) */}
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/90 backdrop-blur">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="MyPro Market home">
+            <MyProMarketLogo size="md" />
+          </button>
+          <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+            <a href="#provides" className="hover:text-[#2F6DB5]">How It Works</a>
+            <a href="#key-benefits" className="hover:text-[#2F6DB5]">Who We Serve</a>
+            <a href="#sms-optin" className="inline-flex items-center gap-1.5 hover:text-[#2F6DB5]">
+              <span className="h-2 w-2 bg-[#98C44E] rounded-full animate-pulse inline-block"></span>
+              SMS Opt-In
+            </a>
+            <button onClick={onBackToCorporate} className="inline-flex items-center gap-1 hover:text-[#2F6DB5]"><ArrowLeft className="h-4 w-4" /> MyPro Products</button>
+          </nav>
+          <a
+            href="https://market.myproproducts.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="rounded-lg bg-[#98C44E] hover:bg-[#85b03f] px-4 py-2 text-sm font-bold text-white"
+          >
+            Launch App
           </a>
         </div>
-        <button 
-          onClick={onBackToCorporate}
-          className="flex items-center space-x-1 font-bold bg-[#98C44E] hover:bg-[#85b03f] text-white px-3 py-1 rounded transition-colors text-[11px]"
-        >
-          <ArrowLeft className="h-3 w-3" />
-          <span>Back to MyPro Products Suite</span>
-        </button>
-      </div>
+      </header>
 
-      {/* 2. Standing Navbar for cloned MyPro Market site */}
-      <nav className="bg-white border-b border-slate-100 py-4 sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-          <MyProMarketLogo size="lg" />
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#5A9BE3] via-[#468CDC] to-[#2F6DB5] text-white">
+        <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(#fff_1px,transparent_1px)] [background-size:22px_22px]" aria-hidden="true" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          <div className="grid gap-14 lg:grid-cols-[1.15fr_1fr] items-center">
+            <div>
+              <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white ring-1 ring-white/20">
+                <ShieldCheck className="h-3.5 w-3.5 text-[#C8EB8A]" /> 100% Insured &amp; Active State Licensed Network
+              </span>
+              <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold font-nunito tracking-tight leading-[1.05]">
+                Restore Peace of Mind <span className="text-[#C8EB8A]">with MyPro Market</span>
+              </h1>
+              <p className="mt-6 text-lg text-white/85 max-w-xl leading-relaxed">
+                Stop searching for unreliable contractors. MyPro Market matches insurance carriers, insurance agents, property managers and homeowners with pre-vetted contractors immediately.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <button
+                  onClick={() => onRequestDemo('market')}
+                  className="inline-flex items-center gap-2 rounded-xl bg-white hover:bg-slate-50 px-6 py-3.5 text-base font-bold text-[#2F6DB5] transition-colors"
+                >
+                  Schedule Demo <ArrowRight className="h-5 w-5" />
+                </button>
+                <a
+                  href="https://market.myproproducts.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-xl px-6 py-3.5 text-base font-bold text-white ring-1 ring-white/40 hover:bg-white/10 transition-colors"
+                >
+                  Launch App
+                </a>
+              </div>
+              <p className="mt-5 text-sm text-white/80">
+                MyPro Market keeps everyone in touch and on the same page.{' '}
+                <a href="#sms-optin" className="font-semibold text-white underline underline-offset-2 hover:text-[#C8EB8A]">Opt in to text alerts &rarr;</a>
+              </p>
+            </div>
 
-          <div className="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
-            <a href="#provides" className="hover:text-market-blue transition-colors">How It Works</a>
-            <a href="#key-benefits" className="hover:text-market-blue transition-colors">Who We Serve</a>
-            <a href="#sms-optin" className="text-[#468CDC] hover:text-[#3b7cbd] transition-colors flex items-center space-x-1">
-              <span className="h-2 w-2 bg-[#98C44E] rounded-full animate-pulse inline-block"></span>
-              <span>SMS Opt-In</span>
-            </a>
-          </div>
-
-          <div className="flex items-center space-x-3">
-            <button
-              onClick={() => onRequestDemo('market')}
-              className="bg-transparent hover:bg-slate-50 text-slate-700 font-bold text-xs px-3.5 py-2.5 rounded-lg border border-slate-200 transition-all"
-            >
-              Schedule Demo
-            </button>
-            <a
-              href="https://market.myproproducts.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-[#98C44E] hover:bg-[#85b03f] text-white font-bold text-xs px-4 py-2.5 rounded-lg shadow-md shadow-[#98C44E]/10 transition-all text-center flex items-center justify-center"
-            >
-              Launch App
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      {/* 3. Hero Section of cloned MyPro Market site */}
-      <section className="relative pt-20 pb-24 md:pt-28 md:pb-32 bg-[#468CDC] overflow-hidden border-b border-market-blue/20 text-white">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-70 pointer-events-none" />
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
-          <div className="lg:grid lg:grid-cols-[1fr_auto] lg:gap-12 lg:items-center lg:text-left">
-          <div>
-          
-          <span className="inline-flex items-center space-x-1.5 bg-white/10 border border-white/20 text-white text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-6">
-            <ShieldCheck className="h-3.5 w-3.5 text-[#98c44E]" />
-            <span>100% Insured & Active State Licensed Network</span>
-          </span>
-
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold font-nunito text-white tracking-tight max-w-4xl mx-auto lg:mx-0 leading-[1.1]">
-            Restore Peace of Mind with MyPro Market
-          </h1>
-
-          <p className="text-lg sm:text-xl text-white font-nunito mt-6 max-w-3xl mx-auto lg:mx-0 leading-relaxed">
-            Stop searching for unreliable contractors. MyPro Market matches insurance carriers, insurance agents, property managers and homeowners with pre-vetted contractors immediately.
-          </p>
-
-          <div className="mt-8 flex flex-col sm:flex-row justify-center lg:justify-start items-center gap-4">
-            <button
-              onClick={() => onRequestDemo('market')}
-              className="w-full sm:w-auto px-8 py-4 bg-white text-[#468CDC] hover:bg-slate-50 font-bold rounded-xl transition-all shadow-lg shadow-black/10 flex items-center justify-center space-x-2"
-            >
-              <span>Schedule Demo</span>
-              <ArrowRight className="h-5 w-5" />
-            </button>
-            <a
-              href="https://market.myproproducts.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto px-8 py-4 bg-[#98C44E] hover:bg-[#85b03f] text-white font-bold rounded-xl transition-all shadow-lg shadow-black/10 flex items-center justify-center space-x-2 text-center"
-            >
-              <span>Launch App</span>
-              <ArrowRight className="h-5 w-5" />
-            </a>
-          </div>
-
-          </div>
-
-          {/* Mason as a contractor, holding a phone with the MyPro Market symbol */}
-          <img
-            src="/mypro-market-mason-robot.webp" width={996} height={1100} loading="eager"
-            alt="Mason, a friendly robot contractor in a white hard hat and tool belt, holding a phone with the MyPro Market symbol"
-            className="mx-auto mt-12 lg:mt-0 w-[240px] sm:w-[300px] lg:w-[420px] h-auto"
-            style={{ filter: 'drop-shadow(0 24px 36px rgba(11,20,38,0.35))' }}
-          />
+            {/* Mason as a contractor, holding a phone with the MyPro Market symbol */}
+            <img
+              src="/mypro-market-mason-robot.webp" width={996} height={1100} loading="eager"
+              alt="Mason, a friendly robot contractor in a white hard hat and tool belt, holding a phone with the MyPro Market symbol"
+              className="mx-auto w-[240px] sm:w-[300px] lg:w-[400px] h-auto"
+              style={{ filter: 'drop-shadow(0 24px 36px rgba(11,20,38,0.35))' }}
+            />
           </div>
 
           {/* Social Proof Stats Banner */}
-          <div className="mt-16 pt-12 border-t border-white/15 max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+          <div className="mt-16 pt-12 border-t border-white/15 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
               <div className="text-3xl font-extrabold text-white">24/7/365</div>
               <div className="text-xs font-bold text-white/70 uppercase tracking-wider mt-1">Emergency Service Response</div>
             </div>
             <div>
-              <div className="text-3xl font-extrabold text-[#98c44E]">100%</div>
+              <div className="text-3xl font-extrabold text-[#C8EB8A]">100%</div>
               <div className="text-xs font-bold text-white/70 uppercase tracking-wider mt-1">GL & License Vetted</div>
             </div>
             <div>
@@ -278,11 +246,10 @@ export default function MyProMarketWebsite({ onBackToCorporate, onRequestDemo, o
               <div className="text-xs font-bold text-white/70 uppercase tracking-wider mt-1">Match Confirmation</div>
             </div>
             <div>
-              <div className="text-3xl font-extrabold text-[#98c44E]">4.9 / 5</div>
+              <div className="text-3xl font-extrabold text-[#C8EB8A]">4.9 / 5</div>
               <div className="text-xs font-bold text-white/70 uppercase tracking-wider mt-1">Average Service Score</div>
             </div>
           </div>
-
         </div>
       </section>
 
