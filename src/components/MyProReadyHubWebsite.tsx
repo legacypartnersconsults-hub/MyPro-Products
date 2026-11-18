@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import {
-  ArrowLeft, ArrowRight, Bell, CheckSquare, Compass, Gauge, Lock, Map as MapIcon, MapPin, Sparkles,
+  ArrowLeft, ArrowRight, Bell, CheckSquare, Compass, Gauge, Lock, Map as MapIcon, MapPin, ShieldCheck, Sparkles,
 } from 'lucide-react';
 import MyProReadyHubLogo from './MyProReadyHubLogo';
 import { MyProReadyHubPrivacySection } from './MyProReadyHubPrivacyPolicy';
@@ -100,72 +100,67 @@ function MasonRotator() {
 
 export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo }: MyProReadyHubWebsiteProps) {
   const [termsOpen, setTermsOpen] = useState(false);
+  const go = (id: string) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
   return (
     <div style={{ background: '#fff', color: INK, fontFamily: "'Inter', sans-serif" }} className="min-h-screen antialiased">
-      {/* Welcome screen: dark navy, like the app's splash */}
-      <section style={{ background: `radial-gradient(120% 90% at 70% 0%, #26385f 0%, ${NAVY} 62%)`, color: '#fff' }} className="relative overflow-hidden">
-        <header className="max-w-6xl mx-auto px-6 pt-5 flex items-center justify-between gap-4">
-          <MyProReadyHubLogo size="md" />
-          <div className="flex items-center gap-3">
-            <button
-              onClick={onBackToCorporate}
-              className="hidden sm:inline-flex items-center gap-1.5 text-[13px] font-semibold cursor-pointer"
-              style={{ color: 'rgba(255,255,255,0.75)' }}
-            >
-              <ArrowLeft className="h-3.5 w-3.5" /> MyPro Products
-            </button>
-            <button
-              onClick={() => onRequestDemo('readyhub')}
-              className="rounded-xl px-4 py-2 text-[13px] font-bold cursor-pointer"
-              style={{ background: GREEN, color: '#fff' }}
-            >
-              Request a demo
-            </button>
-          </div>
-        </header>
+      {/* Header: same layout as the Claim Assist page (logo, section links, one
+          call to action), in Ready Hub navy so the cyan logo stays readable. */}
+      <header className="sticky top-0 z-30 border-b border-white/10 backdrop-blur" style={{ background: 'rgba(11,20,38,0.92)' }}>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
+          <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} aria-label="MyPro Ready Hub home" className="cursor-pointer">
+            <MyProReadyHubLogo size="md" />
+          </button>
+          <nav className="hidden md:flex items-center gap-8 text-sm font-semibold text-white/75">
+            <button onClick={() => go('whats-inside')} className="hover:text-[#6AD5F9] cursor-pointer">What&rsquo;s Inside</button>
+            <button onClick={() => go('in-the-app')} className="hover:text-[#6AD5F9] cursor-pointer">In the App</button>
+            <button onClick={() => go('privacy-policy')} className="hover:text-[#6AD5F9] cursor-pointer">Privacy</button>
+            <button onClick={onBackToCorporate} className="inline-flex items-center gap-1 hover:text-[#6AD5F9] cursor-pointer"><ArrowLeft className="h-4 w-4" /> MyPro Products</button>
+          </nav>
+          <button onClick={() => onRequestDemo('readyhub')} className="rounded-lg px-4 py-2 text-sm font-bold text-white bg-[#98C44E] hover:bg-[#85B03F] cursor-pointer">
+            Request a demo
+          </button>
+        </div>
+      </header>
 
-        <div className="max-w-6xl mx-auto px-6 pt-14 pb-20 grid lg:grid-cols-2 gap-14 items-center">
+      {/* Hero: dark navy, like the app's splash */}
+      <section style={{ background: `radial-gradient(120% 90% at 70% 0%, #26385f 0%, ${NAVY} 62%)` }} className="relative overflow-hidden text-white">
+        <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(#fff_1px,transparent_1px)] [background-size:22px_22px]" aria-hidden="true" />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 grid gap-14 lg:grid-cols-[1.15fr_1fr] items-center">
           <div>
-            <Eyebrow color="#6AD5F9">MyPro Ready Hub &middot; by MyPro Products</Eyebrow>
-            <h1 style={{ fontSize: 'clamp(2.1rem, 5vw, 3.4rem)', fontWeight: 700, lineHeight: 1.12, color: '#6AD5F9', marginTop: 14 }}>
-              Protect Your Assets.<br />Prepare for the Unexpected.
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[#6AD5F9] ring-1 ring-white/20">
+              <ShieldCheck className="h-3.5 w-3.5" /> Disaster preparedness for your household
+            </span>
+            <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05]">
+              Protect Your Assets. <span className="text-[#6AD5F9]">Prepare for the Unexpected.</span>
             </h1>
-            <p style={{ fontSize: 17, lineHeight: 1.65, color: 'rgba(255,255,255,0.78)', marginTop: 18, maxWidth: 520 }}>
+            <p className="mt-6 text-lg text-white/85 max-w-xl leading-relaxed">
               MyPro Ready Hub is a disaster-preparedness app for your home and household. See your local risk, work through guided checklists, follow storms on live radar, and keep your inventory, prescriptions and documents in one secure vault.
             </p>
-            <div className="flex flex-wrap items-center gap-3 mt-8">
-              <button
-                onClick={() => onRequestDemo('readyhub')}
-                className="inline-flex items-center gap-2 rounded-2xl px-6 py-3.5 text-[15px] font-bold cursor-pointer"
-                style={{ background: GREEN, color: '#fff' }}
-              >
-                Request a demo <ArrowRight className="h-4 w-4" />
+            <div className="mt-8 flex flex-wrap gap-3">
+              <button onClick={() => onRequestDemo('readyhub')} className="inline-flex items-center gap-2 rounded-xl bg-[#98C44E] hover:bg-[#85B03F] px-6 py-3.5 text-base font-bold text-white transition-colors cursor-pointer">
+                Request a demo <ArrowRight className="h-5 w-5" />
               </button>
-              <a href="#in-the-app" className="rounded-2xl px-6 py-3.5 text-[15px] font-semibold" style={{ color: '#fff', border: '1px solid rgba(255,255,255,0.25)' }}>
+              <button onClick={() => go('in-the-app')} className="rounded-xl px-6 py-3.5 text-base font-bold text-white ring-1 ring-white/40 hover:bg-white/10 transition-colors cursor-pointer">
                 See it in the app
-              </a>
+              </button>
             </div>
-            <p style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.55)', marginTop: 18 }}>7-day free trial &middot; No charge until the trial ends &middot; Cancel anytime</p>
+            <p className="mt-5 text-sm text-white/70">7-day free trial &middot; No charge until the trial ends &middot; Cancel anytime</p>
           </div>
 
-          <figure className="relative flex flex-col items-center lg:items-end">
+          <figure className="relative flex flex-col items-center">
             <div
               aria-hidden
-              className="absolute left-1/2 lg:left-auto lg:right-[8%] top-[8%] w-[78%] max-w-[420px] aspect-square rounded-full -translate-x-1/2 lg:translate-x-0"
+              className="absolute left-1/2 top-[8%] w-[78%] max-w-[420px] aspect-square rounded-full -translate-x-1/2"
               style={{ background: 'radial-gradient(circle, rgba(106,213,249,0.28) 0%, rgba(106,213,249,0) 70%)' }}
             />
             <img
               src="/readyhub/readyranger-mason.webp" width={1224} height={1200} loading="eager"
               alt="ReadyRanger Mason holding up a phone showing the MyPro Ready Hub app icon"
-              className="relative w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[460px] h-auto"
+              className="relative w-full max-w-[300px] sm:max-w-[380px] lg:max-w-[440px] h-auto"
               style={{ filter: 'drop-shadow(0 24px 40px rgba(0,0,0,0.45))' }}
             />
-            {/* Same type as the headline, at half its size */}
-            <figcaption
-              className="relative mt-2 text-center lg:mr-[6%] max-w-[460px]"
-              style={{ fontSize: 'clamp(1.05rem, 2.5vw, 1.7rem)', fontWeight: 700, lineHeight: 1.2, color: '#6AD5F9' }}
-            >
+            <figcaption className="relative mt-2 text-center max-w-[440px] text-lg sm:text-xl font-bold leading-snug text-[#6AD5F9]">
               Meet ReadyRanger Mason, your preparedness advisor.
             </figcaption>
           </figure>
@@ -173,7 +168,7 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
       </section>
 
       {/* What's inside: white cards with a colored edge, as in the app */}
-      <section style={{ background: SURFACE }} className="px-6 py-20">
+      <section id="whats-inside" style={{ background: SURFACE }} className="scroll-mt-20 px-6 py-20">
         <div className="max-w-6xl mx-auto">
           <Eyebrow>What&rsquo;s inside</Eyebrow>
           <h2 style={{ fontSize: 'clamp(1.7rem, 3.4vw, 2.4rem)', fontWeight: 800, lineHeight: 1.15, marginTop: 8, maxWidth: 640 }}>
@@ -208,7 +203,7 @@ export default function MyProReadyHubWebsite({ onBackToCorporate, onRequestDemo 
       </section>
 
       {/* Real screens */}
-      <section id="in-the-app" className="px-6 py-20">
+      <section id="in-the-app" className="scroll-mt-20 px-6 py-20">
         <div className="max-w-6xl mx-auto">
           <Eyebrow>In the app</Eyebrow>
           <h2 style={{ fontSize: 'clamp(1.7rem, 3.4vw, 2.4rem)', fontWeight: 800, lineHeight: 1.15, marginTop: 8 }}>The real screens</h2>

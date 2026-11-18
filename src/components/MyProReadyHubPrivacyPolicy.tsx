@@ -28,7 +28,7 @@ const CARDS = [
 
 export function MyProReadyHubPrivacySection() {
   return (
-    <section id="privacy-policy" className="px-6 py-20" style={{ background: '#F7F9FC' }}>
+    <section id="privacy-policy" className="scroll-mt-20 px-6 py-20" style={{ background: '#F7F9FC' }}>
       <div className="max-w-6xl mx-auto">
         <p style={{ fontFamily: 'var(--font-label)', fontSize: 11, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#468CDC', fontWeight: 500 }}>
           Privacy
